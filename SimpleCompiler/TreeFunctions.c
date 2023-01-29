@@ -91,6 +91,20 @@ static func_entry intrinsic_function_table[] = {
     assert(ctx->arg ## argnum);    \
     ctx->arg ## argnum->func(ctx->arg ## argnum, retval)
 
+/**
+ * Assigns the value as a constant float return value.
+ * @param value The expression or value to assign. Must evaluate to float.
+ */
+#define assign_ret_val(value) \
+    (**ret_val) = value
+
+/**
+ * Assigns the value as a constant float return value.
+ * @param ref The reference pointer to assign. Must evaluate to float*.
+ */
+#define assign_ret_ref(ref) \
+    (*ret_val) = ref
+
 /* Used in genrand_int32 */
 #define N 624
 #define M 397
@@ -163,7 +177,7 @@ prjm_eel_function_decl(const)
 {
     assert_valid_ctx();
 
-    (**ret_val) = ctx->value;
+    assign_ret_val(ctx->value);
 }
 
 prjm_eel_function_decl(var)
@@ -172,7 +186,7 @@ prjm_eel_function_decl(var)
     assert(ctx->var);
     assert(ctx->var->value_ptr);
 
-    (*ret_val) = ctx->var->value_ptr;
+    assign_ret_ref(ctx->var->value_ptr);
 }
 
 
@@ -194,7 +208,7 @@ prjm_eel_function_decl(execute_list)
         cur_expr->func(cur_expr, &value_ptr);
     }
 
-    (*ret_val) = value_ptr;
+    assign_ret_ref(value_ptr);
 }
 
 prjm_eel_function_decl(execute_loop)
@@ -226,7 +240,7 @@ prjm_eel_function_decl(execute_loop)
         }
     }
 
-    (*ret_val) = value_ptr;
+    assign_ret_ref(value_ptr);
 }
 
 prjm_eel_function_decl(execute_while)
@@ -252,7 +266,7 @@ prjm_eel_function_decl(execute_while)
         loop_count_int++;
     } while (*value_ptr != 0 && loop_count_int < 1000000);
 
-    (*ret_val) = value_ptr;
+    assign_ret_ref(value_ptr);
 }
 
 prjm_eel_function_decl(if)
@@ -304,7 +318,7 @@ prjm_eel_function_decl(set)
     invoke_arg(1, ret_val);
     invoke_arg(2, &value_ptr);
 
-    (**ret_val) = *value_ptr;
+    assign_ret_val(*value_ptr);
 }
 
 
@@ -352,7 +366,7 @@ prjm_eel_function_decl(bnot)
 
     invoke_arg(1, &value_ptr);
 
-    (**ret_val) = (float) !(*value_ptr);
+    assign_ret_val((float) !(*value_ptr));
 }
 
 prjm_eel_function_decl(equal)
@@ -367,7 +381,7 @@ prjm_eel_function_decl(equal)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = (*val1_ptr == *val2_ptr) ? 1.f : .0f;
+    assign_ret_val((*val1_ptr == *val2_ptr) ? 1.f : .0f);
 }
 
 prjm_eel_function_decl(notequal)
@@ -381,7 +395,7 @@ prjm_eel_function_decl(notequal)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = (*val1_ptr != *val2_ptr) ? 1.f : .0f;
+    assign_ret_val((*val1_ptr != *val2_ptr) ? 1.f : .0f);
 }
 
 prjm_eel_function_decl(below)
@@ -396,7 +410,7 @@ prjm_eel_function_decl(below)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = (*val1_ptr < *val2_ptr) ? 1.f : .0f;
+    assign_ret_val((*val1_ptr < *val2_ptr) ? 1.f : .0f);
 }
 
 prjm_eel_function_decl(above)
@@ -411,7 +425,7 @@ prjm_eel_function_decl(above)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = (*val1_ptr > *val2_ptr) ? 1.f : .0f;
+    assign_ret_val((*val1_ptr > *val2_ptr) ? 1.f : .0f);
 }
 
 prjm_eel_function_decl(beloweq)
@@ -426,7 +440,7 @@ prjm_eel_function_decl(beloweq)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = (*val1_ptr <= *val2_ptr) ? 1.f : .0f;
+    assign_ret_val((*val1_ptr <= *val2_ptr) ? 1.f : .0f);
 }
 
 prjm_eel_function_decl(aboveeq)
@@ -441,7 +455,7 @@ prjm_eel_function_decl(aboveeq)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = (*val1_ptr >= *val2_ptr) ? 1.f : .0f;
+    assign_ret_val((*val1_ptr >= *val2_ptr) ? 1.f : .0f);
 }
 
 prjm_eel_function_decl(add)
@@ -456,7 +470,7 @@ prjm_eel_function_decl(add)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = *val1_ptr + *val2_ptr;
+    assign_ret_val(*val1_ptr + *val2_ptr);
 }
 
 prjm_eel_function_decl(sub)
@@ -471,7 +485,7 @@ prjm_eel_function_decl(sub)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = *val1_ptr - *val2_ptr;
+    assign_ret_val(*val1_ptr - *val2_ptr);
 }
 
 prjm_eel_function_decl(mul)
@@ -486,7 +500,7 @@ prjm_eel_function_decl(mul)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = *val1_ptr * *val2_ptr;
+    assign_ret_val(*val1_ptr * *val2_ptr);
 }
 
 prjm_eel_function_decl(div)
@@ -501,7 +515,7 @@ prjm_eel_function_decl(div)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = *val1_ptr / *val2_ptr;
+    assign_ret_val(*val1_ptr / *val2_ptr);
 }
 
 prjm_eel_function_decl(mod)
@@ -516,7 +530,7 @@ prjm_eel_function_decl(mod)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = (float) ((int) *val1_ptr % (int) *val2_ptr);
+    assign_ret_val((float) ((int) *val1_ptr % (int) *val2_ptr));
 }
 
 prjm_eel_function_decl(band)
@@ -531,7 +545,7 @@ prjm_eel_function_decl(band)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = (float) ((int) *val1_ptr & (int) *val2_ptr);
+    assign_ret_val((float) ((int) *val1_ptr & (int) *val2_ptr));
 }
 
 prjm_eel_function_decl(bor)
@@ -546,7 +560,7 @@ prjm_eel_function_decl(bor)
     invoke_arg(1, &val1_ptr);
     invoke_arg(2, &val2_ptr);
 
-    (**ret_val) = (float) ((int) *val1_ptr | (int) *val2_ptr);
+    assign_ret_val((float) ((int) *val1_ptr | (int) *val2_ptr));
 }
 
 
@@ -562,7 +576,7 @@ prjm_eel_function_decl(addop)
     invoke_arg(2, &val2_ptr);
 
     (*val1_ptr) = *val1_ptr + *val2_ptr;
-    (*ret_val) = val1_ptr;
+    assign_ret_ref(val1_ptr);
 }
 
 prjm_eel_function_decl(subop)
@@ -577,7 +591,7 @@ prjm_eel_function_decl(subop)
     invoke_arg(2, &val2_ptr);
 
     (*val1_ptr) = *val1_ptr - *val2_ptr;
-    (*ret_val) = val1_ptr;
+    assign_ret_ref(val1_ptr);
 }
 
 prjm_eel_function_decl(mulop)
@@ -592,7 +606,7 @@ prjm_eel_function_decl(mulop)
     invoke_arg(2, &val2_ptr);
 
     (*val1_ptr) = *val1_ptr * *val2_ptr;
-    (*ret_val) = val1_ptr;
+    assign_ret_ref(val1_ptr);
 }
 
 prjm_eel_function_decl(divop)
@@ -607,7 +621,7 @@ prjm_eel_function_decl(divop)
     invoke_arg(2, &val2_ptr);
 
     (*val1_ptr) = *val1_ptr / *val2_ptr;
-    (*ret_val) = val1_ptr;
+    assign_ret_ref(val1_ptr);
 }
 
 prjm_eel_function_decl(orop)
@@ -622,7 +636,7 @@ prjm_eel_function_decl(orop)
     invoke_arg(2, &val2_ptr);
 
     (*val1_ptr) = (float) ((int) *val1_ptr & (int) *val2_ptr);
-    (*ret_val) = val1_ptr;
+    assign_ret_ref(val1_ptr);
 }
 
 prjm_eel_function_decl(andop)
@@ -637,7 +651,7 @@ prjm_eel_function_decl(andop)
     invoke_arg(2, &val2_ptr);
 
     (*val1_ptr) = (float) ((int) *val1_ptr | (int) *val2_ptr);
-    (*ret_val) = val1_ptr;
+    assign_ret_ref(val1_ptr);
 }
 
 prjm_eel_function_decl(modop)
@@ -652,7 +666,7 @@ prjm_eel_function_decl(modop)
     invoke_arg(2, &val2_ptr);
 
     (*val1_ptr) = (float) ((int) (*val1_ptr) % (int) (*val2_ptr));
-    (*ret_val) = val1_ptr;
+    assign_ret_ref(val1_ptr);
 }
 
 prjm_eel_function_decl(powop)
@@ -667,7 +681,7 @@ prjm_eel_function_decl(powop)
     invoke_arg(2, &val2_ptr);
 
     (*val1_ptr) = powf(*val1_ptr, *val2_ptr);
-    (*ret_val) = val1_ptr;
+    assign_ret_ref(val1_ptr);
 }
 
 
@@ -682,7 +696,7 @@ prjm_eel_function_decl(math_func1)
 
     invoke_arg(1, &math_arg_ptr);
 
-    (**ret_val) = ((prjm_eel_math_func1*) ctx->math_func)(*math_arg_ptr);
+    assign_ret_val(((prjm_eel_math_func1*) ctx->math_func)(*math_arg_ptr));
 }
 
 prjm_eel_function_decl(math_func2)
@@ -698,7 +712,7 @@ prjm_eel_function_decl(math_func2)
     invoke_arg(1, &math_arg1_ptr);
     invoke_arg(2, &math_arg2_ptr);
 
-    (**ret_val) = ((prjm_eel_math_func2*) ctx->math_func)(*math_arg1_ptr, *math_arg2_ptr);
+    assign_ret_val(((prjm_eel_math_func2*) ctx->math_func)(*math_arg1_ptr, *math_arg2_ptr));
 }
 
 prjm_eel_function_decl(sigmoid)
@@ -714,7 +728,7 @@ prjm_eel_function_decl(sigmoid)
     invoke_arg(2, &math_arg2_ptr);
 
     double t = (1 + exp((double) -(*math_arg1_ptr) * (*math_arg2_ptr)));
-    (**ret_val) = (float) (fabs(t) > 0.00001 ? 1.0 / t : 0.f);
+    assign_ret_val((float) (fabs(t) > 0.00001 ? 1.0 / t : 0.f));
 }
 
 prjm_eel_function_decl(sqr)
@@ -726,7 +740,7 @@ prjm_eel_function_decl(sqr)
 
     invoke_arg(1, &value_ptr);
 
-    (**ret_val) = (*value_ptr) * (*value_ptr);
+    assign_ret_val((*value_ptr) * (*value_ptr));
 }
 
 prjm_eel_function_decl(abs)
@@ -738,7 +752,7 @@ prjm_eel_function_decl(abs)
 
     invoke_arg(1, &value_ptr);
 
-    (**ret_val) = fabsf(*value_ptr);
+    assign_ret_val(fabsf(*value_ptr));
 }
 
 prjm_eel_function_decl(min)
@@ -753,7 +767,7 @@ prjm_eel_function_decl(min)
     invoke_arg(1, &math_arg1_ptr);
     invoke_arg(2, &math_arg2_ptr);
 
-    (**ret_val) = (*math_arg1_ptr) < (*math_arg2_ptr) ? (*math_arg1_ptr) : (*math_arg2_ptr);
+    assign_ret_val((*math_arg1_ptr) < (*math_arg2_ptr) ? (*math_arg1_ptr) : (*math_arg2_ptr));
 }
 
 prjm_eel_function_decl(max)
@@ -768,7 +782,7 @@ prjm_eel_function_decl(max)
     invoke_arg(1, &math_arg1_ptr);
     invoke_arg(2, &math_arg2_ptr);
 
-    (**ret_val) = (*math_arg1_ptr) > (*math_arg2_ptr) ? (*math_arg1_ptr) : (*math_arg2_ptr);
+    assign_ret_val((*math_arg1_ptr) > (*math_arg2_ptr) ? (*math_arg1_ptr) : (*math_arg2_ptr));
 }
 
 prjm_eel_function_decl(sign)
@@ -785,7 +799,7 @@ prjm_eel_function_decl(sign)
         (**ret_val) = .0f;
         return;
     }
-    (**ret_val) = (*value_ptr) < .0f ? -1.f : 1.f;
+    assign_ret_val((*value_ptr) < .0f ? -1.f : 1.f);
 }
 
 prjm_eel_function_decl(rand)
@@ -803,7 +817,7 @@ prjm_eel_function_decl(rand)
         rand_max = 1.f;
     }
 
-    (**ret_val) = (float) (prjm_eel_genrand_int32() * (1.0 / (double) 0xFFFFFFFF * rand_max));
+    assign_ret_val((float) (prjm_eel_genrand_int32() * (1.0 / (double) 0xFFFFFFFF * rand_max)));
 }
 
 prjm_eel_function_decl(invsqrt)
@@ -832,5 +846,5 @@ prjm_eel_function_decl(invsqrt)
     type_conv.int_val = 0x5f3759df - (type_conv.int_val >> 1);
     type_conv.float_val = type_conv.float_val * (three_halfs - (num2 * type_conv.float_val * type_conv.float_val));
 
-    (**ret_val) = type_conv.float_val;
+    assign_ret_val(type_conv.float_val);
 }
