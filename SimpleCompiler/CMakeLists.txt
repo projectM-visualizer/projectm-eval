@@ -28,6 +28,7 @@ add_custom_target(GenerateScanner ALL
 add_custom_command(COMMAND ${BISON_EXECUTABLE}
         -o ${CMAKE_CURRENT_BINARY_DIR}/Compiler.c
         --defines=${CMAKE_CURRENT_BINARY_DIR}/Compiler.h
+        -Wcounterexamples
         Compiler.y
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         OUTPUT ${BISON_OUTPUT_FILES}
@@ -39,15 +40,21 @@ add_custom_target(GenerateCompiler ALL
         )
 
 add_executable(SimpleCompiler
-        ${CMAKE_CURRENT_BINARY_DIR}/Compiler.c
-        ${CMAKE_CURRENT_BINARY_DIR}/Compiler.h
-        ${CMAKE_CURRENT_BINARY_DIR}/Scanner.c
-        ${CMAKE_CURRENT_BINARY_DIR}/Scanner.h
-        Calc.h
-        main.cpp
+        CompileContext.h
+        Compiler.c
+        Compiler.h
+        Compiler.y
+        CompilerFunctions.c
+        CompilerFunctions.h
+        CompilerTypes.h
         ExpressionTree.h
+        Scanner.c
+        Scanner.h
+        Scanner.l
         TreeFunctions.c
-        MathFunctions.h MathFunctions.c TreeFunctions.h)
+        TreeFunctions.h
+        main.cpp
+        )
 
 target_include_directories(SimpleCompiler
         PRIVATE

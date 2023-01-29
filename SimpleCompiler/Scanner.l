@@ -1,15 +1,18 @@
-%{
-#include "Calc.h"
+%option reentrant
+%option nounput noinput noyywrap 8bit nodefault yylineno
+%option bison-bridge bison-locations
+%option prefix="prjm_eel_"
+%option extra-type="struct prjm_eel_scanner_state *"
+
+%top{
+#include "CompilerTypes.h"
 #include "Compiler.h"
 
 #include <stdio.h>
 
-%}
+#define YY_STDINIT
+}
 
-%option noyywrap
-    /*%option yylineno*/
-%option bison-bridge bison-locations
-%option prefix="prjm_eel_"
 
     /* States */
 %x ML_COMMENT
@@ -26,12 +29,12 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
 %%
 
     /* Comments */
-"/*"                { BEGIN(ML_COMMENT); }
-<ML_COMMENT>"*/"    { BEGIN(INITIAL); }
+"/*"                { printf("START COMMENT BLOCK\n"); BEGIN(ML_COMMENT); }
+<ML_COMMENT>"*/"    { printf("END COMMENT BLOCK\n");BEGIN(INITIAL); }
 <ML_COMMENT>\n      { }
 
-"//"                { BEGIN(IL_COMMENT); }
-<IL_COMMENT>\n      { BEGIN(INITIAL); }
+"//"                { printf("START INLINE COMMENT\n");BEGIN(IL_COMMENT); }
+<IL_COMMENT>\n      { printf("END INLINE COMMENT\n");BEGIN(INITIAL); }
 <IL_COMMENT>.       { }
 
     /* Constants */
@@ -47,8 +50,6 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
 "$"(?i:phi)         { printf("Found PHI Constant\n"); yylval->NUM = 1.61803399f; return NUM; }
 
     /* Literals */
-(?i:loop)          { printf("Found LOOP\n"); return LOOP; }
-(?i:while)         { printf("Found WHILE\n"); return WHILE; }
 (?i:gmem)          { printf("Found GMEM\n"); return GMEM; }
 (?i:gmegabuf)      { printf("Found GMEGABUF\n"); return GMEGABUF; }
 (?i:megabuf)       { printf("Found MEGABUF\n"); return MEGABUF; }
@@ -60,11 +61,8 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
                     }
 {NAME}              {
                         printf("Found text: %s\n", yytext);
-                        symrec *s = getsym(yytext);
-                        if (!s)
-                            s = putsym(yytext, VAR);
-                        yylval->VAR = s;
-                        return s->type;
+                        yylval->NAME = strdup(yytext);
+                        return NAME;
                     }
 
     /* Operators */

@@ -1,8 +1,9 @@
-%code top {
-  #include "Calc.h"   /* Contains definition of 'symrec'. */
+%code requires {
+
+  #include "CompilerTypes.h"
   #include "Compiler.h"
-  int prjm_eel_lex (YYSTYPE * yylval_param, YYLTYPE * yylloc_param );
-  void prjm_eel_error (char const *);
+
+  typedef void* yyscan_t;
 }
 
 /* Generator options */
@@ -11,9 +12,23 @@
 %no-lines
 %define api.pure true
 %define api.prefix {prjm_eel_}
-%define api.header.include {"Calc.h"}
 %define api.value.type union /* Generate YYSTYPE from these types: */
 %define parse.error verbose
+
+    /* Parser and lexer arguments */
+%param {prjm_eel_compiler_context_t* cctx} { yyscan_t scanner }
+
+%code provides {
+
+    #define YYSTYPE PRJM_EEL_STYPE
+    #define YYLTYPE PRJM_EEL_LTYPE
+
+   #define YY_DECL \
+       int yylex(YYSTYPE* yylval_param, YYLTYPE* yylloc_param, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner)
+   YY_DECL;
+
+   int yyerror(YYLTYPE* yyllocp, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner, const char* message);
+}
 
 /* Token declarations */
 
@@ -24,10 +39,9 @@
 %token ADDOP SUBOP MODOP OROP ANDOP DIVOP MULOP POWOP EQUAL BELEQ ABOEQ NOTEQ BOOLOR BOOLAND
 
 /* Value types */
-%token <float>  NUM     /* Simple number. */
-%token <symrec*> VAR FUN /* Symbol table pointer: variable/function. */
-%nterm <symrec*> function memory lvalue
-%nterm <float> program instruction-list loop instruction expression
+%token <float> NUM
+%token <char*> NAME
+%nterm <prjm_eel_compiler_node_t*> variable function function-arglist memory lvalue program instruction-list expression
 
 /* Operator precedence, lowest first, highest last. */
 %precedence ','
@@ -46,8 +60,11 @@
 %left '<' BELEQ
 %left '-' '+'
 %left '*' '/' '%'
+%right '!'
 %precedence NEG POS /* unary minus or plus */
 %left '^'
+%left '[' ']'
+%left '(' ')'
 
 %% /* The grammar follows. */
 
@@ -55,38 +72,34 @@ program:
   instruction-list { printf ("PROGRAM END\n"); }
 ;
 
-instruction-list:
-  instruction                  { printf ("INSTRUCTION LIST START\n"); }
-| instruction-list instruction { printf ("INSTRUCTION LIST +1\n"); }
-;
-
-instruction:
-  expression ';'    { printf ("INSTRUCTION EXPRESSION\n"); }
-| loop ';'          { printf ("INSTRUCTION LOOP\n"); }
-;
-
-/**
- * loop() and while() are special, as these are the only "functions" which takes a list
- * of expressions as the second argument. This isn't allowed in any other function.
- */
-loop:
-  LOOP '(' expression ',' instruction-list ')' { printf ("LOOP END\n"); }
-| WHILE '(' expression ',' instruction-list ')' { printf ("WHILE END\n"); }
-;
-
 /* Functions */
 function:
-  FUN '(' expression ')'                                 { printf("FUNC 1: %s\n", $1->name); }
-| FUN '(' expression ',' expression ')'                  { printf("FUNC 2: %s\n", $1->name); }
-| FUN '(' expression ',' expression ',' expression ')'   { printf("FUNC 3: %s\n", $1->name); }
+  NAME '(' function-arglist ')'            { printf("FUNCTION: %s\n", $1); }
+;
+
+function-arglist:
+  instruction-list                         { printf("FUNCTION ARGLIST START\n"); }
+| function-arglist ',' instruction-list    { printf("FUNCTION ARGLIST +ARG\n"); }
+;
+
+parentheses:
+  '(' instruction-list ')'                 { printf("PARENTHESED EXPRESSION\n"); }
+| '(' ')'                                  { printf("EMPTY PARENTHESES\n"); }
+;
+
+instruction-list:
+  expression                               { printf ("INSTRUCTION LIST START\n"); }
+| instruction-list ';' expression          { printf ("INSTRUCTION LIST +1\n"); }
+| instruction-list ';' empty-expression    { printf ("INSTRUCTION LIST +0\n"); }
+| instruction-list ';' error               { printf ("INSTRUCTION LIST ERROR +0\n"); }
 ;
 
 /* Memory access */
 memory:
 /* Memory access via index */
-  expression '[' ']'              { printf("INDEX[] - MEM AT INDEX <EXP>\n"); }
-| expression '[' expression ']'   { printf("INDEX[OFFSET] - MEM AT INDEX <EXP> WITH OFFSET <EXP>\n"); }
-| GMEM '[' expression ']'         { printf("GMEM[INDEX] - GLOBAL MEM AT INDEX <EXP>\n"); }
+  expression '[' ']'                    { printf("INDEX[] - MEM AT INDEX <EXP>\n"); }
+| expression '[' expression ']'         { printf("INDEX[OFFSET] - MEM AT INDEX <EXP> WITH OFFSET <EXP>\n"); }
+| GMEM '[' expression ']'               { printf("GMEM[INDEX] - GLOBAL MEM AT INDEX <EXP>\n"); }
 
 /* Memory access via function */
 | MEGABUF '(' expression ')'      { printf("MEGABUF(INDEX) - MEM AT INDEX <EXP>\n"); }
@@ -94,15 +107,22 @@ memory:
 ;
 
 lvalue:
-  VAR                             { printf("VAR: %s\n", $1->name); }
+  variable
 | memory                          { printf("MEMORY ACCESS\n"); }
+;
+
+variable:
+  NAME                            { printf("VAR: %s\n", $1); }
+;
+
+empty-expression:
+  %empty         { printf("EMPTY EXPRESSION\n"); }
 ;
 
 /* General expressions */
 expression:
-  %empty                          { printf("EMPTY EXPRESSION\n"); }
 /* Literals */
-| NUM                             { printf("NUM: %g\n", $1); }
+  NUM                             { printf("NUM: %g\n", $1); }
 | lvalue                          { printf("LVALUE\n", $1); }
 
 /* Compund assignment operators */
@@ -149,7 +169,7 @@ expression:
 | '!' expression                  { printf("UNARY !\n"); }
 
 /* Parenthesed expression */
-| '(' expression ')'              { printf("PARENTHESED EXP\n"); }
+| parentheses                     { printf("PARENTHESED EXP\n"); }
 ;
 
 /* End of grammar. */
