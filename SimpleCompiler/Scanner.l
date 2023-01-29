@@ -35,13 +35,13 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
 <IL_COMMENT>.       { }
 
     /* Constants */
-"$"[Xx]{HEX}{HEX}*  {
+"$"[Xx]{HEX}+       {
                         printf("Found HEX Constant\n");
                         char* p = yytext + 2;
                         yylval->NUM = (double)strtoul(yytext + 2, &p, 16);
                         return NUM;
                         }
-"$'"."'"            { printf("Found ORD Constant\n"); yylval->NUM = 0.0f; return NUM; }
+"$'"."'"            { printf("Found ORD Constant\n"); yylval->NUM = *(char*)(yytext + 2); return NUM; }
 "$"(?i:pi)          { printf("Found PI Constant\n"); yylval->NUM = 3.141592653589793f; return NUM; }
 "$"[eE]             { printf("Found E Constant\n"); yylval->NUM = 2.71828183f; return NUM; }
 "$"(?i:phi)         { printf("Found PHI Constant\n"); yylval->NUM = 1.61803399f; return NUM; }
@@ -52,6 +52,7 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
 (?i:gmem)          { printf("Found GMEM\n"); return GMEM; }
 (?i:gmegabuf)      { printf("Found GMEGABUF\n"); return GMEGABUF; }
 (?i:megabuf)       { printf("Found MEGABUF\n"); return MEGABUF; }
+
 {FLOAT}            {
                         yylval->NUM = atof(yytext);
                         printf("Found number: %g\n", yylval->NUM);
