@@ -1,0 +1,26 @@
+find_package(GTest 1.10 REQUIRED NO_MODULE)
+
+
+add_executable(projectM_EvalLib_Test
+        TreeFunctionsTest.cpp
+        ${CMAKE_SOURCE_DIR}/SimpleCompiler/TreeFunctions.h
+        ${CMAKE_SOURCE_DIR}/SimpleCompiler/TreeFunctions.c
+        )
+
+
+target_link_libraries(projectM_EvalLib_Test
+        PRIVATE
+        GTest::gtest_main
+        )
+
+target_include_directories(projectM_EvalLib_Test
+        PRIVATE
+        ${CMAKE_SOURCE_DIR}/SimpleCompiler
+        )
+
+target_compile_definitions(projectM_EvalLib_Test
+        PRIVATE
+        PROJECTM_TEST_DATA_DIR="${CMAKE_CURRENT_LIST_DIR}/data"
+        )
+
+add_test(NAME projectM_EvalLib_Test COMMAND projectM_EvalLib_Test)

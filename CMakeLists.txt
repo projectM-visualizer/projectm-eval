@@ -15,10 +15,9 @@ find_package(BISON 3.8)
 find_package(FLEX 2.6)
 
 add_subdirectory(SimpleCompiler)
-#add_subdirectory(projectM-EvalLib)
 
 if(BUILD_TESTING)
     enable_testing()
-    #add_subdirectory(tests)
+    add_subdirectory(tests)
 endif()
 
