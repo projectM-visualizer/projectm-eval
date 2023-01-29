@@ -6,18 +6,36 @@
 
 #include "ExpressionTree.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "stdbool.h"
+
 /**
  * @brief Structure containing information about an available function implementation.
  * This struct is used to fill the intrinsic function table and is used to add additional,
  * externally-defined functions to the parser.
  */
-typedef struct
+typedef struct prjm_eel_function_def
 {
     const char* name; /*!< The lower-case name of the function in the expression syntax */
     prjm_eel_expr_func_t* func; /*!< A pointer to the function implementation */
     void* math_func; /*!< When using math_func1 or math_func2 in @a func, a pointer to the C library math function. */
     int params; /*!< Number of accepted parameters, 1 to 3. */
-} func_entry;
+    bool is_const_eval; /*!< If true, the function can be evaluated to a constant value at compile time. */
+} prjm_eel_function_def_t;
+
+typedef struct prjm_eel_function_entry
+{
+    prjm_eel_function_def_t* function;
+    struct prjm_eel_function_entry* next;
+} prjm_eel_function_entry_t;
+
+typedef struct
+{
+    prjm_eel_function_entry_t* first;
+} prjm_eel_function_list_t;
 
 /**
  * @brief Abbreviates parser function declaration.
@@ -31,7 +49,7 @@ prjm_eel_function_decl(const);
 prjm_eel_function_decl(var);
 
 /* Execution control structures */
-prjm_eel_function_decl(list);
+prjm_eel_function_decl(execute_list);
 prjm_eel_function_decl(execute_loop);
 prjm_eel_function_decl(execute_while);
 prjm_eel_function_decl(if);
@@ -47,7 +65,6 @@ prjm_eel_function_decl(gmegabuf);
 prjm_eel_function_decl(freembuf);
 prjm_eel_function_decl(memcpy);
 prjm_eel_function_decl(memset);
-
 /* Operators */
 prjm_eel_function_decl(bnot);
 prjm_eel_function_decl(equal);
@@ -56,7 +73,6 @@ prjm_eel_function_decl(below);
 prjm_eel_function_decl(above);
 prjm_eel_function_decl(beloweq);
 prjm_eel_function_decl(aboveeq);
-
 prjm_eel_function_decl(add);
 prjm_eel_function_decl(sub);
 prjm_eel_function_decl(mul);
@@ -86,3 +102,7 @@ prjm_eel_function_decl(max);
 prjm_eel_function_decl(sign);
 prjm_eel_function_decl(rand);
 prjm_eel_function_decl(invsqrt);
+
+#ifdef __cplusplus
+};
+#endif
