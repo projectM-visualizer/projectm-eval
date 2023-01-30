@@ -36,18 +36,20 @@ prjm_eel_variable_t* TreeFunctions::CreateVariable(const char* name, float initi
     return var;
 }
 
-prjm_eel_exptreenode_t* TreeFunctions::CreateEmptyNode()
+prjm_eel_exptreenode_t* TreeFunctions::CreateEmptyNode(int argCount)
 {
-    auto* varNode = new prjm_eel_exptreenode{};
-
-    n_treeNodes.push_back(varNode);
-
-    return varNode;
+    auto* node = reinterpret_cast<prjm_eel_exptreenode_t*>(calloc(1, sizeof(prjm_eel_exptreenode_t)));
+    if (argCount > 0)
+    {
+        node->args = reinterpret_cast<prjm_eel_exptreenode_t**>( calloc(argCount + 1,
+                                                                        sizeof(prjm_eel_exptreenode_t*)));
+    }
+    return node;
 }
 
 prjm_eel_exptreenode_t* TreeFunctions::CreateConstantNode(float value)
 {
-    auto* varNode = CreateEmptyNode();
+    auto* varNode = CreateEmptyNode(0);
 
     varNode->func = prjm_eel_func_const;
     varNode->value = value;
@@ -61,7 +63,7 @@ TreeFunctions::CreateVariableNode(const char* name, float initialValue, float* e
 {
     *variable = CreateVariable(name, initialValue, externalDataPointer);
 
-    auto* varNode = CreateEmptyNode();
+    auto* varNode = CreateEmptyNode(0);
 
     varNode->func = prjm_eel_func_var;
     varNode->var = *variable;
@@ -79,9 +81,9 @@ void TreeFunctions::TearDown()
 {
     prjm_eel_variable_t* nextVar = m_variables;
 
-    for (auto node: n_treeNodes)
+    for (auto node: m_treeNodes)
     {
-        delete node;
+        prjm_eel_destroy_exptreenode(node);
     }
 
     while (nextVar)
@@ -102,6 +104,8 @@ TEST_F(TreeFunctions, Constant)
 {
     auto* constNode = CreateConstantNode(5.0f);
 
+    m_treeNodes.push_back(constNode);
+
     float value{};
     float* valuePointer = &value;
     constNode->func(constNode, &valuePointer);
@@ -113,6 +117,8 @@ TEST_F(TreeFunctions, Variable)
 {
     prjm_eel_variable_t* var;
     auto* varNode = CreateVariableNode("x", 5.f, nullptr, &var);
+
+    m_treeNodes.push_back(varNode);
 
     float value{};
     float* valuePointer = &value;
@@ -130,6 +136,8 @@ TEST_F(TreeFunctions, VariableExternal)
     auto* varNode = CreateVariableNode("x", 5.f, nullptr, &var);
     var->value_ptr = &externalValue;
 
+    m_treeNodes.push_back(varNode);
+
     float value{};
     float* valuePointer = &value;
     varNode->func(varNode, &valuePointer);
@@ -140,29 +148,34 @@ TEST_F(TreeFunctions, VariableExternal)
 
 TEST_F(TreeFunctions, ExecuteList)
 {
-    auto* constNode1 = CreateConstantNode(-50.0f);
-    auto* constNode2 = CreateConstantNode(50.0f);
 
+    // Expression list ("x = -50; y = 50;")
     prjm_eel_variable_t* var1;
     auto* varNode1 = CreateVariableNode("x", 5.f, nullptr, &var1);
+    auto* constNode1 = CreateConstantNode(-50.0f);
+
+    auto* setNode1 = CreateEmptyNode(2);
+    setNode1->func = prjm_eel_func_set;
+    setNode1->args[0] = varNode1;
+    setNode1->args[1] = constNode1;
+
 
     prjm_eel_variable_t* var2;
     auto* varNode2 = CreateVariableNode("y", 123.f, nullptr, &var2);
+    auto* constNode2 = CreateConstantNode(50.0f);
 
-    auto* setNode1 = CreateEmptyNode();
-    setNode1->func = prjm_eel_func_set;
-    setNode1->arg1 = varNode1;
-    setNode1->arg2 = constNode1;
-
-    auto* setNode2 = CreateEmptyNode();
+    auto* setNode2 = CreateEmptyNode(2);
     setNode2->func = prjm_eel_func_set;
-    setNode2->arg1 = varNode2;
-    setNode2->arg2 = constNode2;
-
-    auto* listNode = CreateEmptyNode();
-    listNode->func = prjm_eel_func_execute_list;
-    listNode->next = setNode1;
+    setNode2->args[0] = varNode2;
+    setNode2->args[1] = constNode2;
     setNode1->next = setNode2;
+
+    // Executor
+    auto* listNode = CreateEmptyNode(1);
+    listNode->func = prjm_eel_func_execute_list;
+    listNode->args[0] = setNode1;
+
+    m_treeNodes.push_back(listNode);
 
     float value{};
     float* valuePointer = &value;
@@ -176,11 +189,13 @@ TEST_F(TreeFunctions, ExecuteList)
 TEST_F(TreeFunctions, MathFunctionsOneArgument)
 {
     auto* constNode = CreateConstantNode(5.0f);
-    auto* sinNode = CreateEmptyNode();
+    auto* sinNode = CreateEmptyNode(1);
 
     sinNode->func = prjm_eel_func_math_func1;
-    sinNode->math_func = (void*)sinf;
-    sinNode->arg1 = constNode;
+    sinNode->math_func = (void*) sinf;
+    sinNode->args[0] = constNode;
+
+    m_treeNodes.push_back(sinNode);
 
     float value{};
     float* valuePointer = &value;
@@ -193,12 +208,14 @@ TEST_F(TreeFunctions, MathFunctionsTwoArguments)
 {
     auto* constNode1 = CreateConstantNode(5.0f);
     auto* constNode2 = CreateConstantNode(-5.0f);
-    auto* atan2Node = CreateEmptyNode();
+    auto* atan2Node = CreateEmptyNode(2);
 
     atan2Node->func = prjm_eel_func_math_func2;
-    atan2Node->math_func = (void*)atan2f;
-    atan2Node->arg1 = constNode1;
-    atan2Node->arg2 = constNode2;
+    atan2Node->math_func = (void*) atan2f;
+    atan2Node->args[0] = constNode1;
+    atan2Node->args[1] = constNode2;
+
+    m_treeNodes.push_back(atan2Node);
 
     float value{};
     float* valuePointer = &value;
@@ -214,11 +231,13 @@ TEST_F(TreeFunctions, Set)
     prjm_eel_variable_t* var2;
     auto* varNode1 = CreateVariableNode("x", 5.f, nullptr, &var1);
     auto* varNode2 = CreateVariableNode("y", 45.f, nullptr, &var2);
-    auto* setNode = CreateEmptyNode();
 
+    auto* setNode = CreateEmptyNode(2);
     setNode->func = prjm_eel_func_set;
-    setNode->arg1 = varNode1;
-    setNode->arg2 = varNode2;
+    setNode->args[0] = varNode1;
+    setNode->args[1] = varNode2;
+
+    m_treeNodes.push_back(setNode);
 
     float value{};
     float* valuePointer = &value;

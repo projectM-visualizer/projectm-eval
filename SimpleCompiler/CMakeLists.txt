@@ -40,6 +40,7 @@ add_custom_target(GenerateCompiler ALL
         )
 
 add_executable(SimpleCompiler
+        CompileContext.c
         CompileContext.h
         Compiler.c
         Compiler.h
@@ -48,13 +49,15 @@ add_executable(SimpleCompiler
         CompilerFunctions.h
         CompilerTypes.h
         ExpressionTree.h
+        FileParser.cpp
+        FileParser.hpp
         Scanner.c
         Scanner.h
         Scanner.l
         TreeFunctions.c
         TreeFunctions.h
         main.cpp
-        )
+        ExpressionTree.c TreeVariables.c TreeVariables.h)
 
 target_include_directories(SimpleCompiler
         PRIVATE

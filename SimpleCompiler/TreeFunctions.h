@@ -4,38 +4,16 @@
  */
 #pragma once
 
+#include "CompilerTypes.h"
 #include "ExpressionTree.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "stdbool.h"
-
 /**
- * @brief Structure containing information about an available function implementation.
- * This struct is used to fill the intrinsic function table and is used to add additional,
- * externally-defined functions to the parser.
+ * @brief Returns the list with the built-in function table.
+ * The list must not be freed, as it points to the internal static data.
+ * @param list A pointer which will receive the list reference.
+ * @param count The number of elements inserted into the list.
  */
-typedef struct prjm_eel_function_def
-{
-    const char* name; /*!< The lower-case name of the function in the expression syntax */
-    prjm_eel_expr_func_t* func; /*!< A pointer to the function implementation */
-    void* math_func; /*!< When using math_func1 or math_func2 in @a func, a pointer to the C library math function. */
-    int params; /*!< Number of accepted parameters, 1 to 3. */
-    bool is_const_eval; /*!< If true, the function can be evaluated to a constant value at compile time. */
-} prjm_eel_function_def_t;
-
-typedef struct prjm_eel_function_entry
-{
-    prjm_eel_function_def_t* function;
-    struct prjm_eel_function_entry* next;
-} prjm_eel_function_entry_t;
-
-typedef struct
-{
-    prjm_eel_function_entry_t* first;
-} prjm_eel_function_list_t;
+void prjm_eel_intrinsic_functions(prjm_eel_intrinsic_function_list_ptr list, int* count);
 
 /**
  * @brief Abbreviates parser function declaration.
@@ -65,6 +43,7 @@ prjm_eel_function_decl(gmegabuf);
 prjm_eel_function_decl(freembuf);
 prjm_eel_function_decl(memcpy);
 prjm_eel_function_decl(memset);
+
 /* Operators */
 prjm_eel_function_decl(bnot);
 prjm_eel_function_decl(equal);
@@ -80,6 +59,7 @@ prjm_eel_function_decl(div);
 prjm_eel_function_decl(mod);
 prjm_eel_function_decl(band);
 prjm_eel_function_decl(bor);
+prjm_eel_function_decl(neg);
 
 /* Compound assignment operators */
 prjm_eel_function_decl(addop);
@@ -102,7 +82,3 @@ prjm_eel_function_decl(max);
 prjm_eel_function_decl(sign);
 prjm_eel_function_decl(rand);
 prjm_eel_function_decl(invsqrt);
-
-#ifdef __cplusplus
-};
-#endif

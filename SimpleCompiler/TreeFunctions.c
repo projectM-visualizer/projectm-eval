@@ -15,66 +15,84 @@
  * Milkdrop, we also allow expressions to call them directly.
  */
 static prjm_eel_function_def_t intrinsic_function_table[] = {
-    { "if",       prjm_eel_func_if,            0,      3, true },
-    { "_if",      prjm_eel_func_if,            0,      3, true },
-    { "_and",     prjm_eel_func_band,          0,      2, true },
-    { "_or",      prjm_eel_func_bor,           0,      2, true },
-    { "loop",     prjm_eel_func_execute_loop,  0,      2, true },
-    { "while",    prjm_eel_func_execute_while, 0,      1, true },
+    /* Special intrinsic functions. Cannot be used via expression syntax. */
+    { "/*const*/", prjm_eel_func_const,         0,      0, true,  false },
+    { "/*var*/",   prjm_eel_func_var,           0,      0, false, false },
+    { "/*list*/",  prjm_eel_func_execute_list,  0,      1, true,  false },
 
-    { "_not",     prjm_eel_func_bnot,          0,      1, true },
-    { "_equal",   prjm_eel_func_equal,         0,      2, true },
-    { "_noteq",   prjm_eel_func_notequal,      0,      2, true },
-    { "_below",   prjm_eel_func_below,         0,      2, true },
-    { "_above",   prjm_eel_func_above,         0,      2, true },
-    { "_beleq",   prjm_eel_func_beloweq,       0,      2, true },
-    { "_aboeq",   prjm_eel_func_aboveeq,       0,      2, true },
+    { "if",        prjm_eel_func_if,            0,      3, true,  false },
+    { "_if",       prjm_eel_func_if,            0,      3, true,  false },
+    { "_and",      prjm_eel_func_band,          0,      2, true,  false },
+    { "_or",       prjm_eel_func_bor,           0,      2, true,  false },
+    { "loop",      prjm_eel_func_execute_loop,  0,      2, true,  false },
+    { "while",     prjm_eel_func_execute_while, 0,      1, true,  false },
 
-    { "_set",     prjm_eel_func_set,           0,      2, false },
-    { "_mod",     prjm_eel_func_mod,           0,      2, true },
-    { "_mulop",   prjm_eel_func_mulop,         0,      2, true },
-    { "_divop",   prjm_eel_func_divop,         0,      2, true },
-    { "_orop",    prjm_eel_func_orop,          0,      2, true },
-    { "_andop",   prjm_eel_func_andop,         0,      2, true },
-    { "_addop",   prjm_eel_func_addop,         0,      2, true },
-    { "_subop",   prjm_eel_func_subop,         0,      2, true },
-    { "_modop",   prjm_eel_func_modop,         0,      2, true },
+    { "_not",      prjm_eel_func_bnot,          0,      1, true,  false },
+    { "bnot",      prjm_eel_func_bnot,          0,      1, true,  false },
+    { "_equal",    prjm_eel_func_equal,         0,      2, true,  false },
+    { "equal",     prjm_eel_func_equal,         0,      2, true,  false },
+    { "_noteq",    prjm_eel_func_notequal,      0,      2, true,  false },
+    { "_below",    prjm_eel_func_below,         0,      2, true,  false },
+    { "below",     prjm_eel_func_below,         0,      2, true,  false },
+    { "_above",    prjm_eel_func_above,         0,      2, true,  false },
+    { "above",     prjm_eel_func_above,         0,      2, true,  false },
+    { "_beleq",    prjm_eel_func_beloweq,       0,      2, true,  false },
+    { "_aboeq",    prjm_eel_func_aboveeq,       0,      2, true,  false },
 
-    { "sin",      prjm_eel_func_math_func1,    sinf,   1, true },
-    { "cos",      prjm_eel_func_math_func1,    cosf,   1, true },
-    { "tan",      prjm_eel_func_math_func1,    tanf,   1, true },
-    { "asin",     prjm_eel_func_math_func1,    asinf,  1, true },
-    { "acos",     prjm_eel_func_math_func1,    acosf,  1, true },
-    { "atan",     prjm_eel_func_math_func1,    atanf,  1, true },
-    { "atan2",    prjm_eel_func_math_func2,    atan2f, 2, true },
-    { "sqr",      prjm_eel_func_sqr,           0,      1, true },
-    { "sqrt",     prjm_eel_func_math_func1,    sqrtf,  1, true },
-    { "pow",      prjm_eel_func_math_func2,    powf,   2, true },
-    { "_powop",   prjm_eel_func_powop,         0,      2, true },
-    { "exp",      prjm_eel_func_math_func1,    expf,   1, true },
+    { "_set",      prjm_eel_func_set,           0,      2, false, true },
+    { "assign",    prjm_eel_func_set,           0,      2, false, true },
+    { "_add",      prjm_eel_func_add,           0,      2, true,  false },
+    { "_sub",      prjm_eel_func_sub,           0,      2, true,  false },
+    { "_mul",      prjm_eel_func_mul,           0,      2, true,  false },
+    { "_div",      prjm_eel_func_div,           0,      2, true,  false },
+    { "_mod",      prjm_eel_func_mod,           0,      2, true,  false },
+    { "_mulop",    prjm_eel_func_mulop,         0,      2, false, true },
+    { "_divop",    prjm_eel_func_divop,         0,      2, false, true },
+    { "_orop",     prjm_eel_func_orop,          0,      2, false, true },
+    { "_andop",    prjm_eel_func_andop,         0,      2, false, true },
+    { "_addop",    prjm_eel_func_addop,         0,      2, false, true },
+    { "_subop",    prjm_eel_func_subop,         0,      2, false, true },
+    { "_modop",    prjm_eel_func_modop,         0,      2, false, true },
 
-    { "log",      prjm_eel_func_math_func1,    logf,   1, true },
-    { "log10",    prjm_eel_func_math_func1,    log10f, 1, true },
-    { "abs",      prjm_eel_func_abs,           0,      1, true },
-    { "min",      prjm_eel_func_min,           0,      2, true },
-    { "max",      prjm_eel_func_max,           0,      2, true },
-    { "sign",     prjm_eel_func_sign,          0,      1, true },
-    { "rand",     prjm_eel_func_rand,          0,      1, false },
-    { "floor",    prjm_eel_func_math_func1,    floorf, 1, true },
-    { "ceil",     prjm_eel_func_math_func1,    ceilf,  1, true },
-    { "invsqrt",  prjm_eel_func_invsqrt,       0,      1, true },
-    { "sigmoid",  prjm_eel_func_sigmoid,       0,      2, true },
+    { "sin",       prjm_eel_func_math_func1,    sinf,   1, true,  false },
+    { "cos",       prjm_eel_func_math_func1,    cosf,   1, true,  false },
+    { "tan",       prjm_eel_func_math_func1,    tanf,   1, true,  false },
+    { "asin",      prjm_eel_func_math_func1,    asinf,  1, true,  false },
+    { "acos",      prjm_eel_func_math_func1,    acosf,  1, true,  false },
+    { "atan",      prjm_eel_func_math_func1,    atanf,  1, true,  false },
+    { "atan2",     prjm_eel_func_math_func2,    atan2f, 2, true,  false },
+    { "sqr",       prjm_eel_func_sqr,           0,      1, true,  false },
+    { "sqrt",      prjm_eel_func_math_func1,    sqrtf,  1, true,  false },
+    { "pow",       prjm_eel_func_math_func2,    powf,   2, true,  false },
+    { "_powop",    prjm_eel_func_powop,         0,      2, false, true },
+    { "exp",       prjm_eel_func_math_func1,    expf,   1, true,  false },
+    { "_neg",      prjm_eel_func_neg,           0,      1, true,  false },
 
-    { "band",     prjm_eel_func_band,          0,      2, true },
-    { "bor",      prjm_eel_func_bor,           0,      2, true },
+    { "log",       prjm_eel_func_math_func1,    logf,   1, true,  false },
+    { "log10",     prjm_eel_func_math_func1,    log10f, 1, true,  false },
+    { "abs",       prjm_eel_func_abs,           0,      1, true,  false },
+    { "min",       prjm_eel_func_min,           0,      2, true,  false },
+    { "max",       prjm_eel_func_max,           0,      2, true,  false },
+    { "sign",      prjm_eel_func_sign,          0,      1, true,  false },
+    { "rand",      prjm_eel_func_rand,          0,      1, false, false },
+    { "floor",     prjm_eel_func_math_func1,    floorf, 1, true,  false },
+    { "int",       prjm_eel_func_math_func1,    floorf, 1, true,  false },
+    { "ceil",      prjm_eel_func_math_func1,    ceilf,  1, true,  false },
+    { "invsqrt",   prjm_eel_func_invsqrt,       0,      1, true,  false },
+    { "sigmoid",   prjm_eel_func_sigmoid,       0,      2, true,  false },
 
-    { "exec2",    prjm_eel_func_exec2,         0,      2, true },
-    { "exec3",    prjm_eel_func_exec3,         0,      3, true },
-    { "_mem",     prjm_eel_func_megabuf,       0,      1, false },
-    { "_gmem",    prjm_eel_func_gmegabuf,      0,      1, false },
-    { "freembuf", prjm_eel_func_freembuf,      0,      1, false },
-    { "memcpy",   prjm_eel_func_memcpy,        0,      3, false },
-    { "memset",   prjm_eel_func_memset,        0,      3, false }
+    { "band",      prjm_eel_func_band,          0,      2, true,  false },
+    { "bor",       prjm_eel_func_bor,           0,      2, true,  false },
+
+    { "exec2",     prjm_eel_func_exec2,         0,      2, true,  false },
+    { "exec3",     prjm_eel_func_exec3,         0,      3, true,  false },
+    { "_mem",      prjm_eel_func_megabuf,       0,      1, false, true },
+    { "megabuf",   prjm_eel_func_megabuf,       0,      1, false, true },
+    { "_gmem",     prjm_eel_func_gmegabuf,      0,      1, false, true },
+    { "gmegabuf",  prjm_eel_func_gmegabuf,      0,      1, false, true },
+    { "freembuf",  prjm_eel_func_freembuf,      0,      1, false, true },
+    { "memcpy",    prjm_eel_func_memcpy,        0,      3, false, true },
+    { "memset",    prjm_eel_func_memset,        0,      3, false, true }
 };
 
 
@@ -89,8 +107,8 @@ static prjm_eel_function_def_t intrinsic_function_table[] = {
  * Invokes the expression function of the indexed argument
  */
 #define invoke_arg(argnum, retval) \
-    assert(ctx->arg ## argnum);    \
-    ctx->arg ## argnum->func(ctx->arg ## argnum, retval)
+    assert(ctx->args[argnum]);    \
+    ctx->args[argnum]->func(ctx->args[argnum], retval)
 
 /**
  * Assigns the value as a constant float return value.
@@ -112,6 +130,12 @@ static prjm_eel_function_def_t intrinsic_function_table[] = {
 #define MATRIX_A 0x9908b0dfUL   /* constant vector a */
 #define UPPER_MASK 0x80000000UL /* most significant w-r bits */
 #define LOWER_MASK 0x7fffffffUL /* least significant r bits */
+
+void prjm_eel_intrinsic_functions(prjm_eel_intrinsic_function_list_ptr list, int* count)
+{
+    *count = sizeof(intrinsic_function_table) / sizeof(prjm_eel_function_def_t);
+    *list = intrinsic_function_table;
+}
 
 /* This is Milkdrop's original rand() implementation. */
 static unsigned int prjm_eel_genrand_int32(void)
@@ -195,18 +219,20 @@ prjm_eel_function_decl(var)
 prjm_eel_function_decl(execute_list)
 {
     assert_valid_ctx();
-    assert(ctx->next);
+    assert(ctx->list);
 
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
-    prjm_eel_exptreenode_t* cur_expr = ctx;
-    while (cur_expr->next)
+    prjm_eel_exptreenode_list_item_t* item = ctx->list;
+    while (item)
     {
+        assert(item->expr);
+        assert(item->expr->func);
+
         ctx->value = .0f;
         value_ptr = &ctx->value;
-        cur_expr = cur_expr->next;
-        assert(cur_expr->func);
-        cur_expr->func(cur_expr, &value_ptr);
+        item->expr->func(item->expr, &value_ptr);
+        item = item->next;
     }
 
     assign_ret_ref(value_ptr);
@@ -215,11 +241,10 @@ prjm_eel_function_decl(execute_list)
 prjm_eel_function_decl(execute_loop)
 {
     assert_valid_ctx();
-    assert(ctx->next);
 
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
-    invoke_arg(1, &value_ptr);
+    invoke_arg(0, &value_ptr);
 
     int loop_count_int = (int) (*value_ptr);
     /* Limit execution count */
@@ -230,15 +255,9 @@ prjm_eel_function_decl(execute_loop)
 
     for (int i = 0; i < loop_count_int; i++)
     {
-        prjm_eel_exptreenode_t* cur_expr = ctx;
-        while (cur_expr->next)
-        {
-            ctx->value = .0f;
-            value_ptr = &ctx->value;
-            cur_expr = cur_expr->next;
-            assert(cur_expr->func);
-            cur_expr->func(cur_expr, &value_ptr);
-        }
+        ctx->value = .0f;
+        value_ptr = &ctx->value;
+        invoke_arg(1, &value_ptr);
     }
 
     assign_ret_ref(value_ptr);
@@ -247,23 +266,13 @@ prjm_eel_function_decl(execute_loop)
 prjm_eel_function_decl(execute_while)
 {
     assert_valid_ctx();
-    assert(ctx->next);
 
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
     int loop_count_int = 0;
     do
     {
-        prjm_eel_exptreenode_t* cur_expr = ctx;
-        while (cur_expr->next)
-        {
-            ctx->value = .0f;
-            value_ptr = &ctx->value;
-            cur_expr = cur_expr->next;
-            assert(cur_expr->func);
-            cur_expr->func(cur_expr, &value_ptr);
-        }
-
+        invoke_arg(0, &value_ptr);
         loop_count_int++;
     } while (*value_ptr != 0 && loop_count_int < 1000000);
 
@@ -276,14 +285,14 @@ prjm_eel_function_decl(if)
 
     float* if_arg = &ctx->value;
 
-    invoke_arg(1, &if_arg);
+    invoke_arg(0, &if_arg);
 
     if ((*if_arg) != 0)
     {
-        invoke_arg(2, ret_val);
+        invoke_arg(1, ret_val);
         return;
     }
-    invoke_arg(3, ret_val);
+    invoke_arg(2, ret_val);
 }
 
 prjm_eel_function_decl(exec2)
@@ -293,8 +302,8 @@ prjm_eel_function_decl(exec2)
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
 
-    invoke_arg(1, &value_ptr);
-    invoke_arg(2, ret_val);
+    invoke_arg(0, &value_ptr);
+    invoke_arg(1, ret_val);
 }
 
 prjm_eel_function_decl(exec3)
@@ -304,9 +313,9 @@ prjm_eel_function_decl(exec3)
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
 
+    invoke_arg(0, &value_ptr);
     invoke_arg(1, &value_ptr);
-    invoke_arg(2, &value_ptr);
-    invoke_arg(3, ret_val);
+    invoke_arg(2, ret_val);
 }
 
 prjm_eel_function_decl(set)
@@ -316,8 +325,8 @@ prjm_eel_function_decl(set)
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
 
-    invoke_arg(1, ret_val);
-    invoke_arg(2, &value_ptr);
+    invoke_arg(0, ret_val);
+    invoke_arg(1, &value_ptr);
 
     assign_ret_val(*value_ptr);
 }
@@ -365,7 +374,7 @@ prjm_eel_function_decl(bnot)
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
 
-    invoke_arg(1, &value_ptr);
+    invoke_arg(0, &value_ptr);
 
     assign_ret_val((float) !(*value_ptr));
 }
@@ -379,8 +388,8 @@ prjm_eel_function_decl(equal)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val((*val1_ptr == *val2_ptr) ? 1.f : .0f);
 }
@@ -393,8 +402,8 @@ prjm_eel_function_decl(notequal)
     float val2 = .0f;
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val((*val1_ptr != *val2_ptr) ? 1.f : .0f);
 }
@@ -408,8 +417,8 @@ prjm_eel_function_decl(below)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val((*val1_ptr < *val2_ptr) ? 1.f : .0f);
 }
@@ -423,8 +432,8 @@ prjm_eel_function_decl(above)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val((*val1_ptr > *val2_ptr) ? 1.f : .0f);
 }
@@ -438,8 +447,8 @@ prjm_eel_function_decl(beloweq)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val((*val1_ptr <= *val2_ptr) ? 1.f : .0f);
 }
@@ -453,8 +462,8 @@ prjm_eel_function_decl(aboveeq)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val((*val1_ptr >= *val2_ptr) ? 1.f : .0f);
 }
@@ -468,8 +477,8 @@ prjm_eel_function_decl(add)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val(*val1_ptr + *val2_ptr);
 }
@@ -483,8 +492,8 @@ prjm_eel_function_decl(sub)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val(*val1_ptr - *val2_ptr);
 }
@@ -498,8 +507,8 @@ prjm_eel_function_decl(mul)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val(*val1_ptr * *val2_ptr);
 }
@@ -513,8 +522,8 @@ prjm_eel_function_decl(div)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val(*val1_ptr / *val2_ptr);
 }
@@ -528,8 +537,8 @@ prjm_eel_function_decl(mod)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val((float) ((int) *val1_ptr % (int) *val2_ptr));
 }
@@ -543,8 +552,8 @@ prjm_eel_function_decl(band)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val((float) ((int) *val1_ptr & (int) *val2_ptr));
 }
@@ -558,12 +567,23 @@ prjm_eel_function_decl(bor)
     float* val1_ptr = &val1;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     assign_ret_val((float) ((int) *val1_ptr | (int) *val2_ptr));
 }
 
+prjm_eel_function_decl(neg)
+{
+    assert_valid_ctx();
+
+    float val1 = .0f;
+    float* val1_ptr = &val1;
+
+    invoke_arg(0, &val1_ptr);
+
+    assign_ret_val(-(*val1_ptr));
+}
 
 prjm_eel_function_decl(addop)
 {
@@ -573,8 +593,8 @@ prjm_eel_function_decl(addop)
     float* val1_ptr = &ctx->value;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     (*val1_ptr) = *val1_ptr + *val2_ptr;
     assign_ret_ref(val1_ptr);
@@ -588,8 +608,8 @@ prjm_eel_function_decl(subop)
     float* val1_ptr = &ctx->value;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     (*val1_ptr) = *val1_ptr - *val2_ptr;
     assign_ret_ref(val1_ptr);
@@ -603,8 +623,8 @@ prjm_eel_function_decl(mulop)
     float* val1_ptr = &ctx->value;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     (*val1_ptr) = *val1_ptr * *val2_ptr;
     assign_ret_ref(val1_ptr);
@@ -618,8 +638,8 @@ prjm_eel_function_decl(divop)
     float* val1_ptr = &ctx->value;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     (*val1_ptr) = *val1_ptr / *val2_ptr;
     assign_ret_ref(val1_ptr);
@@ -633,8 +653,8 @@ prjm_eel_function_decl(orop)
     float* val1_ptr = &ctx->value;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     (*val1_ptr) = (float) ((int) *val1_ptr & (int) *val2_ptr);
     assign_ret_ref(val1_ptr);
@@ -648,8 +668,8 @@ prjm_eel_function_decl(andop)
     float* val1_ptr = &ctx->value;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     (*val1_ptr) = (float) ((int) *val1_ptr | (int) *val2_ptr);
     assign_ret_ref(val1_ptr);
@@ -663,8 +683,8 @@ prjm_eel_function_decl(modop)
     float* val1_ptr = &ctx->value;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     (*val1_ptr) = (float) ((int) (*val1_ptr) % (int) (*val2_ptr));
     assign_ret_ref(val1_ptr);
@@ -678,8 +698,8 @@ prjm_eel_function_decl(powop)
     float* val1_ptr = &ctx->value;
     float* val2_ptr = &val2;
 
-    invoke_arg(1, &val1_ptr);
-    invoke_arg(2, &val2_ptr);
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
 
     (*val1_ptr) = powf(*val1_ptr, *val2_ptr);
     assign_ret_ref(val1_ptr);
@@ -695,7 +715,7 @@ prjm_eel_function_decl(math_func1)
     ctx->value = .0f;
     float* math_arg_ptr = &ctx->value;
 
-    invoke_arg(1, &math_arg_ptr);
+    invoke_arg(0, &math_arg_ptr);
 
     assign_ret_val(((prjm_eel_math_func1*) ctx->math_func)(*math_arg_ptr));
 }
@@ -710,8 +730,8 @@ prjm_eel_function_decl(math_func2)
     float* math_arg1_ptr = &math_arg1;
     float* math_arg2_ptr = &math_arg2;
 
-    invoke_arg(1, &math_arg1_ptr);
-    invoke_arg(2, &math_arg2_ptr);
+    invoke_arg(0, &math_arg1_ptr);
+    invoke_arg(1, &math_arg2_ptr);
 
     assign_ret_val(((prjm_eel_math_func2*) ctx->math_func)(*math_arg1_ptr, *math_arg2_ptr));
 }
@@ -725,8 +745,8 @@ prjm_eel_function_decl(sigmoid)
     float* math_arg1_ptr = &math_arg1;
     float* math_arg2_ptr = &math_arg2;
 
-    invoke_arg(1, &math_arg1_ptr);
-    invoke_arg(2, &math_arg2_ptr);
+    invoke_arg(0, &math_arg1_ptr);
+    invoke_arg(1, &math_arg2_ptr);
 
     double t = (1 + exp((double) -(*math_arg1_ptr) * (*math_arg2_ptr)));
     assign_ret_val((float) (fabs(t) > 0.00001 ? 1.0 / t : 0.f));
@@ -739,7 +759,7 @@ prjm_eel_function_decl(sqr)
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
 
-    invoke_arg(1, &value_ptr);
+    invoke_arg(0, &value_ptr);
 
     assign_ret_val((*value_ptr) * (*value_ptr));
 }
@@ -751,7 +771,7 @@ prjm_eel_function_decl(abs)
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
 
-    invoke_arg(1, &value_ptr);
+    invoke_arg(0, &value_ptr);
 
     assign_ret_val(fabsf(*value_ptr));
 }
@@ -765,8 +785,8 @@ prjm_eel_function_decl(min)
     float* math_arg1_ptr = &math_arg1;
     float* math_arg2_ptr = &math_arg2;
 
-    invoke_arg(1, &math_arg1_ptr);
-    invoke_arg(2, &math_arg2_ptr);
+    invoke_arg(0, &math_arg1_ptr);
+    invoke_arg(1, &math_arg2_ptr);
 
     assign_ret_val((*math_arg1_ptr) < (*math_arg2_ptr) ? (*math_arg1_ptr) : (*math_arg2_ptr));
 }
@@ -780,8 +800,8 @@ prjm_eel_function_decl(max)
     float* math_arg1_ptr = &math_arg1;
     float* math_arg2_ptr = &math_arg2;
 
-    invoke_arg(1, &math_arg1_ptr);
-    invoke_arg(2, &math_arg2_ptr);
+    invoke_arg(0, &math_arg1_ptr);
+    invoke_arg(1, &math_arg2_ptr);
 
     assign_ret_val((*math_arg1_ptr) > (*math_arg2_ptr) ? (*math_arg1_ptr) : (*math_arg2_ptr));
 }
@@ -793,7 +813,7 @@ prjm_eel_function_decl(sign)
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
 
-    invoke_arg(1, &value_ptr);
+    invoke_arg(0, &value_ptr);
 
     if (*value_ptr == 0)
     {
@@ -810,7 +830,7 @@ prjm_eel_function_decl(rand)
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
 
-    invoke_arg(1, &value_ptr);
+    invoke_arg(0, &value_ptr);
 
     float rand_max = floorf(*value_ptr);
     if (rand_max < 1.f)
@@ -840,7 +860,7 @@ prjm_eel_function_decl(invsqrt)
     ctx->value = .0f;
     float* value_ptr = &ctx->value;
 
-    invoke_arg(1, &value_ptr);
+    invoke_arg(0, &value_ptr);
 
     float num2 = (*value_ptr) * one_half;
     type_conv.float_val = (*value_ptr);

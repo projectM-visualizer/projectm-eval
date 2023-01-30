@@ -3,8 +3,10 @@ find_package(GTest 1.10 REQUIRED NO_MODULE)
 
 add_executable(projectM_EvalLib_Test
         TreeFunctionsTest.cpp
-        ${CMAKE_SOURCE_DIR}/SimpleCompiler/TreeFunctions.h
+        ${CMAKE_SOURCE_DIR}/SimpleCompiler/ExpressionTree.c
+        ${CMAKE_SOURCE_DIR}/SimpleCompiler/ExpressionTree.h
         ${CMAKE_SOURCE_DIR}/SimpleCompiler/TreeFunctions.c
+        ${CMAKE_SOURCE_DIR}/SimpleCompiler/TreeFunctions.h
         )
 
 

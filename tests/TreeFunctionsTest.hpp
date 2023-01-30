@@ -15,7 +15,7 @@ protected:
 
     prjm_eel_variable_t* CreateVariable(const char* name, float initialValue, float* externalDataPointer);
 
-    prjm_eel_exptreenode_t* CreateEmptyNode();
+    prjm_eel_exptreenode_t* CreateEmptyNode(int argCount);
 
     prjm_eel_exptreenode_t* CreateConstantNode(float value);
 
@@ -27,5 +27,5 @@ protected:
     void TearDown() override;
 
     prjm_eel_variable_t* m_variables{};
-    std::vector<prjm_eel_exptreenode_t*> n_treeNodes;
+    std::vector<prjm_eel_exptreenode_t*> m_treeNodes;
 };
