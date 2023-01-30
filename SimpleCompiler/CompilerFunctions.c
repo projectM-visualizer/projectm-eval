@@ -3,6 +3,7 @@
 #include "TreeFunctions.h"
 #include "TreeVariables.h"
 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -26,11 +27,7 @@ void prjm_eel_compiler_destroy_arglist(prjm_eel_compiler_arg_list_t* arglist)
         arg = arg->next;
         if (free_arg->node)
         {
-            if (free_arg->node->tree_node)
-            {
-                prjm_eel_destroy_exptreenode(free_arg->node->tree_node);
-            }
-            free(free_arg->node);
+            prjm_eel_compiler_destroy_node(free_arg->node);
         }
         free(free_arg);
     }
@@ -83,6 +80,7 @@ prjm_eel_compiler_arg_list_t* prjm_eel_compiler_add_argument(prjm_eel_compiler_a
                                                              prjm_eel_compiler_node_t* arg)
 {
     prjm_eel_compiler_arg_node_t* arg_node = calloc(1, sizeof(prjm_eel_compiler_arg_node_t));
+
     if (arg_node == NULL)
     {
         return NULL;
@@ -130,20 +128,6 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_function(prjm_eel_compiler_co
     }
 
     prjm_eel_compiler_node_t* node = prjm_eel_compiler_create_expression(cctx, func, arglist);
-
-    return node;
-}
-
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_variable(prjm_eel_compiler_context_t* cctx, const char* name)
-{
-    /* Find existing variable or create a new one */
-    prjm_eel_variable_def_t* var = prjm_eel_register_variable(cctx, name, NULL);
-
-    prjm_eel_function_def_t* var_func = prjm_eel_compiler_get_function(cctx, "/*var*/");
-    prjm_eel_compiler_node_t* node = prjm_eel_compiler_create_expression_empty(var_func);
-
-    prjm_eel_exptreenode_t* expr = node->tree_node;
-    expr->var = var;
 
     return node;
 }
@@ -196,21 +180,21 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
             expr_arg++;
             arg = arg->next;
         }
-
-        prjm_eel_compiler_destroy_arglist(arglist);
     }
+
+    prjm_eel_compiler_destroy_arglist(arglist);
 
     prjm_eel_compiler_node_t* node = calloc(1, sizeof(prjm_eel_compiler_node_t));
 
     node->type = PRJM_EEL_NODE_FUNC_EXPRESSION;
     node->is_const_expr = args_are_const_evaluable && func->is_const_eval;
     node->is_state_changing = args_are_state_changing || func->is_state_changing;
+    node->tree_node = expr;
 
     // Evaluate expression if constant-evaluable
     if (node->is_const_expr &&
         !node->is_state_changing)
     {
-        printf("[Optimizer] Evaluating and replacing constant expression\n");
         prjm_eel_exptreenode_t* const_expr = calloc(1, sizeof(prjm_eel_exptreenode_t));
         prjm_eel_function_def_t* const_func = prjm_eel_compiler_get_function(cctx, "/*const*/");
         const_expr->func = const_func->func;
@@ -219,22 +203,17 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
         expr->func(expr, &value_ptr);
         const_expr->value = *value_ptr;
 
-        prjm_eel_destroy_exptreenode(expr);
-
         node->tree_node = const_expr;
         node->is_const_expr = const_func->is_const_eval;
         node->is_state_changing = const_func->is_state_changing;
-    }
-    else
-    {
-        node->tree_node = expr;
+
+        prjm_eel_destroy_exptreenode(expr);
     }
 
     return node;
 }
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_const_expression(prjm_eel_compiler_context_t* cctx,
-                                                                    float value)
+prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_context_t* cctx, float value)
 {
     prjm_eel_function_def_t* const_func = prjm_eel_compiler_get_function(cctx, "/*const*/");
 
@@ -251,6 +230,19 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_const_expression(prjm_eel_com
     return node;
 }
 
+prjm_eel_compiler_node_t* prjm_eel_compiler_create_variable(prjm_eel_compiler_context_t* cctx, const char* name)
+{
+    /* Find existing variable or create a new one */
+    prjm_eel_variable_def_t* var = prjm_eel_register_variable(cctx, name, NULL);
+
+    prjm_eel_function_def_t* var_func = prjm_eel_compiler_get_function(cctx, "/*var*/");
+    prjm_eel_compiler_node_t* node = prjm_eel_compiler_create_expression_empty(var_func);
+
+    node->tree_node->var = var;
+
+    return node;
+}
+
 prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_context_t* cctx,
                                                             prjm_eel_compiler_node_t* list,
                                                             prjm_eel_compiler_node_t* instruction)
@@ -263,13 +255,12 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_co
     prjm_eel_compiler_node_t* node = list;
 
     /* Convert single expression to instruction list if needed. */
-    if (node->type == PRJM_EEL_NODE_FUNC_EXPRESSION)
+    if (list->type != PRJM_EEL_NODE_FUNC_INSTRUCTIONLIST)
     {
         /* If previous instruction is not state-changing, we can remove it as it won't do
          * anything useful. Only the last expression's value may be of interest. */
-        if (!node->is_state_changing)
+        if (!list->is_state_changing)
         {
-            printf("[Optimizer] Deleting previous non-state changing/uninteresting expression.\n");
             prjm_eel_compiler_destroy_node(list);
             return instruction;
         }
@@ -289,14 +280,17 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_co
         node = new_node;
     }
 
+    assert(node);
+    assert(node->tree_node);
+    assert(node->tree_node->list);
+
     prjm_eel_exptreenode_list_item_t* item = node->tree_node->list;
-    while(item->next)
+    while (item->next)
     {
         /* If last expression in the existing list is not state-changing, we can remove it as it won't do
          * anything useful. Only the last expression's value may be of interest. */
         if (!node->is_state_changing && !item->next->next)
         {
-            printf("[Optimizer] Deleting previous non-state changing/uninteresting expression.\n");
             prjm_eel_destroy_exptreenode(item->next->expr);
             free(item->next);
             break;
@@ -307,7 +301,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_co
 
     item->next = malloc(sizeof(prjm_eel_exptreenode_list_item_t));
     item->next->expr = instruction->tree_node;
-    instruction->tree_node = NULL;
+    item->next->next = NULL;
 
     /* Update const/state flags with last expression */
     node->is_const_expr = instruction->is_const_expr;

@@ -41,7 +41,7 @@ static int ScanString(const char* input)
         float* init_value_ptr = &init_value;
         cctx->program->func(cctx->program, &init_value_ptr);
 
-        std::cout << "Program executed." << std::endl;
+        std::cout << "Program executed, returned " << *init_value_ptr << "." << std::endl;
 
         DumpVars(cctx);
     }
@@ -68,7 +68,6 @@ int main(int argc, char const* argv[])
                 std::cerr << "Read error." << std::endl;
                 return 1;
             }
-            //result = ScanString("x = 1;loop(500000, loop(1000, x += sin(x);))");
             result = ScanString(parser.GetCode(argv[2]).c_str());
         }
 

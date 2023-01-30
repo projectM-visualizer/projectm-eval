@@ -71,107 +71,111 @@ typedef void* yyscan_t;
 %% /* The grammar follows. */
 
 program:
-  instruction-list[topnode] { printf ("[Parser] PROGRAM END\n"); if($topnode) { cctx->program = $topnode->tree_node; } }
+  instruction-list[topnode] {
+        if($topnode) {
+            cctx->program = $topnode->tree_node;
+        };
+        free($topnode);
+    }
 ;
 
 /* Functions */
 function:
-  FUNC '(' function-arglist ')'            { printf("[Parser] FUNCTION: %s\n", $1); PRJM_EEL_FUNC($$, $1, $3); free($1); }
+  FUNC[name] '(' function-arglist[args] ')' { PRJM_EEL_FUNC($$, $name, $args); free($name); }
 ;
 
 function-arglist:
-  instruction-list                         { printf("[Parser] FUNCTION ARGLIST START\n"); $$ = prjm_eel_compiler_add_argument(NULL, $1); }
-| function-arglist ',' instruction-list    { printf("[Parser] FUNCTION ARGLIST +ARG\n"); $$ = prjm_eel_compiler_add_argument($1, $3); }
+  instruction-list[instr]                            { $$ = prjm_eel_compiler_add_argument(NULL, $instr); }
+| function-arglist[args] ',' instruction-list[instr] { $$ = prjm_eel_compiler_add_argument($args, $instr); }
 ;
 
 parentheses:
-  '(' instruction-list ')'                 { printf("[Parser] PARENTHESED EXPRESSION\n"); $$ = $2; }
-| '(' ')'                                  { printf("[Parser] EMPTY PARENTHESES\n"); }
+  '(' instruction-list[instr] ')' { $$ = $instr; }
+| '(' ')'                         { }
 ;
 
 instruction-list:
-  expression                               { printf ("[Parser] INSTRUCTION LIST START\n"); $$ = $1; }
-| instruction-list[list] ';' expression[expr]    { printf ("[Parser] INSTRUCTION LIST +1\n"); $$ = prjm_eel_compiler_add_instruction(cctx, $list, $expr); }
-| instruction-list[list] ';' empty-expression    { printf ("[Parser] INSTRUCTION LIST +0\n"); $$ = $1; }
-| instruction-list[list] ';' error               { printf ("[Parser] INSTRUCTION LIST ERROR +0\n"); $$ = $1; }
+  expression[expr]                            { $$ = $expr; }
+| instruction-list[list] ';' expression[expr] { $$ = prjm_eel_compiler_add_instruction(cctx, $list, $expr); }
+| instruction-list[list] ';' empty-expression { $$ = $list; }
+| instruction-list[list] ';' error            { $$ = $list; }
 ;
 
 /* Memory access */
 memory:
 /* Memory access via index */
-  expression[idx] '[' ']'                    { printf("[Parser] INDEX[] - MEM AT INDEX <EXP>\n"); PRJM_EEL_FUNC1($$, "_mem", $idx) }
-| expression[idx] '[' expression[offs] ']'   { printf("[Parser] INDEX[OFFSET] - MEM AT INDEX <EXP> WITH OFFSET <EXP>\n"); PRJM_EEL_FUNC2($$, "_addop", $idx, $offs); PRJM_EEL_FUNC1($$, "_mem", $$) }
-| GMEM '[' expression[idx] ']'               { printf("[Parser] GMEM[INDEX] - GLOBAL MEM AT INDEX <EXP>\n"); PRJM_EEL_FUNC1($$, "_gmem", $idx) }
-
+  expression[idx] '[' ']'                    { PRJM_EEL_FUNC1($$, "_mem", $idx) }
+| expression[idx] '[' expression[offs] ']'   { PRJM_EEL_FUNC2($$, "_addop", $idx, $offs); PRJM_EEL_FUNC1($$, "_mem", $$) }
+| GMEM '[' expression[idx] ']'               { PRJM_EEL_FUNC1($$, "_gmem", $idx) }
 /* Memory access via function */
-| MEGABUF '(' expression[idx] ')'      { printf("[Parser] MEGABUF(INDEX) - MEM AT INDEX <EXP>\n"); PRJM_EEL_FUNC1($$, "_mem", $idx) }
-| GMEGABUF '(' expression[idx] ')'     { printf("[Parser] GMEGABUF(INDEX) - GLOBAL MEM AT INDEX <EXP>\n"); PRJM_EEL_FUNC1($$, "_gmem", $idx) }
+| MEGABUF '(' expression[idx] ')'            { PRJM_EEL_FUNC1($$, "_mem", $idx) }
+| GMEGABUF '(' expression[idx] ')'           { PRJM_EEL_FUNC1($$, "_gmem", $idx) }
 ;
 
 lvalue:
-  variable                        { printf("[Parser] VAR lvalue\n"); $$ = $1; }
-| memory                          { printf("[Parser] MEMORY ACCESS\n"); $$ = $1; }
+  variable { $$ = $1; }
+| memory   { $$ = $1; }
 ;
 
 variable:
-  VAR                            { printf("[Parser] VAR: %s\n", $1); $$ = prjm_eel_compiler_create_variable(cctx, $1); }
+  VAR[name] { $$ = prjm_eel_compiler_create_variable(cctx, $name); free($name); }
 ;
 
 empty-expression:
-  %empty         { printf("[Parser] EMPTY EXPRESSION\n"); }
+  %empty         { }
 ;
 
 /* General expressions */
 expression:
 /* Literals */
-  NUM                             { printf("[Parser] NUM: %g\n", $1); $$ = prjm_eel_compiler_create_const_expression(cctx, $1); }
-| lvalue                          { printf("[Parser] LVALUE LITERAL\n"); $$ = $1; }
+  NUM[val]                                     { $$ = prjm_eel_compiler_create_constant(cctx, $val); }
+| lvalue[expr]                                 { $$ = $expr; }
 
 /* Compund assignment operators */
-| lvalue[left] ADDOP expression[right]     { printf("[Parser] OPERATOR +=\n"); PRJM_EEL_FUNC2($$, "_addop", $left, $right) }
-| lvalue[left] SUBOP expression[right]     { printf("[Parser] OPERATOR -=\n"); PRJM_EEL_FUNC2($$, "_subop", $left, $right) }
-| lvalue[left] MODOP expression[right]     { printf("[Parser] OPERATOR %%=\n"); PRJM_EEL_FUNC2($$, "_modop", $left, $right) }
-| lvalue[left] OROP expression[right]      { printf("[Parser] OPERATOR |=\n"); PRJM_EEL_FUNC2($$, "_orop", $left, $right) }
-| lvalue[left] ANDOP expression[right]     { printf("[Parser] OPERATOR &=\n"); PRJM_EEL_FUNC2($$, "_andop", $left, $right) }
-| lvalue[left] DIVOP expression[right]     { printf("[Parser] OPERATOR /=\n"); PRJM_EEL_FUNC2($$, "_divop", $left, $right) }
-| lvalue[left] MULOP expression[right]     { printf("[Parser] OPERATOR /=\n"); PRJM_EEL_FUNC2($$, "_mulop", $left, $right) }
-| lvalue[left] POWOP expression[right]     { printf("[Parser] OPERATOR ^=\n"); PRJM_EEL_FUNC2($$, "_powop", $left, $right) }
+| lvalue[left] ADDOP expression[right]         { PRJM_EEL_FUNC2($$, "_addop", $left, $right) }
+| lvalue[left] SUBOP expression[right]         { PRJM_EEL_FUNC2($$, "_subop", $left, $right) }
+| lvalue[left] MODOP expression[right]         { PRJM_EEL_FUNC2($$, "_modop", $left, $right) }
+| lvalue[left] OROP expression[right]          { PRJM_EEL_FUNC2($$, "_orop", $left, $right) }
+| lvalue[left] ANDOP expression[right]         { PRJM_EEL_FUNC2($$, "_andop", $left, $right) }
+| lvalue[left] DIVOP expression[right]         { PRJM_EEL_FUNC2($$, "_divop", $left, $right) }
+| lvalue[left] MULOP expression[right]         { PRJM_EEL_FUNC2($$, "_mulop", $left, $right) }
+| lvalue[left] POWOP expression[right]         { PRJM_EEL_FUNC2($$, "_powop", $left, $right) }
 
 /* Comparison operators */
-| expression[left] EQUAL expression[right]     { printf("[Parser] OPERATOR ==\n"); PRJM_EEL_FUNC2($$, "_equal", $left, $right) }
-| expression[left] BELEQ expression[right]     { printf("[Parser] OPERATOR <=\n"); PRJM_EEL_FUNC2($$, "_beleq", $left, $right) }
-| expression[left] ABOEQ expression[right]     { printf("[Parser] OPERATOR >=\n"); PRJM_EEL_FUNC2($$, "_aboeq", $left, $right) }
-| expression[left] NOTEQ expression[right]     { printf("[Parser] OPERATOR !=\n"); PRJM_EEL_FUNC2($$, "_noteq", $left, $right) }
-| expression[left] '<' expression[right]       { printf("[Parser] OPERATOR <\n"); PRJM_EEL_FUNC2($$, "_below", $left, $right) }
-| expression[left] '>' expression[right]       { printf("[Parser] OPERATOR >\n"); PRJM_EEL_FUNC2($$, "_above", $left, $right) }
+| expression[left] EQUAL expression[right]     { PRJM_EEL_FUNC2($$, "_equal", $left, $right) }
+| expression[left] BELEQ expression[right]     { PRJM_EEL_FUNC2($$, "_beleq", $left, $right) }
+| expression[left] ABOEQ expression[right]     { PRJM_EEL_FUNC2($$, "_aboeq", $left, $right) }
+| expression[left] NOTEQ expression[right]     { PRJM_EEL_FUNC2($$, "_noteq", $left, $right) }
+| expression[left] '<' expression[right]       { PRJM_EEL_FUNC2($$, "_below", $left, $right) }
+| expression[left] '>' expression[right]       { PRJM_EEL_FUNC2($$, "_above", $left, $right) }
 
 /* Boolean operators */
-| expression[left] BOOLOR expression[right]    { printf("[Parser] OPERATOR ||\n"); PRJM_EEL_FUNC2($$, "bor", $left, $right) }
-| expression[left] BOOLAND expression[right]   { printf("[Parser] OPERATOR &&\n"); PRJM_EEL_FUNC2($$, "band", $left, $right) }
+| expression[left] BOOLOR expression[right]    { PRJM_EEL_FUNC2($$, "bor", $left, $right) }
+| expression[left] BOOLAND expression[right]   { PRJM_EEL_FUNC2($$, "band", $left, $right) }
 
 /* Assignment operator */
-| lvalue[left] '=' expression[right]           { printf("[Parser] ASSIGN expression TO LVALUE\n"); PRJM_EEL_FUNC2($$, "_set", $left, $right) }
+| lvalue[left] '=' expression[right]           { PRJM_EEL_FUNC2($$, "_set", $left, $right) }
 
-| function                        { printf("[Parser] CALL FUNCTION\n"); $$ = $1; }
+| function                        { $$ = $1; }
 
 /* Ternary operator */
-| expression[cond] '?' expression[trueval] ':' expression[falseval]   { printf("[Parser] TERNARY OPERATOR\n"); PRJM_EEL_FUNC3($$, "_if", $cond, $trueval, $falseval) }
+| expression[cond] '?' expression[trueval] ':' expression[falseval]   { PRJM_EEL_FUNC3($$, "_if", $cond, $trueval, $falseval) }
 
 /* Binary operators */
-| expression[left] '+' expression[right] { printf("[Parser] OPERATOR +\n");  PRJM_EEL_FUNC2($$, "_add", $left, $right) }
-| expression[left] '-' expression[right] { printf("[Parser] OPERATOR -\n");  PRJM_EEL_FUNC2($$, "_sub", $left, $right) }
-| expression[left] '*' expression[right] { printf("[Parser] OPERATOR *\n");  PRJM_EEL_FUNC2($$, "_mul", $left, $right) }
-| expression[left] '/' expression[right] { printf("[Parser] OPERATOR /\n");  PRJM_EEL_FUNC2($$, "_div", $left, $right) }
-| expression[left] '%' expression[right] { printf("[Parser] OPERATOR %%\n"); PRJM_EEL_FUNC2($$, "_mod", $left, $right) }
-| expression[left] '^' expression[right] { printf("[Parser] OPERATOR ^\n");  PRJM_EEL_FUNC2($$, "pow", $left, $right) }
+| expression[left] '+' expression[right] { PRJM_EEL_FUNC2($$, "_add", $left, $right) }
+| expression[left] '-' expression[right] { PRJM_EEL_FUNC2($$, "_sub", $left, $right) }
+| expression[left] '*' expression[right] { PRJM_EEL_FUNC2($$, "_mul", $left, $right) }
+| expression[left] '/' expression[right] { PRJM_EEL_FUNC2($$, "_div", $left, $right) }
+| expression[left] '%' expression[right] { PRJM_EEL_FUNC2($$, "_mod", $left, $right) }
+| expression[left] '^' expression[right] { PRJM_EEL_FUNC2($$, "pow", $left, $right) }
 
 /* Unary operators */
-| '-' expression[value] %prec NEG        { printf("[Parser] UNARY -\n"); PRJM_EEL_FUNC1($$, "_neg", $value) }
-| '+' expression[value] %prec POS        { printf("[Parser] UNARY +\n"); $$ = $value; } /* a + prefix does nothing. */
-| '!' expression[value]                  { printf("[Parser] UNARY !\n"); PRJM_EEL_FUNC1($$, "_not", $value) }
+| '-' expression[value] %prec NEG        { PRJM_EEL_FUNC1($$, "_neg", $value) }
+| '+' expression[value] %prec POS        { $$ = $value; } /* a + prefix does nothing. */
+| '!' expression[value]                  { PRJM_EEL_FUNC1($$, "_not", $value) }
 
 /* Parenthesed expression */
-| parentheses[value]                     { printf("[Parser] PARENTHESED EXP\n"); $$ = $value; }
+| parentheses[value]                     { $$ = $value; }
 ;
 
 /* End of grammar. */

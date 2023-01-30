@@ -4,6 +4,11 @@
 
 void prjm_eel_destroy_exptreenode(prjm_eel_exptreenode_t* expr)
 {
+    if (!expr)
+    {
+        return;
+    }
+
     /* Free arguments */
     if (expr->args)
     {

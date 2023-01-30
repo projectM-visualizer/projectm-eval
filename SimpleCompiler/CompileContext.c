@@ -55,8 +55,11 @@ void prjm_eel_destroy_compile_context(prjm_eel_compiler_context_t* cctx)
         var = var->next;
 
         free(free_var->variable->name);
+        free(free_var->variable);
         free(free_var);
     }
+
+    prjm_eel_destroy_exptreenode(cctx->program);
 
     free(cctx);
 }

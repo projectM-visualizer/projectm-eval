@@ -4,30 +4,37 @@
 #include "Compiler.h"
 
 #define PRJM_EEL_FUNC(ret, name, args) {\
-    char* errval = 0; \
-    ret = prjm_eel_compiler_create_function(cctx, name, args, &errval); \
-    if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }}
+        char* errval = NULL; \
+        ret = prjm_eel_compiler_create_function(cctx, name, args, &errval); \
+        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }\
+    }
 
 #define PRJM_EEL_FUNC1(ret, name, arg1) {\
-    char* errval = 0;                   \
-    prjm_eel_compiler_arg_list_t* arglist = prjm_eel_compiler_add_argument(NULL, arg1); \
-    ret = prjm_eel_compiler_create_function(cctx, name, arglist, &errval); \
-    if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }}
+        char* errval = NULL; \
+        prjm_eel_compiler_arg_list_t* arglist = NULL; \
+        arglist = prjm_eel_compiler_add_argument(arglist, arg1); \
+        ret = prjm_eel_compiler_create_function(cctx, name, arglist, &errval); \
+        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }   \
+    }
 
 #define PRJM_EEL_FUNC2(ret, name, arg1, arg2) {\
-    char* errval = 0; \
-    prjm_eel_compiler_arg_list_t* arglist = prjm_eel_compiler_add_argument(NULL, arg1); \
-    arglist = prjm_eel_compiler_add_argument(arglist, arg2); \
-    ret = prjm_eel_compiler_create_function(cctx, name, arglist, &errval); \
-    if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }}
+        char* errval = NULL; \
+        prjm_eel_compiler_arg_list_t* arglist = NULL; \
+        arglist = prjm_eel_compiler_add_argument(arglist, arg1); \
+        arglist = prjm_eel_compiler_add_argument(arglist, arg2); \
+        ret = prjm_eel_compiler_create_function(cctx, name, arglist, &errval); \
+        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }   \
+    }
 
 #define PRJM_EEL_FUNC3(ret, name, arg1, arg2, arg3) {\
-    char* errval = 0; \
-    prjm_eel_compiler_arg_list_t* arglist = prjm_eel_compiler_add_argument(NULL, arg1); \
-    arglist = prjm_eel_compiler_add_argument(arglist, arg2);                            \
-    arglist = prjm_eel_compiler_add_argument(arglist, arg3); \
-    ret = prjm_eel_compiler_create_function(cctx, name, arglist, &errval); \
-    if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }}
+        char* errval = NULL; \
+        prjm_eel_compiler_arg_list_t* arglist = NULL; \
+        arglist = prjm_eel_compiler_add_argument(arglist, arg1); \
+        arglist = prjm_eel_compiler_add_argument(arglist, arg2); \
+        arglist = prjm_eel_compiler_add_argument(arglist, arg3); \
+        ret = prjm_eel_compiler_create_function(cctx, name, arglist, &errval); \
+        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }   \
+    }
 
 /**
  * @brief Frees the given argument list container and items.
@@ -89,8 +96,8 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
                                                               prjm_eel_function_def_t* func,
                                                               prjm_eel_compiler_arg_list_t* arglist);
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_const_expression(prjm_eel_compiler_context_t* cctx,
-                                                                    float value);
+prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_context_t* cctx,
+                                                            float value);
 
 prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_context_t* cctx,
                                                             prjm_eel_compiler_node_t* list,
