@@ -1,12 +1,13 @@
 #include "CompileContext.h"
 
 #include "TreeFunctions.h"
+#include "MemoryBuffer.h"
 
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
-prjm_eel_compiler_context_t* prjm_eel_create_compile_context()
+prjm_eel_compiler_context_t* prjm_eel_create_compile_context(prjm_eel_mem_buffer global_memory)
 {
     prjm_eel_compiler_context_t* cctx = calloc(1, sizeof(prjm_eel_compiler_context_t));
 
@@ -29,6 +30,17 @@ prjm_eel_compiler_context_t* prjm_eel_create_compile_context()
         last_func = func;
     }
     cctx->functions.first = last_func;
+
+    cctx->memory = prjm_eel_memory_create_buffer();
+
+    if (global_memory)
+    {
+        cctx->global_memory = global_memory;
+    }
+    else
+    {
+        cctx->global_memory = prjm_eel_memory_global();
+    }
 
     return cctx;
 }
@@ -60,6 +72,19 @@ void prjm_eel_destroy_compile_context(prjm_eel_compiler_context_t* cctx)
     }
 
     prjm_eel_destroy_exptreenode(cctx->program);
+    prjm_eel_memory_destroy_buffer(cctx->memory);
 
     free(cctx);
+}
+
+void prjm_eel_reset_context_vars(prjm_eel_compiler_context_t* cctx)
+{
+    assert(cctx);
+
+    prjm_eel_variable_entry_t* var = cctx->variables.first;
+    while (var)
+    {
+        var->variable->value = .0f;
+        var = var->next;
+    }
 }

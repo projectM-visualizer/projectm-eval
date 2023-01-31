@@ -3,11 +3,16 @@ extern "C" {
 #include "CompilerTypes.h"
 #include "Compiler.h"
 #include "Scanner.h"
+#include "MemoryBuffer.h"
 }
 
 #include "FileParser.hpp"
 
 #include <iostream>
+
+// Empty mutex functions
+void prjm_eel_memory_host_lock_mutex(){}
+void prjm_eel_memory_host_unlock_mutex(){}
 
 static void DumpVars(prjm_eel_compiler_context_t* cctx)
 {
@@ -22,11 +27,14 @@ static void DumpVars(prjm_eel_compiler_context_t* cctx)
 
 static int ScanString(const char* input)
 {
-    prjm_eel_compiler_context_t* cctx = prjm_eel_create_compile_context();
+    prjm_eel_compiler_context_t* cctx = prjm_eel_create_compile_context(nullptr);
     yyscan_t scanner{};
 
     prjm_eel_lex_init(&scanner);
     YY_BUFFER_STATE bufferState = prjm_eel__scan_string(input, scanner);
+
+    bufferState->yy_bs_lineno = 1;
+    bufferState->yy_bs_column = 0;
 
     int result = prjm_eel_parse(cctx, scanner);
 
@@ -68,10 +76,13 @@ int main(int argc, char const* argv[])
                 std::cerr << "Read error." << std::endl;
                 return 1;
             }
+            std::cout << "Code:" << std::endl << parser.GetCode(argv[2]) << std::endl << std::endl;
             result = ScanString(parser.GetCode(argv[2]).c_str());
         }
 
     }
+
+    prjm_eel_memory_destroy_global();
 
     return result;
 }

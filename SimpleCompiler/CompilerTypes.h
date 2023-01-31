@@ -25,6 +25,11 @@ typedef float (prjm_eel_math_func3)(float, float, float);
 typedef void (prjm_eel_expr_func_t)(struct prjm_eel_exptreenode* ctx, float** ret_val);
 
 /**
+ * @brief Buffer pointer for megabuf/gmegabuf.
+ */
+typedef float** prjm_eel_mem_buffer;
+
+/**
  * @brief Structure containing information about an available function implementation.
  * This struct is used to fill the intrinsic function table and is used to add additional,
  * externally-defined functions to the parser.
@@ -89,7 +94,11 @@ typedef struct prjm_eel_exptreenode
     prjm_eel_expr_func_t* func;
     void* math_func;
     float value; /*!< A constant, numerical value. Also used as temp value. */
-    prjm_eel_variable_def_t* var; /*!< Variable reference. */
+    union
+    {
+        prjm_eel_variable_def_t* var; /*!< Variable reference. */
+        prjm_eel_mem_buffer memory_buffer; /*!< megabuf/gmegabuf memory block. */
+    };
     struct prjm_eel_exptreenode** args; /*!< Function arguments. Last element must be a NULL pointer*/
     prjm_eel_exptreenode_list_item_t* list;  /*!< Next argument in the instruction list. */
 } prjm_eel_exptreenode_t;
@@ -127,5 +136,7 @@ typedef struct
 {
     prjm_eel_function_list_t functions;
     prjm_eel_variable_list_t variables;
+    prjm_eel_mem_buffer memory;
+    prjm_eel_mem_buffer global_memory;
     prjm_eel_exptreenode_t* program;
 } prjm_eel_compiler_context_t;

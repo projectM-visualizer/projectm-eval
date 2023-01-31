@@ -57,7 +57,7 @@ add_executable(SimpleCompiler
         TreeFunctions.c
         TreeFunctions.h
         main.cpp
-        ExpressionTree.c TreeVariables.c TreeVariables.h)
+        ExpressionTree.c TreeVariables.c TreeVariables.h MemoryBuffer.c MemoryBuffer.h)
 
 target_include_directories(SimpleCompiler
         PRIVATE

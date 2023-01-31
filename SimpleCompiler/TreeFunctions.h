@@ -38,8 +38,7 @@ prjm_eel_function_decl(exec3);
 prjm_eel_function_decl(set);
 
 /* Memory access function */
-prjm_eel_function_decl(megabuf);
-prjm_eel_function_decl(gmegabuf);
+prjm_eel_function_decl(mem);
 prjm_eel_function_decl(freembuf);
 prjm_eel_function_decl(memcpy);
 prjm_eel_function_decl(memset);

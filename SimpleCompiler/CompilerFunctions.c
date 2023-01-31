@@ -10,7 +10,8 @@
 /* Called by yyparse on error. */
 void prjm_eel_error(PRJM_EEL_LTYPE* loc, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner, char const* s)
 {
-    fprintf(stderr, "[Parser] ERROR: %s\n", s);
+    fprintf(stderr, "[Parser] ERROR: %s (Line %d, Column %d)\n", s,
+            loc->first_line, loc->first_column);
 }
 
 void prjm_eel_compiler_destroy_arglist(prjm_eel_compiler_arg_list_t* arglist)
@@ -157,6 +158,21 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
 
     expr->func = func->func;
     expr->math_func = func->math_func;
+
+    /* Need special treatment for memory access functions */
+    if (strcmp(func->name, "_mem") == 0 ||
+        strcmp(func->name, "megabuf") == 0 ||
+        strcmp(func->name, "freembuf") == 0 ||
+        strcmp(func->name, "memcpy") == 0 ||
+        strcmp(func->name, "memset") == 0)
+    {
+        expr->memory_buffer = cctx->memory;
+    }
+    else if (strcmp(func->name, "_gmem") == 0 ||
+             strcmp(func->name, "gmegabuf") == 0)
+    {
+        expr->memory_buffer = cctx->global_memory;
+    }
 
     bool args_are_const_evaluable = true;
     bool args_are_state_changing = false;

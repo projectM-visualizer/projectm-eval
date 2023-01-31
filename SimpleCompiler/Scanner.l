@@ -1,5 +1,9 @@
 %option reentrant
-%option nounput noinput noyywrap 8bit nodefault yylineno
+%option nounput
+%option noinput
+%option noyywrap
+%option 8bit
+%option yylineno
 %option bison-bridge bison-locations
 %option prefix="prjm_eel_"
 %option extra-type="struct prjm_eel_scanner_state *"
@@ -11,6 +15,12 @@
 #include <stdio.h>
 
 #define YY_STDINIT
+#define YY_USER_ACTION \
+    yycolumn += strlen(yytext);\
+    yylloc_param->first_line = yylineno; \
+    yylloc_param->first_column = yycolumn; \
+    yylloc_param->last_line = yylineno; \
+    yylloc_param->last_column = yycolumn;
 }
 
 
@@ -47,11 +57,6 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
 "$"(?i:pi)          { yylval->NUM = 3.141592653589793f; return NUM; }
 "$"[eE]             { yylval->NUM = 2.71828183f; return NUM; }
 "$"(?i:phi)         { yylval->NUM = 1.61803399f; return NUM; }
-
-    /* Literals */
-(?i:gmem)          { return GMEM; }
-(?i:gmegabuf)      { return GMEGABUF; }
-(?i:megabuf)       { return MEGABUF; }
 
 {FLOAT}            {
                         yylval->NUM = atof(yytext);

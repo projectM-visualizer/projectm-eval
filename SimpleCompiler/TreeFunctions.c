@@ -4,6 +4,8 @@
  */
 #include "TreeFunctions.h"
 
+#include "MemoryBuffer.h"
+
 #include <math.h>
 #include <assert.h>
 #include <stdint.h>
@@ -86,10 +88,10 @@ static prjm_eel_function_def_t intrinsic_function_table[] = {
 
     { "exec2",     prjm_eel_func_exec2,         0,      2, true,  false },
     { "exec3",     prjm_eel_func_exec3,         0,      3, true,  false },
-    { "_mem",      prjm_eel_func_megabuf,       0,      1, false, true },
-    { "megabuf",   prjm_eel_func_megabuf,       0,      1, false, true },
-    { "_gmem",     prjm_eel_func_gmegabuf,      0,      1, false, true },
-    { "gmegabuf",  prjm_eel_func_gmegabuf,      0,      1, false, true },
+    { "_mem",      prjm_eel_func_mem,           0,      1, false, true },
+    { "megabuf",   prjm_eel_func_mem,           0,      1, false, true },
+    { "_gmem",     prjm_eel_func_mem,           0,      1, false, true },
+    { "gmegabuf",  prjm_eel_func_mem,           0,      1, false, true },
     { "freembuf",  prjm_eel_func_freembuf,      0,      1, false, true },
     { "memcpy",    prjm_eel_func_memcpy,        0,      3, false, true },
     { "memset",    prjm_eel_func_memset,        0,      3, false, true }
@@ -333,21 +335,29 @@ prjm_eel_function_decl(set)
 
 
 /* Memory access functions */
-prjm_eel_function_decl(megabuf)
+prjm_eel_function_decl(mem)
 {
     assert_valid_ctx();
+    assert(ctx->memory_buffer);
 
-}
+    ctx->value = .0f;
+    float* index_ptr = &ctx->value;
+    invoke_arg(0, &index_ptr);
 
-prjm_eel_function_decl(gmegabuf)
-{
-    assert_valid_ctx();
+    float* mem_addr = prjm_eel_memory_allocate(ctx->memory_buffer, (int)lrintf(*index_ptr));
+    if(mem_addr)
+    {
+        assign_ret_ref(mem_addr);
+        return;
+    }
 
+    assign_ret_val(0.0f);
 }
 
 prjm_eel_function_decl(freembuf)
 {
     assert_valid_ctx();
+
 
 }
 

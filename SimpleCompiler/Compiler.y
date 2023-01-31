@@ -24,6 +24,8 @@ typedef void* yyscan_t;
     #define YYSTYPE PRJM_EEL_STYPE
     #define YYLTYPE PRJM_EEL_LTYPE
 
+    #define YYERROR_VERBOSE
+
    #define YY_DECL \
        int yylex(YYSTYPE* yylval_param, YYLTYPE* yylloc_param, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner)
    YY_DECL;
@@ -42,7 +44,7 @@ typedef void* yyscan_t;
 /* Value types */
 %token <float> NUM
 %token <char*> VAR FUNC
-%nterm <prjm_eel_compiler_node_t*> variable function memory lvalue program instruction-list expression parentheses
+%nterm <prjm_eel_compiler_node_t*> function program instruction-list expression parentheses
 %nterm <prjm_eel_compiler_arg_list_t*> function-arglist
 
 /* Operator precedence, lowest first, highest last. */
@@ -91,55 +93,42 @@ function-arglist:
 
 parentheses:
   '(' instruction-list[instr] ')' { $$ = $instr; }
-| '(' ')'                         { }
 ;
 
 instruction-list:
   expression[expr]                            { $$ = $expr; }
 | instruction-list[list] ';' expression[expr] { $$ = prjm_eel_compiler_add_instruction(cctx, $list, $expr); }
 | instruction-list[list] ';' empty-expression { $$ = $list; }
-| instruction-list[list] ';' error            { $$ = $list; }
-;
-
-/* Memory access */
-memory:
-/* Memory access via index */
-  expression[idx] '[' ']'                    { PRJM_EEL_FUNC1($$, "_mem", $idx) }
-| expression[idx] '[' expression[offs] ']'   { PRJM_EEL_FUNC2($$, "_addop", $idx, $offs); PRJM_EEL_FUNC1($$, "_mem", $$) }
-| GMEM '[' expression[idx] ']'               { PRJM_EEL_FUNC1($$, "_gmem", $idx) }
-/* Memory access via function */
-| MEGABUF '(' expression[idx] ')'            { PRJM_EEL_FUNC1($$, "_mem", $idx) }
-| GMEGABUF '(' expression[idx] ')'           { PRJM_EEL_FUNC1($$, "_gmem", $idx) }
-;
-
-lvalue:
-  variable { $$ = $1; }
-| memory   { $$ = $1; }
-;
-
-variable:
-  VAR[name] { $$ = prjm_eel_compiler_create_variable(cctx, $name); free($name); }
 ;
 
 empty-expression:
-  %empty         { }
+  %empty
+| '(' ')'
 ;
 
 /* General expressions */
 expression:
 /* Literals */
   NUM[val]                                     { $$ = prjm_eel_compiler_create_constant(cctx, $val); }
-| lvalue[expr]                                 { $$ = $expr; }
+| VAR[name] { $$ = prjm_eel_compiler_create_variable(cctx, $name); free($name); }
+
+/* Memory access via index */
+| expression[idx] '[' ']'                    { PRJM_EEL_FUNC1($$, "_mem", $idx) }
+| expression[idx] '[' expression[offs] ']'   { /* Create additional "idx + offs" operation as arg to _mem */
+                                               prjm_eel_compiler_node_t* idx_plus_offset;
+                                               PRJM_EEL_FUNC2(idx_plus_offset, "_add", $idx, $offs)
+                                               PRJM_EEL_FUNC1($$, "_mem", idx_plus_offset)
+                                               }
 
 /* Compund assignment operators */
-| lvalue[left] ADDOP expression[right]         { PRJM_EEL_FUNC2($$, "_addop", $left, $right) }
-| lvalue[left] SUBOP expression[right]         { PRJM_EEL_FUNC2($$, "_subop", $left, $right) }
-| lvalue[left] MODOP expression[right]         { PRJM_EEL_FUNC2($$, "_modop", $left, $right) }
-| lvalue[left] OROP expression[right]          { PRJM_EEL_FUNC2($$, "_orop", $left, $right) }
-| lvalue[left] ANDOP expression[right]         { PRJM_EEL_FUNC2($$, "_andop", $left, $right) }
-| lvalue[left] DIVOP expression[right]         { PRJM_EEL_FUNC2($$, "_divop", $left, $right) }
-| lvalue[left] MULOP expression[right]         { PRJM_EEL_FUNC2($$, "_mulop", $left, $right) }
-| lvalue[left] POWOP expression[right]         { PRJM_EEL_FUNC2($$, "_powop", $left, $right) }
+| expression[left] ADDOP expression[right]         { PRJM_EEL_FUNC2($$, "_addop", $left, $right) }
+| expression[left] SUBOP expression[right]         { PRJM_EEL_FUNC2($$, "_subop", $left, $right) }
+| expression[left] MODOP expression[right]         { PRJM_EEL_FUNC2($$, "_modop", $left, $right) }
+| expression[left] OROP expression[right]          { PRJM_EEL_FUNC2($$, "_orop", $left, $right) }
+| expression[left] ANDOP expression[right]         { PRJM_EEL_FUNC2($$, "_andop", $left, $right) }
+| expression[left] DIVOP expression[right]         { PRJM_EEL_FUNC2($$, "_divop", $left, $right) }
+| expression[left] MULOP expression[right]         { PRJM_EEL_FUNC2($$, "_mulop", $left, $right) }
+| expression[left] POWOP expression[right]         { PRJM_EEL_FUNC2($$, "_powop", $left, $right) }
 
 /* Comparison operators */
 | expression[left] EQUAL expression[right]     { PRJM_EEL_FUNC2($$, "_equal", $left, $right) }
@@ -154,8 +143,9 @@ expression:
 | expression[left] BOOLAND expression[right]   { PRJM_EEL_FUNC2($$, "band", $left, $right) }
 
 /* Assignment operator */
-| lvalue[left] '=' expression[right]           { PRJM_EEL_FUNC2($$, "_set", $left, $right) }
+| expression[left] '=' expression[right]           { PRJM_EEL_FUNC2($$, "_set", $left, $right) }
 
+/* Function call */
 | function                        { $$ = $1; }
 
 /* Ternary operator */
@@ -175,7 +165,7 @@ expression:
 | '!' expression[value]                  { PRJM_EEL_FUNC1($$, "_not", $value) }
 
 /* Parenthesed expression */
-| parentheses[value]                     { $$ = $value; }
+| parentheses[value]                      { $$ = $value; }
 ;
 
 /* End of grammar. */
