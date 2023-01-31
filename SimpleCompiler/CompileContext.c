@@ -1,8 +1,8 @@
 #include "CompileContext.h"
 
+#include "Scanner.h"
 #include "Compiler.h"
 #include "MemoryBuffer.h"
-#include "Scanner.h"
 #include "TreeFunctions.h"
 
 #include <assert.h>

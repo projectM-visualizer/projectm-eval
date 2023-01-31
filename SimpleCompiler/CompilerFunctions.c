@@ -216,7 +216,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
         prjm_eel_function_def_t* const_func = prjm_eel_compiler_get_function(cctx, "/*const*/");
         const_expr->func = const_func->func;
 
-        float* value_ptr = &const_expr->value;
+        PRJM_F* value_ptr = &const_expr->value;
         expr->func(expr, &value_ptr);
         const_expr->value = *value_ptr;
 
@@ -230,7 +230,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
     return node;
 }
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_context_t* cctx, float value)
+prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_context_t* cctx, PRJM_F value)
 {
     prjm_eel_function_def_t* const_func = prjm_eel_compiler_get_function(cctx, "/*const*/");
 

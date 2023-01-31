@@ -22,7 +22,7 @@ static prjm_eel_variable_entry_t* find_variable_entry(prjm_eel_compiler_context_
 
 prjm_eel_variable_def_t* prjm_eel_register_variable(prjm_eel_compiler_context_t* cctx,
                                                     const char* name,
-                                                    float* value_ptr)
+                                                    PRJM_F* value_ptr)
 {
     prjm_eel_variable_entry_t* var = find_variable_entry(cctx, name);
 

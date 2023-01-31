@@ -97,7 +97,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
                                                               prjm_eel_compiler_arg_list_t* arglist);
 
 prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_context_t* cctx,
-                                                            float value);
+                                                            PRJM_F value);
 
 prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_context_t* cctx,
                                                             prjm_eel_compiler_node_t* list,

@@ -1,8 +1,6 @@
 extern "C" {
 #include "CompileContext.h"
 #include "CompilerTypes.h"
-#include "Compiler.h"
-#include "Scanner.h"
 #include "MemoryBuffer.h"
 }
 
@@ -45,11 +43,13 @@ static void ScanString(const char* input)
     {
         std::cout << "Parsing done, running." << std::endl;
 
-        float init_value = .0f;
-        float* init_value_ptr = &init_value;
+        PRJM_F init_value = .0;
+        PRJM_F* init_value_ptr = &init_value;
         program->program->func(program->program, &init_value_ptr);
 
         std::cout << "Program executed, returned " << *init_value_ptr << "." << std::endl;
+
+        DumpVars(cctx);
 
         prjm_eel_destroy_code(program);
     }

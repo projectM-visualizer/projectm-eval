@@ -29,7 +29,7 @@ prjm_eel_mem_buffer prjm_eel_memory_global()
 
 prjm_eel_mem_buffer prjm_eel_memory_create_buffer()
 {
-    return calloc(PRJM_EEL_MEM_BLOCKS, sizeof(float*));
+    return calloc(PRJM_EEL_MEM_BLOCKS, sizeof(PRJM_F*));
 }
 
 void prjm_eel_memory_destroy_buffer(prjm_eel_mem_buffer buffer)
@@ -56,12 +56,17 @@ void prjm_eel_memory_free(prjm_eel_mem_buffer buffer)
         }
     }
 
-    memset(buffer, 0, PRJM_EEL_MEM_BLOCKS * sizeof(float*));
+    memset(buffer, 0, PRJM_EEL_MEM_BLOCKS * sizeof(PRJM_F*));
 
     prjm_eel_memory_host_unlock_mutex();
 }
 
-float* prjm_eel_memory_allocate(prjm_eel_mem_buffer buffer, int index)
+void prjm_eel_memory_free_block(prjm_eel_mem_buffer buffer, int block)
+{
+
+}
+
+PRJM_F* prjm_eel_memory_allocate(prjm_eel_mem_buffer buffer, int index)
 {
     int block;
     if (!buffer)
@@ -71,7 +76,7 @@ float* prjm_eel_memory_allocate(prjm_eel_mem_buffer buffer, int index)
 
     if (index >= 0 && (block = index / PRJM_EEL_MEM_ITEMSPERBLOCK) < PRJM_EEL_MEM_BLOCKS)
     {
-        float* cur_block = buffer[block];
+        PRJM_F* cur_block = buffer[block];
 
         if (!cur_block)
         {
@@ -79,7 +84,7 @@ float* prjm_eel_memory_allocate(prjm_eel_mem_buffer buffer, int index)
 
             if (!(cur_block = buffer[block]))
             {
-                cur_block = buffer[block] = calloc(sizeof(float), PRJM_EEL_MEM_ITEMSPERBLOCK);
+                cur_block = buffer[block] = calloc(sizeof(PRJM_F), PRJM_EEL_MEM_ITEMSPERBLOCK);
             }
             if (!cur_block)
             {

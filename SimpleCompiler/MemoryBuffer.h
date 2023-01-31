@@ -55,8 +55,16 @@ void prjm_eel_memory_destroy_buffer(prjm_eel_mem_buffer buffer);
 void prjm_eel_memory_free(prjm_eel_mem_buffer buffer);
 
 /**
+ * @brief Frees the data stored in a single block of the buffer.
+ * The buffer itself will not be destroyed. Call @a prjm_eel_memory_destroy_buffer() if this is needed.
+ * @param buffer The buffer to clear.
+ * @param block The block to clear.
+ */
+void prjm_eel_memory_free_block(prjm_eel_mem_buffer buffer, int block);
+
+/**
  * @brief Allocates the appropriate memory block and returns a pointer to the data address for the given index.
  * @param buffer A pointer to the buffer to use.
  * @param index The memory index (offset) to allocate and return a pointer to.
  */
-float* prjm_eel_memory_allocate(prjm_eel_mem_buffer buffer, int index);
+PRJM_F* prjm_eel_memory_allocate(prjm_eel_mem_buffer buffer, int index);
