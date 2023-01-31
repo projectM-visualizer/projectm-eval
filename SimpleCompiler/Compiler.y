@@ -75,7 +75,7 @@ typedef void* yyscan_t;
 program:
   instruction-list[topnode] {
         if($topnode) {
-            cctx->program = $topnode->tree_node;
+            cctx->compile_result = $topnode->tree_node;
         };
         free($topnode);
     }

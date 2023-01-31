@@ -10,8 +10,9 @@
 /* Called by yyparse on error. */
 void prjm_eel_error(PRJM_EEL_LTYPE* loc, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner, char const* s)
 {
-    fprintf(stderr, "[Parser] ERROR: %s (Line %d, Column %d)\n", s,
-            loc->first_line, loc->first_column);
+    cctx->error.error = strdup(s);
+    cctx->error.line = loc->first_line;
+    cctx->error.column = loc->first_column;
 }
 
 void prjm_eel_compiler_destroy_arglist(prjm_eel_compiler_arg_list_t* arglist)

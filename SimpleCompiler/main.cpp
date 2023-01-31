@@ -11,8 +11,13 @@ extern "C" {
 #include <iostream>
 
 // Empty mutex functions
-void prjm_eel_memory_host_lock_mutex(){}
-void prjm_eel_memory_host_unlock_mutex(){}
+void prjm_eel_memory_host_lock_mutex()
+{
+}
+
+void prjm_eel_memory_host_unlock_mutex()
+{
+}
 
 static void DumpVars(prjm_eel_compiler_context_t* cctx)
 {
@@ -25,38 +30,31 @@ static void DumpVars(prjm_eel_compiler_context_t* cctx)
     }
 }
 
-static int ScanString(const char* input)
+static void ScanString(const char* input)
 {
     prjm_eel_compiler_context_t* cctx = prjm_eel_create_compile_context(nullptr);
-    yyscan_t scanner{};
+    prjm_eel_program_t* program = prjm_eel_compile_code(cctx, input);
 
-    prjm_eel_lex_init(&scanner);
-    YY_BUFFER_STATE bufferState = prjm_eel__scan_string(input, scanner);
-
-    bufferState->yy_bs_lineno = 1;
-    bufferState->yy_bs_column = 0;
-
-    int result = prjm_eel_parse(cctx, scanner);
-
-    prjm_eel__delete_buffer(bufferState, scanner);
-    prjm_eel_lex_destroy(scanner);
-
-    std::cout << "Parsing done, running." << std::endl;
-
-    if (cctx->program)
+    if (!program)
     {
+        int line, column;
+        auto* error = prjm_eel_get_error(cctx, &line, &column);
+        std::cout << "Parsing failed: " << error << " (Line " << line << ", Column " << column << ")" << std::endl;
+    }
+    else
+    {
+        std::cout << "Parsing done, running." << std::endl;
+
         float init_value = .0f;
         float* init_value_ptr = &init_value;
-        cctx->program->func(cctx->program, &init_value_ptr);
+        program->program->func(program->program, &init_value_ptr);
 
         std::cout << "Program executed, returned " << *init_value_ptr << "." << std::endl;
 
-        DumpVars(cctx);
+        prjm_eel_destroy_code(program);
     }
 
     prjm_eel_destroy_compile_context(cctx);
-
-    return result;
 }
 
 int main(int argc, char const* argv[])
@@ -67,22 +65,16 @@ int main(int argc, char const* argv[])
         return 1;
     }
 
-    int result{};
+    FileParser parser;
+    if (!parser.Read(argv[1]))
     {
-        {
-            FileParser parser;
-            if (!parser.Read(argv[1]))
-            {
-                std::cerr << "Read error." << std::endl;
-                return 1;
-            }
-            std::cout << "Code:" << std::endl << parser.GetCode(argv[2]) << std::endl << std::endl;
-            result = ScanString(parser.GetCode(argv[2]).c_str());
-        }
-
+        std::cerr << "Read error." << std::endl;
+        return 1;
     }
+    std::cout << "Code:" << std::endl << parser.GetCode(argv[2]) << std::endl << std::endl;
+    ScanString(parser.GetCode(argv[2]).c_str());
 
     prjm_eel_memory_destroy_global();
 
-    return result;
+    return 0;
 }

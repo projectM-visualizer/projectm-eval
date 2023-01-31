@@ -134,9 +134,23 @@ typedef struct prjm_eel_compiler_arg_list
 
 typedef struct
 {
+    char* error;
+    int line;
+    int column;
+} prjm_eel_compiler_error_t;
+
+typedef struct
+{
     prjm_eel_function_list_t functions;
     prjm_eel_variable_list_t variables;
     prjm_eel_mem_buffer memory;
     prjm_eel_mem_buffer global_memory;
-    prjm_eel_exptreenode_t* program;
+    prjm_eel_compiler_error_t error;
+    prjm_eel_exptreenode_t* compile_result;
 } prjm_eel_compiler_context_t;
+
+typedef struct
+{
+    prjm_eel_exptreenode_t* program;
+    prjm_eel_compiler_context_t* cctx;
+} prjm_eel_program_t;

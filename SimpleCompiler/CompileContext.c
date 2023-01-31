@@ -1,7 +1,9 @@
 #include "CompileContext.h"
 
-#include "TreeFunctions.h"
+#include "Compiler.h"
 #include "MemoryBuffer.h"
+#include "Scanner.h"
+#include "TreeFunctions.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -71,10 +73,53 @@ void prjm_eel_destroy_compile_context(prjm_eel_compiler_context_t* cctx)
         free(free_var);
     }
 
-    prjm_eel_destroy_exptreenode(cctx->program);
+    prjm_eel_destroy_exptreenode(cctx->compile_result);
     prjm_eel_memory_destroy_buffer(cctx->memory);
 
+    free(cctx->error.error);
+
     free(cctx);
+}
+
+prjm_eel_program_t* prjm_eel_compile_code(prjm_eel_compiler_context_t* cctx, const char* code)
+{
+    yyscan_t scanner;
+
+    prjm_eel_lex_init(&scanner);
+    YY_BUFFER_STATE bufferState = prjm_eel__scan_string(code, scanner);
+
+    bufferState->yy_bs_lineno = 1;
+    bufferState->yy_bs_column = 0;
+
+    int result = prjm_eel_parse(cctx, scanner);
+
+    prjm_eel__delete_buffer(bufferState, scanner);
+    prjm_eel_lex_destroy(scanner);
+
+    if (result > 0)
+    {
+        prjm_eel_destroy_exptreenode(cctx->compile_result);
+        cctx->compile_result = NULL;
+        return NULL;
+    }
+
+    prjm_eel_program_t* program = malloc(sizeof(prjm_eel_program_t));
+    program->cctx = cctx;
+    program->program = cctx->compile_result;
+    cctx->compile_result = NULL;
+
+    return program;
+}
+
+void prjm_eel_destroy_code(prjm_eel_program_t* program)
+{
+    if (!program)
+    {
+        return;
+    }
+
+    prjm_eel_destroy_exptreenode(program->program);
+    free(program);
 }
 
 void prjm_eel_reset_context_vars(prjm_eel_compiler_context_t* cctx)
@@ -87,4 +132,21 @@ void prjm_eel_reset_context_vars(prjm_eel_compiler_context_t* cctx)
         var->variable->value = .0f;
         var = var->next;
     }
+}
+
+const char* prjm_eel_get_error(prjm_eel_compiler_context_t* cctx, int* line, int* column)
+{
+    assert(cctx);
+
+    if (line)
+    {
+        *line = cctx->error.line;
+    }
+
+    if (column)
+    {
+        *column = cctx->error.column;
+    }
+
+    return cctx->error.error;
 }
