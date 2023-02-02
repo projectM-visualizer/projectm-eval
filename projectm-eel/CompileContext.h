@@ -7,7 +7,7 @@
  * @param global_memory An optional pointer to a memory buffer to use as global memory (gmegabuf). If NULL, uses the built-in buffer.
  * @return A pointer to the newly created context.
  */
-prjm_eel_compiler_context_t* prjm_eel_create_compile_context(prjm_eel_mem_buffer global_memory);
+prjm_eel_compiler_context_t* prjm_eel_create_compile_context(prjm_eel_mem_buffer_t global_memory);
 
 /**
  * @brief Destroys a compile context.

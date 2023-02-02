@@ -1,17 +1,8 @@
 #pragma once
 
+#include "api/projectm_eel.h"
+
 #include <stdbool.h>
-
-
-#ifndef PRJM_F_SIZE
-#define PRJM_F_SIZE 8
-#endif
-
-#if PRJM_F_SIZE == 4
-typedef float PRJM_F;
-#else
-typedef double PRJM_F;
-#endif
 
 
 struct prjm_eel_exptreenode;
@@ -19,27 +10,22 @@ struct prjm_eel_exptreenode;
 /**
  * @brief Math function pointer with one argument.
  */
-typedef PRJM_F (prjm_eel_math_func1)(PRJM_F);
+typedef PRJM_EEL_F (prjm_eel_math_func1)(PRJM_EEL_F);
 
 /**
  * @brief Math function pointer with two arguments.
  */
-typedef PRJM_F (prjm_eel_math_func2)(PRJM_F, PRJM_F);
+typedef PRJM_EEL_F (prjm_eel_math_func2)(PRJM_EEL_F, PRJM_EEL_F);
 
 /**
  * @brief Math function pointer with three arguments.
  */
-typedef PRJM_F (prjm_eel_math_func3)(PRJM_F, PRJM_F, PRJM_F);
+typedef PRJM_EEL_F (prjm_eel_math_func3)(PRJM_EEL_F, PRJM_EEL_F, PRJM_EEL_F);
 
 /**
  * @brief Node function for a single expression.
  */
-typedef void (prjm_eel_expr_func_t)(struct prjm_eel_exptreenode* ctx, PRJM_F** ret_val);
-
-/**
- * @brief Buffer pointer for megabuf/gmegabuf.
- */
-typedef PRJM_F** prjm_eel_mem_buffer;
+typedef void (prjm_eel_expr_func_t)(struct prjm_eel_exptreenode* ctx, PRJM_EEL_F** ret_val);
 
 /**
  * @brief Structure containing information about an available function implementation.
@@ -74,8 +60,7 @@ typedef prjm_eel_intrinsic_function_list* prjm_eel_intrinsic_function_list_ptr;
 typedef struct prjm_eel_variable_def
 {
     char* name; /*!< The lower-case name of the variable in the expression syntax. */
-    PRJM_F value; /*!< The internal value of the variable. */
-    PRJM_F* value_ptr; /*!< The pointer to the actual value of the variable. Either &value or any external pointer. */
+    PRJM_EEL_F value; /*!< The internal value of the variable. */
 } prjm_eel_variable_def_t;
 
 typedef struct prjm_eel_variable_entry
@@ -105,11 +90,11 @@ typedef struct prjm_eel_exptreenode
 {
     prjm_eel_expr_func_t* func;
     void* math_func;
-    PRJM_F value; /*!< A constant, numerical value. Also used as temp value. */
+    PRJM_EEL_F value; /*!< A constant, numerical value. Also used as temp value. */
     union
     {
         prjm_eel_variable_def_t* var; /*!< Variable reference. */
-        prjm_eel_mem_buffer memory_buffer; /*!< megabuf/gmegabuf memory block. */
+        prjm_eel_mem_buffer_t memory_buffer; /*!< megabuf/gmegabuf memory block. */
     };
     struct prjm_eel_exptreenode** args; /*!< Function arguments. Last element must be a NULL pointer*/
     prjm_eel_exptreenode_list_item_t* list;  /*!< Next argument in the instruction list. */
@@ -155,8 +140,8 @@ typedef struct
 {
     prjm_eel_function_list_t functions;
     prjm_eel_variable_list_t variables;
-    prjm_eel_mem_buffer memory;
-    prjm_eel_mem_buffer global_memory;
+    prjm_eel_mem_buffer_t memory;
+    prjm_eel_mem_buffer_t global_memory;
     prjm_eel_compiler_error_t error;
     prjm_eel_exptreenode_t* compile_result;
 } prjm_eel_compiler_context_t;

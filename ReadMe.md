@@ -21,4 +21,4 @@ like Make, Ninja, Visual Studio or Xcode is required.
 To recreate the parser and lexer or to run tests, additional dependencies need to be installed:
 
 - GTest 1.10 or higher to run the unit tests
-- BISON 3.8 and FLEX 2.6 to regenerate the code compiler from the .y/.l files.
+- Bison 3.8 and Flex 2.6 to regenerate the code compiler from the .y/.l files.

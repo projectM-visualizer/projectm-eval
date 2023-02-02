@@ -8,7 +8,6 @@ typedef void* yyscan_t;
 }
 
 /* Generator options */
-%verbose
 %locations
 %no-lines
 %define api.pure true
@@ -42,7 +41,7 @@ typedef void* yyscan_t;
 %token ADDOP SUBOP MODOP OROP ANDOP DIVOP MULOP POWOP EQUAL BELEQ ABOEQ NOTEQ BOOLOR BOOLAND
 
 /* Value types */
-%token <PRJM_F> NUM
+%token <PRJM_EEL_F> NUM
 %token <char*> VAR FUNC
 %nterm <prjm_eel_compiler_node_t*> function program instruction-list expression parentheses
 %nterm <prjm_eel_compiler_arg_list_t*> function-arglist
@@ -162,6 +161,8 @@ expression:
 | expression[left] '/' expression[right] { PRJM_EEL_FUNC2($$, "_div", $left, $right) }
 | expression[left] '%' expression[right] { PRJM_EEL_FUNC2($$, "_mod", $left, $right) }
 | expression[left] '^' expression[right] { PRJM_EEL_FUNC2($$, "pow", $left, $right) }
+| expression[left] '|' expression[right] { PRJM_EEL_FUNC2($$, "bor", $left, $right) }
+| expression[left] '&' expression[right] { PRJM_EEL_FUNC2($$, "band", $left, $right) }
 
 /* Unary operators */
 | '-' expression[value] %prec NEG        { PRJM_EEL_FUNC1($$, "_neg", $value) }

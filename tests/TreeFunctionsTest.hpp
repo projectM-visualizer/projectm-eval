@@ -1,6 +1,9 @@
 #pragma once
 
-#include "TreeFunctions.h"
+extern "C"
+{
+#include "projectm-eel/TreeFunctions.h"
+};
 
 #include <gtest/gtest.h>
 
@@ -11,21 +14,22 @@ class TreeFunctions : public testing::Test
 public:
 
 protected:
-    prjm_eel_variable_t* FindVariable(const char* name);
+    prjm_eel_variable_def_t* FindVariable(const char* name);
 
-    prjm_eel_variable_t* CreateVariable(const char* name, float initialValue, float* externalDataPointer);
+    prjm_eel_variable_def_t* CreateVariable(const char* name, PRJM_EEL_F initialValue);
 
     prjm_eel_exptreenode_t* CreateEmptyNode(int argCount);
 
-    prjm_eel_exptreenode_t* CreateConstantNode(float value);
+    prjm_eel_exptreenode_t* CreateConstantNode(PRJM_EEL_F value);
 
-    prjm_eel_exptreenode_t* CreateVariableNode(const char* name, float initialValue, float* externalDataPointer,
-                                               prjm_eel_variable_t** variable);
+    prjm_eel_exptreenode_t* CreateVariableNode(const char* name,
+                                               PRJM_EEL_F initialValue,
+                                               prjm_eel_variable_def_t** variable);
 
     void SetUp() override;
 
     void TearDown() override;
 
-    prjm_eel_variable_t* m_variables{};
+    std::vector<prjm_eel_variable_def_t*> m_variables{};
     std::vector<prjm_eel_exptreenode_t*> m_treeNodes;
 };

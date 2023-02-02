@@ -1,7 +1,7 @@
 extern "C" {
-#include "CompileContext.h"
-#include "CompilerTypes.h"
-#include "MemoryBuffer.h"
+#include "projectm-eel/CompileContext.h"
+#include "projectm-eel/CompilerTypes.h"
+#include "projectm-eel/MemoryBuffer.h"
 }
 
 #include "FileParser.hpp"
@@ -23,7 +23,7 @@ static void DumpVars(prjm_eel_compiler_context_t* cctx)
     prjm_eel_variable_entry_t* item = cctx->variables.first;
     while (item)
     {
-        printf("%s => %f\n", item->variable->name, *item->variable->value_ptr);
+        printf("%s => %g\n", item->variable->name, item->variable->value);
         item = item->next;
     }
 }
@@ -43,8 +43,8 @@ static void ScanString(const char* input)
     {
         std::cout << "Parsing done, running." << std::endl;
 
-        PRJM_F init_value = .0;
-        PRJM_F* init_value_ptr = &init_value;
+        PRJM_EEL_F init_value = .0;
+        PRJM_EEL_F* init_value_ptr = &init_value;
         program->program->func(program->program, &init_value_ptr);
 
         std::cout << "Program executed, returned " << *init_value_ptr << "." << std::endl;

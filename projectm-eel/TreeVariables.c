@@ -21,8 +21,7 @@ static prjm_eel_variable_entry_t* find_variable_entry(prjm_eel_compiler_context_
 }
 
 prjm_eel_variable_def_t* prjm_eel_register_variable(prjm_eel_compiler_context_t* cctx,
-                                                    const char* name,
-                                                    PRJM_F* value_ptr)
+                                                    const char* name)
 {
     prjm_eel_variable_entry_t* var = find_variable_entry(cctx, name);
 
@@ -33,26 +32,9 @@ prjm_eel_variable_def_t* prjm_eel_register_variable(prjm_eel_compiler_context_t*
         var->variable = calloc(1, sizeof(prjm_eel_variable_def_t));
         var->variable->name = strdup(name);
         var->variable->value = .0f;
-        var->variable->value_ptr = &var->variable->value;
         var->next = cctx->variables.first;
         cctx->variables.first = var;
     }
 
-    if (value_ptr)
-    {
-        var->variable->value_ptr = value_ptr;
-    }
-
     return var->variable;
-}
-
-void prjm_eel_unregister_variable(prjm_eel_compiler_context_t* cctx,
-                                  const char* name)
-{
-    prjm_eel_variable_entry_t* var = find_variable_entry(cctx, name);
-
-    if (var)
-    {
-        var->variable->value_ptr = &var->variable->value;
-    }
 }
