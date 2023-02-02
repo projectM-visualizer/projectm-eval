@@ -61,6 +61,8 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
 "$"[eE]             { yylval->NUM = 2.71828183f; return NUM; }
 "$"(?i:phi)         { yylval->NUM = 1.61803399f; return NUM; }
 
+(?i:gmem)           { return GMEM; }
+
 {FLOAT}            {
                         yylval->NUM = atof(yytext);
                         return NUM;
@@ -74,6 +76,7 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
                         yylval->VAR = strdup(yytext);
                         return VAR;
                     }
+
 
     /* Operators */
 "+="                { return ADDOP; }

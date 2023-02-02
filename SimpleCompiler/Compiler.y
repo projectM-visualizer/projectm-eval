@@ -36,7 +36,7 @@ typedef void* yyscan_t;
 /* Token declarations */
 
 /* Special functions */
-%token LOOP WHILE GMEM GMEGABUF MEGABUF
+%token GMEM
 
 /* Operator tokens */
 %token ADDOP SUBOP MODOP OROP ANDOP DIVOP MULOP POWOP EQUAL BELEQ ABOEQ NOTEQ BOOLOR BOOLAND
@@ -113,6 +113,10 @@ expression:
 | VAR[name] { $$ = prjm_eel_compiler_create_variable(cctx, $name); free($name); }
 
 /* Memory access via index */
+| GMEM '[' ']'                               { prjm_eel_compiler_node_t* gmem_zero_idx =  prjm_eel_compiler_create_constant(cctx, .0);
+                                               PRJM_EEL_FUNC1($$, "_gmem", gmem_zero_idx)
+                                               }
+| GMEM '[' expression[idx] ']'               { PRJM_EEL_FUNC1($$, "_gmem", $idx) }
 | expression[idx] '[' ']'                    { PRJM_EEL_FUNC1($$, "_mem", $idx) }
 | expression[idx] '[' expression[offs] ']'   { /* Create additional "idx + offs" operation as arg to _mem */
                                                prjm_eel_compiler_node_t* idx_plus_offset;
