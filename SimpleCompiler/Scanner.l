@@ -15,12 +15,15 @@
 #include <stdio.h>
 
 #define YY_STDINIT
-#define YY_USER_ACTION \
-    yycolumn += strlen(yytext);\
-    yylloc_param->first_line = yylineno; \
-    yylloc_param->first_column = yycolumn; \
-    yylloc_param->last_line = yylineno; \
-    yylloc_param->last_column = yycolumn;
+#define YY_USER_ACTION                           \
+    {                                            \
+        int old_column = yycolumn;               \
+        yycolumn += strlen(yytext);              \
+        yylloc_param->first_line = yylineno;     \
+        yylloc_param->first_column = old_column; \
+        yylloc_param->last_line = yylineno;      \
+        yylloc_param->last_column = yycolumn;    \
+    }
 }
 
 
