@@ -1,4 +1,4 @@
-#line 1 "/home/kai/Dev/projectm-evallib/projectm-eel/Scanner.c"
+#line 1 "/home/kai/Dev/projectm-evallib/projectm-eval/Scanner.c"
 #include "CompilerTypes.h"
 #include "Compiler.h"
 
@@ -15,7 +15,7 @@
         yylloc_param->last_column = yycolumn;    \
     }
 
-#line 18 "/home/kai/Dev/projectm-evallib/projectm-eel/Scanner.c"
+#line 18 "/home/kai/Dev/projectm-evallib/projectm-eval/Scanner.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -777,7 +777,7 @@ static const flex_int32_t yy_rule_can_match_eol[50] =
 
 
     /* Rule definitions */
-#line 780 "/home/kai/Dev/projectm-evallib/projectm-eel/Scanner.c"
+#line 780 "/home/kai/Dev/projectm-evallib/projectm-eval/Scanner.c"
 
 #define INITIAL 0
 #define ML_COMMENT 1
@@ -1063,7 +1063,7 @@ YY_DECL
 
 
     /* Comments */
-#line 1066 "/home/kai/Dev/projectm-evallib/projectm-eel/Scanner.c"
+#line 1066 "/home/kai/Dev/projectm-evallib/projectm-eval/Scanner.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1401,7 +1401,7 @@ YY_RULE_SETUP
 #line 126 "Scanner.l"
 ECHO;
 	YY_BREAK
-#line 1404 "/home/kai/Dev/projectm-evallib/projectm-eel/Scanner.c"
+#line 1404 "/home/kai/Dev/projectm-evallib/projectm-eval/Scanner.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ML_COMMENT):
 case YY_STATE_EOF(IL_COMMENT):

@@ -4,7 +4,15 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-project(projectM_EvalLib
+set(PROJECTM_EVAL_FLOAT_SIZE "8" CACHE STRING "Byte size of floating-point numbers. 8 to use double, 4 to use float. Default is 8.")
+
+option(BUILD_NS_EEL_SHIM "Build and isntall the ns-eel2 compatibility API shim." OFF)
+
+if(NOT PROJECTM_EVAL_FLOAT_SIZE EQUAL 8 AND NOT PROJECTM_EVAL_FLOAT_SIZE EQUAL 4)
+    message(FATAL_ERROR "PROJECTM_EVAL_FLOAT_SIZE must be set to either 4 (use floats) or 8 (use doubles).")
+endif()
+
+project(projectm-eval
         VERSION 1.0.0
         LANGUAGES C CXX
         )
@@ -14,7 +22,11 @@ include(GNUInstallDirs)
 find_package(BISON 3.8)
 find_package(FLEX 2.6)
 
-add_subdirectory(projectm-eel)
+add_subdirectory(projectm-eval)
+if(BUILD_NS_EEL_SHIM)
+    add_subdirectory(ns-eel2-shim)
+endif()
+
 add_subdirectory(SimpleCompiler)
 
 if(BUILD_TESTING)

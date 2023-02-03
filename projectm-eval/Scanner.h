@@ -2,7 +2,7 @@
 #define prjm_eel_HEADER_H 1
 #define prjm_eel_IN_HEADER 1
 
-#line 5 "/home/kai/Dev/projectm-evallib/projectm-eel/Scanner.h"
+#line 5 "/home/kai/Dev/projectm-evallib/projectm-eval/Scanner.h"
 #include "CompilerTypes.h"
 #include "Compiler.h"
 
@@ -19,7 +19,7 @@
         yylloc_param->last_column = yycolumn;    \
     }
 
-#line 22 "/home/kai/Dev/projectm-evallib/projectm-eel/Scanner.h"
+#line 22 "/home/kai/Dev/projectm-evallib/projectm-eval/Scanner.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -762,6 +762,6 @@ extern int yylex \
 #line 126 "Scanner.l"
 
 
-#line 765 "/home/kai/Dev/projectm-evallib/projectm-eel/Scanner.h"
+#line 765 "/home/kai/Dev/projectm-evallib/projectm-eval/Scanner.h"
 #undef prjm_eel_IN_HEADER
 #endif /* prjm_eel_HEADER_H */

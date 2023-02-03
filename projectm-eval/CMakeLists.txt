@@ -61,7 +61,9 @@ add_library(projectM_EvalLib STATIC
         TreeFunctions.h
         TreeVariables.c
         TreeVariables.h
-        api/projectm_eel.c api/projectm_eel.h)
+        api/projectm-eval.c
+        api/projectm-eval.h
+        )
 
 target_include_directories(projectM_EvalLib
         PUBLIC

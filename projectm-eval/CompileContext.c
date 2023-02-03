@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-prjm_eel_compiler_context_t* prjm_eel_create_compile_context(prjm_eel_mem_buffer_t global_memory)
+prjm_eel_compiler_context_t* prjm_eel_create_compile_context(prjm_eel_mem_buffer global_memory)
 {
     prjm_eel_compiler_context_t* cctx = calloc(1, sizeof(prjm_eel_compiler_context_t));
 
@@ -134,7 +134,7 @@ void prjm_eel_reset_context_vars(prjm_eel_compiler_context_t* cctx)
     }
 }
 
-const char* prjm_eel_get_error(prjm_eel_compiler_context_t* cctx, int* line, int* column)
+const char* prjm_eel_compiler_get_error(prjm_eel_compiler_context_t* cctx, int* line, int* column)
 {
     assert(cctx);
 

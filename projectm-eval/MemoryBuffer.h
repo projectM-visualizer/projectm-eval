@@ -18,26 +18,26 @@ void prjm_eel_memory_destroy_global();
  * Can be used if only one global buffer is required. Call @a prjm_eel_memory_destroy_global()
  * to free this buffer.
  */
-prjm_eel_mem_buffer_t prjm_eel_memory_global();
+prjm_eel_mem_buffer prjm_eel_memory_global();
 
 /**
  * @brief Creates a memory buffer which can hold the required amount of blocks.
  * @return A pointer to the empty buffer.
  */
-prjm_eel_mem_buffer_t prjm_eel_memory_create_buffer();
+prjm_eel_mem_buffer prjm_eel_memory_create_buffer();
 
 /**
  * @brief Destroys a memory buffer and any blocks stored within.
  * @param buffer A pointer to the buffer which should be destroyed.
  */
-void prjm_eel_memory_destroy_buffer(prjm_eel_mem_buffer_t buffer);
+void prjm_eel_memory_destroy_buffer(prjm_eel_mem_buffer buffer);
 
 /**
  * @brief Frees the data stored in the buffer.
  * The buffer itself will not be destroyed. Call @a prjm_eel_memory_destroy_buffer() if this is needed.
  * @param buffer The buffer to clear.
  */
-void prjm_eel_memory_free(prjm_eel_mem_buffer_t buffer);
+void prjm_eel_memory_free(prjm_eel_mem_buffer buffer);
 
 /**
  * @brief Frees the data stored in a single block of the buffer.
@@ -45,11 +45,11 @@ void prjm_eel_memory_free(prjm_eel_mem_buffer_t buffer);
  * @param buffer The buffer to clear.
  * @param block The block to clear.
  */
-void prjm_eel_memory_free_block(prjm_eel_mem_buffer_t buffer, int block);
+void prjm_eel_memory_free_block(prjm_eel_mem_buffer buffer, int block);
 
 /**
  * @brief Allocates the appropriate memory block and returns a pointer to the data address for the given index.
  * @param buffer A pointer to the buffer to use.
  * @param index The memory index (offset) to allocate and return a pointer to.
  */
-PRJM_EEL_F* prjm_eel_memory_allocate(prjm_eel_mem_buffer_t buffer, int index);
+PRJM_EEL_F* prjm_eel_memory_allocate(prjm_eel_mem_buffer buffer, int index);

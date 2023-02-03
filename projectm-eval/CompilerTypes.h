@@ -1,6 +1,6 @@
 #pragma once
 
-#include "api/projectm_eel.h"
+#include "api/projectm-eval.h"
 
 #include <stdbool.h>
 
@@ -94,7 +94,7 @@ typedef struct prjm_eel_exptreenode
     union
     {
         prjm_eel_variable_def_t* var; /*!< Variable reference. */
-        prjm_eel_mem_buffer_t memory_buffer; /*!< megabuf/gmegabuf memory block. */
+        prjm_eel_mem_buffer memory_buffer; /*!< megabuf/gmegabuf memory block. */
     };
     struct prjm_eel_exptreenode** args; /*!< Function arguments. Last element must be a NULL pointer*/
     prjm_eel_exptreenode_list_item_t* list;  /*!< Next argument in the instruction list. */
@@ -136,12 +136,12 @@ typedef struct
     int column;
 } prjm_eel_compiler_error_t;
 
-typedef struct
+typedef struct prjm_eel_context
 {
     prjm_eel_function_list_t functions;
     prjm_eel_variable_list_t variables;
-    prjm_eel_mem_buffer_t memory;
-    prjm_eel_mem_buffer_t global_memory;
+    prjm_eel_mem_buffer memory;
+    prjm_eel_mem_buffer global_memory;
     prjm_eel_compiler_error_t error;
     prjm_eel_exptreenode_t* compile_result;
 } prjm_eel_compiler_context_t;

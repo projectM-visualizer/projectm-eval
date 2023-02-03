@@ -1,7 +1,7 @@
 extern "C" {
-#include "projectm-eel/CompileContext.h"
-#include "projectm-eel/CompilerTypes.h"
-#include "projectm-eel/MemoryBuffer.h"
+#include "projectm-eval/CompileContext.h"
+#include "projectm-eval/CompilerTypes.h"
+#include "projectm-eval/MemoryBuffer.h"
 }
 
 #include "FileParser.hpp"
@@ -36,7 +36,7 @@ static void ScanString(const char* input)
     if (!program)
     {
         int line, column;
-        auto* error = prjm_eel_get_error(cctx, &line, &column);
+        auto* error = prjm_eel_compiler_get_error(cctx, &line, &column);
         std::cout << "Parsing failed: " << error << " (Line " << line << ", Column " << column << ")" << std::endl;
     }
     else

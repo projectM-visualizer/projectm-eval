@@ -6,14 +6,14 @@
 #define PRJM_EEL_MEM_BLOCKS 128
 #define PRJM_EEL_MEM_ITEMSPERBLOCK 65536
 
-static prjm_eel_mem_buffer_t static_global_memory;
+static prjm_eel_mem_buffer static_global_memory;
 
 void prjm_eel_memory_destroy_global()
 {
     prjm_eel_memory_destroy_buffer(static_global_memory);
 }
 
-prjm_eel_mem_buffer_t prjm_eel_memory_global()
+prjm_eel_mem_buffer prjm_eel_memory_global()
 {
     if (!static_global_memory)
     {
@@ -27,19 +27,19 @@ prjm_eel_mem_buffer_t prjm_eel_memory_global()
     return static_global_memory;
 }
 
-prjm_eel_mem_buffer_t prjm_eel_memory_create_buffer()
+prjm_eel_mem_buffer prjm_eel_memory_create_buffer()
 {
     return calloc(PRJM_EEL_MEM_BLOCKS, sizeof(PRJM_EEL_F*));
 }
 
-void prjm_eel_memory_destroy_buffer(prjm_eel_mem_buffer_t buffer)
+void prjm_eel_memory_destroy_buffer(prjm_eel_mem_buffer buffer)
 {
     prjm_eel_memory_free(buffer);
 
     free(buffer);
 }
 
-void prjm_eel_memory_free(prjm_eel_mem_buffer_t buffer)
+void prjm_eel_memory_free(prjm_eel_mem_buffer buffer)
 {
     if (!buffer)
     {
@@ -61,12 +61,12 @@ void prjm_eel_memory_free(prjm_eel_mem_buffer_t buffer)
     prjm_eel_memory_host_unlock_mutex();
 }
 
-void prjm_eel_memory_free_block(prjm_eel_mem_buffer_t buffer, int block)
+void prjm_eel_memory_free_block(prjm_eel_mem_buffer buffer, int block)
 {
 
 }
 
-PRJM_EEL_F* prjm_eel_memory_allocate(prjm_eel_mem_buffer_t buffer, int index)
+PRJM_EEL_F* prjm_eel_memory_allocate(prjm_eel_mem_buffer buffer, int index)
 {
     int block;
     if (!buffer)

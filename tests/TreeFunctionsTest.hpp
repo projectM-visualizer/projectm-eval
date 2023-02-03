@@ -2,7 +2,7 @@
 
 extern "C"
 {
-#include "projectm-eel/TreeFunctions.h"
+#include "projectm-eval/TreeFunctions.h"
 };
 
 #include <gtest/gtest.h>
