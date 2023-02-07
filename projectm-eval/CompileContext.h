@@ -44,7 +44,11 @@ void prjm_eel_reset_context_vars(prjm_eel_compiler_context_t* cctx);
  * @brief Returns the last error message.
  * @param cctx The context to retrieve the error from.
  * @param line A pointer to a variable that will receive the error's position line number or NULL.
- * @param column A pointer to a variable that will receive the error's position column number or NULL.
+ * @param column_start A pointer to a variable that will receive the error's first column number or NULL.
+ * @param column_end A pointer to a variable that will receive the error's last column number or NULL.
  * @return A char pointer to the last error message or NULL if there wasn't an error. The pointer is owned by the context, do not free.
  */
-const char* prjm_eel_compiler_get_error(prjm_eel_compiler_context_t* cctx, int* line, int* column);
+const char* prjm_eel_compiler_get_error(prjm_eel_compiler_context_t* cctx,
+                                        int* line,
+                                        int* column_start,
+                                        int* column_end);

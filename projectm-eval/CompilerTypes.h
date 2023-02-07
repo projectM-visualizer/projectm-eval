@@ -133,7 +133,8 @@ typedef struct
 {
     char* error;
     int line;
-    int column;
+    int column_start;
+    int column_end;
 } prjm_eel_compiler_error_t;
 
 typedef struct projectm_eval_context

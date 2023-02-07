@@ -137,7 +137,7 @@ void prjm_eel_reset_context_vars(prjm_eel_compiler_context_t* cctx)
     }
 }
 
-const char* prjm_eel_compiler_get_error(prjm_eel_compiler_context_t* cctx, int* line, int* column)
+const char* prjm_eel_compiler_get_error(prjm_eel_compiler_context_t* cctx, int* line, int* column_start, int* column_end)
 {
     assert(cctx);
 
@@ -146,9 +146,14 @@ const char* prjm_eel_compiler_get_error(prjm_eel_compiler_context_t* cctx, int* 
         *line = cctx->error.line;
     }
 
-    if (column)
+    if (column_start)
     {
-        *column = cctx->error.column;
+        *column_start = cctx->error.column_start;
+    }
+
+    if (column_end)
+    {
+        *column_end = cctx->error.column_end;
     }
 
     return cctx->error.error;

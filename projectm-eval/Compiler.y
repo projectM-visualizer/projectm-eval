@@ -14,6 +14,7 @@ typedef void* yyscan_t;
 %define api.prefix {prjm_eel_}
 %define api.value.type union /* Generate YYSTYPE from these types: */
 %define parse.error verbose
+%define parse.lac full
 
     /* Parser and lexer arguments */
 %param {prjm_eel_compiler_context_t* cctx} { yyscan_t scanner }

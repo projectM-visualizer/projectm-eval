@@ -6,7 +6,7 @@
 #define PRJM_EEL_FUNC(ret, name, args) {\
         char* errval = NULL; \
         ret = prjm_eel_compiler_create_function(cctx, name, args, &errval); \
-        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }\
+        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); YYERROR; }\
     }
 
 #define PRJM_EEL_FUNC1(ret, name, arg1) {\
@@ -14,7 +14,7 @@
         prjm_eel_compiler_arg_list_t* arglist = NULL; \
         arglist = prjm_eel_compiler_add_argument(arglist, arg1); \
         ret = prjm_eel_compiler_create_function(cctx, name, arglist, &errval); \
-        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }   \
+        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); YYERROR; }   \
     }
 
 #define PRJM_EEL_FUNC2(ret, name, arg1, arg2) {\
@@ -23,7 +23,7 @@
         arglist = prjm_eel_compiler_add_argument(arglist, arg1); \
         arglist = prjm_eel_compiler_add_argument(arglist, arg2); \
         ret = prjm_eel_compiler_create_function(cctx, name, arglist, &errval); \
-        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }   \
+        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); YYERROR; }   \
     }
 
 #define PRJM_EEL_FUNC3(ret, name, arg1, arg2, arg3) {\
@@ -33,7 +33,13 @@
         arglist = prjm_eel_compiler_add_argument(arglist, arg2); \
         arglist = prjm_eel_compiler_add_argument(arglist, arg3); \
         ret = prjm_eel_compiler_create_function(cctx, name, arglist, &errval); \
-        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); }   \
+        if(errval) { yyerror(&yyloc, cctx, scanner, errval); free(errval); YYERROR; }   \
+    }
+
+#define PRJM_EEL_FORMAT_ERROR(errvar, errfmt, ...) { \
+        int chars = snprintf(NULL, 0, errfmt, ##__VA_ARGS__) + 1; \
+        *error = malloc(chars * sizeof(char)); \
+        snprintf(errvar, chars, errfmt, ##__VA_ARGS__); \
     }
 
 /**

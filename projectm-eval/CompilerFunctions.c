@@ -12,7 +12,8 @@ void prjm_eel_error(PRJM_EEL_LTYPE* loc, prjm_eel_compiler_context_t* cctx, yysc
 {
     cctx->error.error = strdup(s);
     cctx->error.line = loc->first_line;
-    cctx->error.column = loc->first_column;
+    cctx->error.column_start = loc->first_column;
+    cctx->error.column_end = loc->last_column;
 }
 
 void prjm_eel_compiler_destroy_arglist(prjm_eel_compiler_arg_list_t* arglist)
@@ -119,13 +120,14 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_function(prjm_eel_compiler_co
     prjm_eel_function_def_t* func = prjm_eel_compiler_get_function(cctx, name);
     if (!func)
     {
-        *error = strdup("Invalid function");
+        PRJM_EEL_FORMAT_ERROR(*error, "Unknown function \"%s\".", name)
         return NULL;
     }
 
     if (func->arg_count != arglist->count)
     {
-        *error = strdup("Invalid argument count");
+        PRJM_EEL_FORMAT_ERROR(*error, "Invalid argument count for function \"%s\": Expected %d, but %d given.",
+                              name, func->arg_count, arglist->count)
         return NULL;
     }
 

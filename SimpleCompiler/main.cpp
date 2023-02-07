@@ -35,9 +35,9 @@ static void ScanString(const char* input)
 
     if (!program)
     {
-        int line, column;
-        auto* error = prjm_eel_compiler_get_error(cctx, &line, &column);
-        std::cout << "Parsing failed: " << error << " (Line " << line << ", Column " << column << ")" << std::endl;
+        int line, columnStart, columnEnd;
+        auto* error = prjm_eel_compiler_get_error(cctx, &line, &columnStart, &columnEnd);
+        std::cout << "Parsing failed: " << error << " (Line " << line << ", Column " << columnStart << "-" << columnEnd << ")" << std::endl;
     }
     else
     {
