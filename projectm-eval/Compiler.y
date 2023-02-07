@@ -124,7 +124,7 @@ expression:
                                                PRJM_EEL_FUNC1($$, "_mem", idx_plus_offset)
                                                }
 
-/* Compund assignment operators */
+/* Compound assignment operators */
 | expression[left] ADDOP expression[right]         { PRJM_EEL_FUNC2($$, "_addop", $left, $right) }
 | expression[left] SUBOP expression[right]         { PRJM_EEL_FUNC2($$, "_subop", $left, $right) }
 | expression[left] MODOP expression[right]         { PRJM_EEL_FUNC2($$, "_modop", $left, $right) }
