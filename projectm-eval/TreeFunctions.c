@@ -24,8 +24,8 @@ static prjm_eel_function_def_t intrinsic_function_table[] = {
 
     { "if",        prjm_eel_func_if,            0,     3, true,  false },
     { "_if",       prjm_eel_func_if,            0,     3, true,  false },
-    { "_and",      prjm_eel_func_band,          0,     2, true,  false },
-    { "_or",       prjm_eel_func_bor,           0,     2, true,  false },
+    { "_and",      prjm_eel_func_band_op,       0,     2, true,  false },
+    { "_or",       prjm_eel_func_bor_op,        0,     2, true,  false },
     { "loop",      prjm_eel_func_execute_loop,  0,     2, true,  false },
     { "while",     prjm_eel_func_execute_while, 0,     1, true,  false },
 
@@ -83,8 +83,8 @@ static prjm_eel_function_def_t intrinsic_function_table[] = {
     { "invsqrt",   prjm_eel_func_invsqrt,       0,     1, true,  false },
     { "sigmoid",   prjm_eel_func_sigmoid,       0,     2, true,  false },
 
-    { "band",      prjm_eel_func_band,          0,     2, true,  false },
-    { "bor",       prjm_eel_func_bor,           0,     2, true,  false },
+    { "band",      prjm_eel_func_band_func,     0,     2, true,  false },
+    { "bor",       prjm_eel_func_bor_func,      0,     2, true,  false },
 
     { "exec2",     prjm_eel_func_exec2,         0,     2, true,  false },
     { "exec3",     prjm_eel_func_exec3,         0,     3, true,  false },
@@ -104,6 +104,24 @@ static prjm_eel_function_def_t intrinsic_function_table[] = {
         assert(ret_val); \
         assert(*ret_val); \
         assert(ctx->func)
+
+/* Allowed error for float/double comparisons to exact values */
+#define COMPARE_CLOSEFACTOR 0.00001
+static const PRJM_EVAL_F close_factor = COMPARE_CLOSEFACTOR;
+
+/* These factors are not exactly as close to zero as their ns-eel2 equivalents, but that shouldn't
+ * matter too much. In ns-eel2, the value is represented as binary 0x00000000FFFFFFFF for doubles.
+ */
+#if PRJM_F_SIZE == 4
+static const PRJM_EVAL_F close_factor_low = 1e-41;
+#define LRINT lrintf
+#else
+static const PRJM_EVAL_F close_factor_low = 1e-300;
+#define LRINT lrint
+#endif
+
+/* Maximum number of loop iterations */
+#define MAX_LOOP_COUNT 1048576
 
 /**
  * Invokes the expression function of the indexed argument
@@ -249,9 +267,9 @@ prjm_eel_function_decl(execute_loop)
 
     int loop_count_int = (int) (*value_ptr);
     /* Limit execution count */
-    if (loop_count_int > 1000000)
+    if (loop_count_int > MAX_LOOP_COUNT)
     {
-        loop_count_int = 1000000;
+        loop_count_int = MAX_LOOP_COUNT;
     }
 
     for (int i = 0; i < loop_count_int; i++)
@@ -270,12 +288,11 @@ prjm_eel_function_decl(execute_while)
 
     ctx->value = .0;
     PRJM_EVAL_F* value_ptr = &ctx->value;
-    int loop_count_int = 0;
+    int loop_count_int = MAX_LOOP_COUNT;
     do
     {
         invoke_arg(0, &value_ptr);
-        loop_count_int++;
-    } while (*value_ptr != 0 && loop_count_int < 1000000);
+    } while (fabs(*value_ptr) > close_factor_low && --loop_count_int);
 
     assign_ret_ref(value_ptr);
 }
@@ -388,7 +405,7 @@ prjm_eel_function_decl(bnot)
 
     invoke_arg(0, &value_ptr);
 
-    assign_ret_val((PRJM_EVAL_F) !(*value_ptr));
+    assign_ret_val(fabs(*value_ptr) < close_factor_low ? 1.0 : 0.0);
 }
 
 prjm_eel_function_decl(equal)
@@ -403,7 +420,7 @@ prjm_eel_function_decl(equal)
     invoke_arg(0, &val1_ptr);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((*val1_ptr == *val2_ptr) ? 1. : .0);
+    assign_ret_val(fabs(*val1_ptr - *val2_ptr) < close_factor_low ? 1.0 : 0.0);
 }
 
 prjm_eel_function_decl(notequal)
@@ -417,7 +434,7 @@ prjm_eel_function_decl(notequal)
     invoke_arg(0, &val1_ptr);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((*val1_ptr != *val2_ptr) ? 1. : .0);
+    assign_ret_val(fabs(*val1_ptr - *val2_ptr) > close_factor_low ? 1.0 : 0.0);
 }
 
 prjm_eel_function_decl(below)
@@ -432,7 +449,7 @@ prjm_eel_function_decl(below)
     invoke_arg(0, &val1_ptr);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((*val1_ptr < *val2_ptr) ? 1. : .0);
+    assign_ret_val((*val1_ptr < *val2_ptr) ? 1.0 : 0.0);
 }
 
 prjm_eel_function_decl(above)
@@ -447,7 +464,7 @@ prjm_eel_function_decl(above)
     invoke_arg(0, &val1_ptr);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((*val1_ptr > *val2_ptr) ? 1. : .0);
+    assign_ret_val((*val1_ptr > *val2_ptr) ? 1.0 : 0.0);
 }
 
 prjm_eel_function_decl(beloweq)
@@ -462,7 +479,7 @@ prjm_eel_function_decl(beloweq)
     invoke_arg(0, &val1_ptr);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((*val1_ptr <= *val2_ptr) ? 1. : .0);
+    assign_ret_val((*val1_ptr <= *val2_ptr) ? 1.0 : 0.0);
 }
 
 prjm_eel_function_decl(aboveeq)
@@ -477,7 +494,7 @@ prjm_eel_function_decl(aboveeq)
     invoke_arg(0, &val1_ptr);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((*val1_ptr >= *val2_ptr) ? 1. : .0);
+    assign_ret_val((*val1_ptr >= *val2_ptr) ? 1.0 : 0.0);
 }
 
 prjm_eel_function_decl(add)
@@ -555,22 +572,61 @@ prjm_eel_function_decl(mod)
     assign_ret_val((PRJM_EVAL_F) ((int) *val1_ptr % (int) *val2_ptr));
 }
 
-prjm_eel_function_decl(band)
+prjm_eel_function_decl(band_op)
 {
     assert_valid_ctx();
 
     PRJM_EVAL_F val1 = .0;
-    PRJM_EVAL_F val2 = .0;
     PRJM_EVAL_F* val1_ptr = &val1;
+    PRJM_EVAL_F val2 = .0;
     PRJM_EVAL_F* val2_ptr = &val2;
 
+    /*
+     * The && operator differs from the "band" function as it only evaluates the second
+     * argument if the first one is non-zero.
+     */
     invoke_arg(0, &val1_ptr);
-    invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((PRJM_EVAL_F) ((int) *val1_ptr & (int) *val2_ptr));
+    if (fabs(*val1_ptr) > close_factor_low)
+    {
+        invoke_arg(1, &val2_ptr);
+
+        assign_ret_val(fabs(*val2_ptr) > close_factor_low ? 1.0 : 0.0);
+    }
+    else
+    {
+        assign_ret_val(0.0);
+    }
 }
 
-prjm_eel_function_decl(bor)
+prjm_eel_function_decl(bor_op)
+{
+    assert_valid_ctx();
+
+    PRJM_EVAL_F val1 = .0;
+    PRJM_EVAL_F* val1_ptr = &val1;
+    PRJM_EVAL_F val2 = .0;
+    PRJM_EVAL_F* val2_ptr = &val2;
+
+    /*
+     * The || operator differs from the "bor" function as it only evaluates the second
+     * argument if the first one is zero.
+     */
+    invoke_arg(0, &val1_ptr);
+
+    if (fabs(*val1_ptr) < close_factor_low)
+    {
+        invoke_arg(1, &val2_ptr);
+
+        assign_ret_val(fabs(*val2_ptr) > close_factor_low ? 1.0 : 0.0);
+    }
+    else
+    {
+        assign_ret_val(1.0);
+    }
+}
+
+prjm_eel_function_decl(band_func)
 {
     assert_valid_ctx();
 
@@ -582,7 +638,24 @@ prjm_eel_function_decl(bor)
     invoke_arg(0, &val1_ptr);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((PRJM_EVAL_F) ((int) *val1_ptr | (int) *val2_ptr));
+    /* This function also uses the larger close factor! */
+    assign_ret_val(fabs(*val1_ptr) > close_factor && fabs(*val2_ptr) > close_factor ? 1.0 : 0.0);
+}
+
+prjm_eel_function_decl(bor_func)
+{
+    assert_valid_ctx();
+
+    PRJM_EVAL_F val1 = .0;
+    PRJM_EVAL_F val2 = .0;
+    PRJM_EVAL_F* val1_ptr = &val1;
+    PRJM_EVAL_F* val2_ptr = &val2;
+
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
+
+    /* This function also uses the larger close factor! */
+    assign_ret_val(fabs(*val1_ptr) > close_factor || fabs(*val2_ptr) > close_factor ? 1.0 : 0.0);
 }
 
 prjm_eel_function_decl(neg)
@@ -602,14 +675,12 @@ prjm_eel_function_decl(addop)
     assert_valid_ctx();
 
     PRJM_EVAL_F val2 = .0;
-    PRJM_EVAL_F* val1_ptr = &ctx->value;
     PRJM_EVAL_F* val2_ptr = &val2;
 
-    invoke_arg(0, &val1_ptr);
+    invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    (*val1_ptr) = *val1_ptr + *val2_ptr;
-    assign_ret_ref(val1_ptr);
+    assign_ret_val(**ret_val + *val2_ptr);
 }
 
 prjm_eel_function_decl(subop)
@@ -617,14 +688,12 @@ prjm_eel_function_decl(subop)
     assert_valid_ctx();
 
     PRJM_EVAL_F val2 = .0;
-    PRJM_EVAL_F* val1_ptr = &ctx->value;
     PRJM_EVAL_F* val2_ptr = &val2;
 
-    invoke_arg(0, &val1_ptr);
+    invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    (*val1_ptr) = *val1_ptr - *val2_ptr;
-    assign_ret_ref(val1_ptr);
+    assign_ret_val(**ret_val - *val2_ptr);
 }
 
 prjm_eel_function_decl(mulop)
@@ -632,14 +701,12 @@ prjm_eel_function_decl(mulop)
     assert_valid_ctx();
 
     PRJM_EVAL_F val2 = .0;
-    PRJM_EVAL_F* val1_ptr = &ctx->value;
     PRJM_EVAL_F* val2_ptr = &val2;
 
-    invoke_arg(0, &val1_ptr);
+    invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    (*val1_ptr) = *val1_ptr * *val2_ptr;
-    assign_ret_ref(val1_ptr);
+    assign_ret_val(**ret_val * *val2_ptr);
 }
 
 prjm_eel_function_decl(divop)
@@ -647,14 +714,12 @@ prjm_eel_function_decl(divop)
     assert_valid_ctx();
 
     PRJM_EVAL_F val2 = .0;
-    PRJM_EVAL_F* val1_ptr = &ctx->value;
     PRJM_EVAL_F* val2_ptr = &val2;
 
-    invoke_arg(0, &val1_ptr);
+    invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    (*val1_ptr) = *val1_ptr / *val2_ptr;
-    assign_ret_ref(val1_ptr);
+    assign_ret_val(**ret_val / *val2_ptr);
 }
 
 prjm_eel_function_decl(orop)
@@ -662,14 +727,12 @@ prjm_eel_function_decl(orop)
     assert_valid_ctx();
 
     PRJM_EVAL_F val2 = .0;
-    PRJM_EVAL_F* val1_ptr = &ctx->value;
     PRJM_EVAL_F* val2_ptr = &val2;
 
-    invoke_arg(0, &val1_ptr);
+    invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    (*val1_ptr) = (PRJM_EVAL_F) ((int) *val1_ptr & (int) *val2_ptr);
-    assign_ret_ref(val1_ptr);
+    assign_ret_val((PRJM_EVAL_F) (LRINT(**ret_val) | LRINT(*val2_ptr)));
 }
 
 prjm_eel_function_decl(andop)
@@ -677,14 +740,12 @@ prjm_eel_function_decl(andop)
     assert_valid_ctx();
 
     PRJM_EVAL_F val2 = .0;
-    PRJM_EVAL_F* val1_ptr = &ctx->value;
     PRJM_EVAL_F* val2_ptr = &val2;
 
-    invoke_arg(0, &val1_ptr);
+    invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    (*val1_ptr) = (PRJM_EVAL_F) ((int) *val1_ptr | (int) *val2_ptr);
-    assign_ret_ref(val1_ptr);
+    assign_ret_val((PRJM_EVAL_F) (LRINT(**ret_val) & LRINT(*val2_ptr)));
 }
 
 prjm_eel_function_decl(modop)
@@ -692,14 +753,12 @@ prjm_eel_function_decl(modop)
     assert_valid_ctx();
 
     PRJM_EVAL_F val2 = .0;
-    PRJM_EVAL_F* val1_ptr = &ctx->value;
     PRJM_EVAL_F* val2_ptr = &val2;
 
-    invoke_arg(0, &val1_ptr);
+    invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    (*val1_ptr) = (PRJM_EVAL_F) ((int) (*val1_ptr) % (int) (*val2_ptr));
-    assign_ret_ref(val1_ptr);
+    assign_ret_val((PRJM_EVAL_F) (LRINT(**ret_val) % LRINT(*val2_ptr)));
 }
 
 prjm_eel_function_decl(powop)
@@ -707,14 +766,12 @@ prjm_eel_function_decl(powop)
     assert_valid_ctx();
 
     PRJM_EVAL_F val2 = .0;
-    PRJM_EVAL_F* val1_ptr = &ctx->value;
     PRJM_EVAL_F* val2_ptr = &val2;
 
-    invoke_arg(0, &val1_ptr);
+    invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    (*val1_ptr) = pow(*val1_ptr, *val2_ptr);
-    assign_ret_ref(val1_ptr);
+    assign_ret_val(pow(**ret_val, *val2_ptr));
 }
 
 
@@ -761,7 +818,7 @@ prjm_eel_function_decl(sigmoid)
     invoke_arg(1, &math_arg2_ptr);
 
     double t = (1 + exp((double) -(*math_arg1_ptr) * (*math_arg2_ptr)));
-    assign_ret_val((PRJM_EVAL_F) (fabs(t) > 0.00001 ? 1.0 / t : .0));
+    assign_ret_val((PRJM_EVAL_F) (fabs(t) > close_factor ? 1.0 / t : .0));
 }
 
 prjm_eel_function_decl(sqr)

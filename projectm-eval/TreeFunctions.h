@@ -56,8 +56,10 @@ prjm_eel_function_decl(sub);
 prjm_eel_function_decl(mul);
 prjm_eel_function_decl(div);
 prjm_eel_function_decl(mod);
-prjm_eel_function_decl(band);
-prjm_eel_function_decl(bor);
+prjm_eel_function_decl(band_op);
+prjm_eel_function_decl(bor_op);
+prjm_eel_function_decl(band_func);
+prjm_eel_function_decl(bor_func);
 prjm_eel_function_decl(neg);
 
 /* Compound assignment operators */
