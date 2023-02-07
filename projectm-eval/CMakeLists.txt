@@ -12,9 +12,10 @@ set(FLEX_OUTPUT_FILES
 if(FLEX_FOUND)
     # Generate lexer code
     add_custom_command(COMMAND ${FLEX_EXECUTABLE}
-            -o ${CMAKE_CURRENT_SOURCE_DIR}/Scanner.c
+            --noline
             --prefix=prjm_eel_
             --header-file=${CMAKE_CURRENT_SOURCE_DIR}/Scanner.h
+            -o ${CMAKE_CURRENT_SOURCE_DIR}/Scanner.c
             Scanner.l
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             OUTPUT ${FLEX_OUTPUT_FILES}
@@ -29,9 +30,10 @@ endif()
 if(BISON_FOUND)
     # Generate compiler code
     add_custom_command(COMMAND ${BISON_EXECUTABLE}
-            -o ${CMAKE_CURRENT_SOURCE_DIR}/Compiler.c
             --defines=${CMAKE_CURRENT_SOURCE_DIR}/Compiler.h
             -Wcounterexamples
+            --no-lines
+            -o ${CMAKE_CURRENT_SOURCE_DIR}/Compiler.c
             Compiler.y
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             OUTPUT ${BISON_OUTPUT_FILES}

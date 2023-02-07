@@ -1,7 +1,10 @@
 #include "TreeVariables.h"
 
+#include "ctype.h"
 #include <stdlib.h>
 #include <string.h>
+
+static PRJM_EVAL_F static_global_variables[100];
 
 static prjm_eel_variable_entry_t* find_variable_entry(prjm_eel_compiler_context_t* cctx,
                                                       const char* name)
@@ -20,9 +23,28 @@ static prjm_eel_variable_entry_t* find_variable_entry(prjm_eel_compiler_context_
     return var;
 }
 
-prjm_eel_variable_def_t* prjm_eel_register_variable(prjm_eel_compiler_context_t* cctx,
-                                                    const char* name)
+PRJM_EVAL_F* prjm_eel_register_variable(prjm_eel_compiler_context_t* cctx, const char* name)
 {
+    if (strlen(name) == 5 &&
+        strncasecmp(name, "reg", 3) == 0 &&
+        isdigit(name[3]) &&
+        isdigit(name[4])
+        )
+    {
+        int var_index = atoi(name + 3);
+        if (var_index < 0 || var_index > 99)
+        {
+            var_index = 0;
+        }
+
+        if (cctx->global_variables == NULL)
+        {
+            cctx->global_variables = &static_global_variables;
+        }
+
+        return (*cctx->global_variables) + var_index;
+    }
+
     prjm_eel_variable_entry_t* var = find_variable_entry(cctx, name);
 
     /* Create if it doesn't exist */
@@ -36,5 +58,5 @@ prjm_eel_variable_def_t* prjm_eel_register_variable(prjm_eel_compiler_context_t*
         cctx->variables.first = var;
     }
 
-    return var->variable;
+    return &var->variable->value;
 }

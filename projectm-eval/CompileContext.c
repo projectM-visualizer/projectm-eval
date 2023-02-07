@@ -9,7 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-prjm_eel_compiler_context_t* prjm_eel_create_compile_context(prjm_eel_mem_buffer global_memory)
+prjm_eel_compiler_context_t* prjm_eel_create_compile_context(projectm_eval_mem_buffer global_memory,
+                                                             PRJM_EVAL_F (* global_variables)[100])
 {
     prjm_eel_compiler_context_t* cctx = calloc(1, sizeof(prjm_eel_compiler_context_t));
 
@@ -21,7 +22,7 @@ prjm_eel_compiler_context_t* prjm_eel_create_compile_context(prjm_eel_mem_buffer
     assert(intrinsics_count);
 
     prjm_eel_function_list_item_t* last_func = NULL;
-    for(int index = intrinsics_count - 1; index >= 0; --index)
+    for (int index = intrinsics_count - 1; index >= 0; --index)
     {
         assert(&intrinsics[index]);
         prjm_eel_function_list_item_t* func = malloc(sizeof(prjm_eel_function_list_item_t));
@@ -44,6 +45,8 @@ prjm_eel_compiler_context_t* prjm_eel_create_compile_context(prjm_eel_mem_buffer
         cctx->global_memory = prjm_eel_memory_global();
     }
 
+    cctx->global_variables = global_variables;
+
     return cctx;
 }
 
@@ -52,7 +55,7 @@ void prjm_eel_destroy_compile_context(prjm_eel_compiler_context_t* cctx)
     assert(cctx);
 
     prjm_eel_function_list_item_t* func = cctx->functions.first;
-    while(func)
+    while (func)
     {
         prjm_eel_function_list_item_t* free_func = func;
         func = func->next;
@@ -63,7 +66,7 @@ void prjm_eel_destroy_compile_context(prjm_eel_compiler_context_t* cctx)
     }
 
     prjm_eel_variable_entry_t* var = cctx->variables.first;
-    while(var)
+    while (var)
     {
         prjm_eel_variable_entry_t* free_var = var;
         var = var->next;

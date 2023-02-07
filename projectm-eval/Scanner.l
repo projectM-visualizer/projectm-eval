@@ -53,7 +53,7 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
     /* Constants */
 "$"[Xx]{HEX}+       {
                         char* p = yytext + 2;
-                        yylval->NUM = (PRJM_EEL_F)strtoul(yytext + 2, &p, 16);
+                        yylval->NUM = (PRJM_EVAL_F)strtoul(yytext + 2, &p, 16);
                         return NUM;
                         }
 "$'"."'"            { yylval->NUM = *(char*)(yytext + 2); return NUM; }

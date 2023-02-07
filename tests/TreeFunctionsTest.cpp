@@ -15,7 +15,7 @@ prjm_eel_variable_def_t* TreeFunctions::FindVariable(const char* name)
     return nullptr;
 }
 
-prjm_eel_variable_def_t* TreeFunctions::CreateVariable(const char* name, PRJM_EEL_F initialValue)
+prjm_eel_variable_def_t* TreeFunctions::CreateVariable(const char* name, PRJM_EVAL_F initialValue)
 {
     auto* var = FindVariable(name);
     if (!var)
@@ -42,7 +42,7 @@ prjm_eel_exptreenode_t* TreeFunctions::CreateEmptyNode(int argCount)
     return node;
 }
 
-prjm_eel_exptreenode_t* TreeFunctions::CreateConstantNode(PRJM_EEL_F value)
+prjm_eel_exptreenode_t* TreeFunctions::CreateConstantNode(PRJM_EVAL_F value)
 {
     auto* varNode = CreateEmptyNode(0);
 
@@ -53,14 +53,14 @@ prjm_eel_exptreenode_t* TreeFunctions::CreateConstantNode(PRJM_EEL_F value)
 }
 
 prjm_eel_exptreenode_t*
-TreeFunctions::CreateVariableNode(const char* name, PRJM_EEL_F initialValue, prjm_eel_variable_def_t** variable)
+TreeFunctions::CreateVariableNode(const char* name, PRJM_EVAL_F initialValue, prjm_eel_variable_def_t** variable)
 {
     *variable = CreateVariable(name, initialValue);
 
     auto* varNode = CreateEmptyNode(0);
 
     varNode->func = prjm_eel_func_var;
-    varNode->var = *variable;
+    varNode->var = &(*variable)->value;
 
     return varNode;
 }
@@ -96,8 +96,8 @@ TEST_F(TreeFunctions, Constant)
 
     m_treeNodes.push_back(constNode);
 
-    PRJM_EEL_F value{};
-    PRJM_EEL_F* valuePointer = &value;
+    PRJM_EVAL_F value{};
+    PRJM_EVAL_F* valuePointer = &value;
     constNode->func(constNode, &valuePointer);
 
     ASSERT_EQ(*valuePointer, 5.f);
@@ -110,8 +110,8 @@ TEST_F(TreeFunctions, Variable)
 
     m_treeNodes.push_back(varNode);
 
-    PRJM_EEL_F value{};
-    PRJM_EEL_F* valuePointer = &value;
+    PRJM_EVAL_F value{};
+    PRJM_EVAL_F* valuePointer = &value;
     varNode->func(varNode, &valuePointer);
 
     ASSERT_EQ(*valuePointer, 5.f);
@@ -148,8 +148,8 @@ TEST_F(TreeFunctions, ExecuteList)
 
     m_treeNodes.push_back(listNode);
 
-    PRJM_EEL_F value{};
-    PRJM_EEL_F* valuePointer = &value;
+    PRJM_EVAL_F value{};
+    PRJM_EVAL_F* valuePointer = &value;
     listNode->func(listNode, &valuePointer);
 
     ASSERT_EQ(*valuePointer, 50.f);
@@ -168,8 +168,8 @@ TEST_F(TreeFunctions, MathFunctionsOneArgument)
 
     m_treeNodes.push_back(sinNode);
 
-    PRJM_EEL_F value{};
-    PRJM_EEL_F* valuePointer = &value;
+    PRJM_EVAL_F value{};
+    PRJM_EVAL_F* valuePointer = &value;
     sinNode->func(sinNode, &valuePointer);
 
     ASSERT_FLOAT_EQ(*valuePointer, -0.958924274663f);
@@ -188,8 +188,8 @@ TEST_F(TreeFunctions, MathFunctionsTwoArguments)
 
     m_treeNodes.push_back(atan2Node);
 
-    PRJM_EEL_F value{};
-    PRJM_EEL_F* valuePointer = &value;
+    PRJM_EVAL_F value{};
+    PRJM_EVAL_F* valuePointer = &value;
     atan2Node->func(atan2Node, &valuePointer);
 
     ASSERT_FLOAT_EQ(*valuePointer, 2.356194490192f);
@@ -210,8 +210,8 @@ TEST_F(TreeFunctions, Set)
 
     m_treeNodes.push_back(setNode);
 
-    PRJM_EEL_F value{};
-    PRJM_EEL_F* valuePointer = &value;
+    PRJM_EVAL_F value{};
+    PRJM_EVAL_F* valuePointer = &value;
     setNode->func(setNode, &valuePointer);
 
     ASSERT_EQ(valuePointer, &var1->value);

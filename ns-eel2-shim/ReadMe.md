@@ -76,8 +76,8 @@ structures are implemented in completely different ways.
 ### Memory Locking Functions
 
 There are two functions which can be used to lock or unlock a mutex whenever the library allocates or deallocates
-megabuf and gmegabuf blocks. Linking the ns-eel2 shim will implement the `prjm_eel_memory_host_lock_mutex`
-and `prjm_eel_memory_host_unlock_mutex` with proxy calls to their respective ns-eel2
+megabuf and gmegabuf blocks. Linking the ns-eel2 shim will implement the `projectm_eval_memory_host_lock_mutex`
+and `projectm_eval_memory_host_unlock_mutex` with proxy calls to their respective ns-eel2
 pendants, `NSEEL_HOSTSTUB_EnterMutex` and `NSEEL_HOSTSTUB_LeaveMutex`. If the code using this library also defines the
 original `prjm_` stubs, it will lead to a "duplicate symbol" linker error.
 
@@ -110,12 +110,12 @@ doesn't introduce new types. Converting the respective types is safely possible 
 
 ```c
 NSEEL_VMCTX ctx = NSEEL_VM_alloc();
-struct prjm_eel_context* prjm_ctx = (struct prjm_eel_context*)ctx;
+struct projectm_eval_context* prjm_ctx = (struct projectm_eval_context*)ctx;
 ```
 
 Analogous, in C++ you should use `reinterpret_cast`:
 
 ```c++
 NSEEL_VMCTX ctx = NSEEL_VM_alloc();
-struct prjm_eel_context* prjm_ctx = reinterpret_cast<struct prjm_eel_context*>(ctx);
+struct projectm_eval_context* prjm_ctx = reinterpret_cast<struct projectm_eval_context*>(ctx);
 ```

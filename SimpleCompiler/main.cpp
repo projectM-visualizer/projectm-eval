@@ -9,11 +9,11 @@ extern "C" {
 #include <iostream>
 
 // Empty mutex functions
-void prjm_eel_memory_host_lock_mutex()
+void projectm_eval_memory_host_lock_mutex()
 {
 }
 
-void prjm_eel_memory_host_unlock_mutex()
+void projectm_eval_memory_host_unlock_mutex()
 {
 }
 
@@ -30,7 +30,7 @@ static void DumpVars(prjm_eel_compiler_context_t* cctx)
 
 static void ScanString(const char* input)
 {
-    prjm_eel_compiler_context_t* cctx = prjm_eel_create_compile_context(nullptr);
+    prjm_eel_compiler_context_t* cctx = prjm_eel_create_compile_context(nullptr, nullptr);
     prjm_eel_program_t* program = prjm_eel_compile_code(cctx, input);
 
     if (!program)
@@ -43,8 +43,8 @@ static void ScanString(const char* input)
     {
         std::cout << "Parsing done, running." << std::endl;
 
-        PRJM_EEL_F init_value = .0;
-        PRJM_EEL_F* init_value_ptr = &init_value;
+        PRJM_EVAL_F init_value = .0;
+        PRJM_EVAL_F* init_value_ptr = &init_value;
         program->program->func(program->program, &init_value_ptr);
 
         std::cout << "Program executed, returned " << *init_value_ptr << "." << std::endl;

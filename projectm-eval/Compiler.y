@@ -41,7 +41,7 @@ typedef void* yyscan_t;
 %token ADDOP SUBOP MODOP OROP ANDOP DIVOP MULOP POWOP EQUAL BELEQ ABOEQ NOTEQ BOOLOR BOOLAND
 
 /* Value types */
-%token <PRJM_EEL_F> NUM
+%token <PRJM_EVAL_F> NUM
 %token <char*> VAR FUNC
 %nterm <prjm_eel_compiler_node_t*> function program instruction-list expression parentheses
 %nterm <prjm_eel_compiler_arg_list_t*> function-arglist
@@ -64,8 +64,8 @@ typedef void* yyscan_t;
 %left '-' '+'
 %left '*' '/' '%'
 %right '!'
-%precedence NEG POS /* unary minus or plus */
 %left '^'
+%precedence NEG POS /* unary minus or plus */
 %left '[' ']'
 %left '(' ')'
 

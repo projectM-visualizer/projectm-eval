@@ -4,10 +4,13 @@
 
 /**
  * @brief Creates an empty compile context.
- * @param global_memory An optional pointer to a memory buffer to use as global memory (gmegabuf). If NULL, uses the built-in buffer.
+ * @param global_memory An optional pointer to a memory buffer to use as global memory (gmegabuf).
+ *                      If NULL, uses the built-in buffer.
+ * @param global_variables An optional pointer to an array with 100 global variables.
  * @return A pointer to the newly created context.
  */
-prjm_eel_compiler_context_t* prjm_eel_create_compile_context(prjm_eel_mem_buffer global_memory);
+prjm_eel_compiler_context_t* prjm_eel_create_compile_context(projectm_eval_mem_buffer global_memory,
+                                                             PRJM_EVAL_F (* global_variables)[100]);
 
 /**
  * @brief Destroys a compile context.

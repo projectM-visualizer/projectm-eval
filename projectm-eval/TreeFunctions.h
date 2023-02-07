@@ -20,7 +20,7 @@ void prjm_eel_intrinsic_functions(prjm_eel_intrinsic_function_list_ptr list, int
  * @param func The name of the function, appended to "prjm_eel_func_".
  */
 #define prjm_eel_function_decl(func) \
-    void prjm_eel_func_ ## func(struct prjm_eel_exptreenode* ctx, PRJM_EEL_F** ret_val)
+    void prjm_eel_func_ ## func(struct prjm_eel_exptreenode* ctx, PRJM_EVAL_F** ret_val)
 
 /* Variable and constant access */
 prjm_eel_function_decl(const);

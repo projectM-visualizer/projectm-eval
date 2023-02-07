@@ -99,7 +99,7 @@ typedef void* yyscan_t;
 #if ! defined PRJM_EEL_STYPE && ! defined PRJM_EEL_STYPE_IS_DECLARED
 union PRJM_EEL_STYPE
 {
-  PRJM_EEL_F NUM;                          /* NUM  */
+  PRJM_EVAL_F NUM;                         /* NUM  */
   char* VAR;                               /* VAR  */
   char* FUNC;                              /* FUNC  */
   prjm_eel_compiler_arg_list_t* yykind_46; /* function-arglist  */

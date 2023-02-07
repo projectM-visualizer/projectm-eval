@@ -10,22 +10,22 @@ struct prjm_eel_exptreenode;
 /**
  * @brief Math function pointer with one argument.
  */
-typedef PRJM_EEL_F (prjm_eel_math_func1)(PRJM_EEL_F);
+typedef PRJM_EVAL_F (prjm_eel_math_func1)(PRJM_EVAL_F);
 
 /**
  * @brief Math function pointer with two arguments.
  */
-typedef PRJM_EEL_F (prjm_eel_math_func2)(PRJM_EEL_F, PRJM_EEL_F);
+typedef PRJM_EVAL_F (prjm_eel_math_func2)(PRJM_EVAL_F, PRJM_EVAL_F);
 
 /**
  * @brief Math function pointer with three arguments.
  */
-typedef PRJM_EEL_F (prjm_eel_math_func3)(PRJM_EEL_F, PRJM_EEL_F, PRJM_EEL_F);
+typedef PRJM_EVAL_F (prjm_eel_math_func3)(PRJM_EVAL_F, PRJM_EVAL_F, PRJM_EVAL_F);
 
 /**
  * @brief Node function for a single expression.
  */
-typedef void (prjm_eel_expr_func_t)(struct prjm_eel_exptreenode* ctx, PRJM_EEL_F** ret_val);
+typedef void (prjm_eel_expr_func_t)(struct prjm_eel_exptreenode* ctx, PRJM_EVAL_F** ret_val);
 
 /**
  * @brief Structure containing information about an available function implementation.
@@ -60,7 +60,7 @@ typedef prjm_eel_intrinsic_function_list* prjm_eel_intrinsic_function_list_ptr;
 typedef struct prjm_eel_variable_def
 {
     char* name; /*!< The lower-case name of the variable in the expression syntax. */
-    PRJM_EEL_F value; /*!< The internal value of the variable. */
+    PRJM_EVAL_F value; /*!< The internal value of the variable. */
 } prjm_eel_variable_def_t;
 
 typedef struct prjm_eel_variable_entry
@@ -90,11 +90,11 @@ typedef struct prjm_eel_exptreenode
 {
     prjm_eel_expr_func_t* func;
     void* math_func;
-    PRJM_EEL_F value; /*!< A constant, numerical value. Also used as temp value. */
+    PRJM_EVAL_F value; /*!< A constant, numerical value. Also used as temp value. */
     union
     {
-        prjm_eel_variable_def_t* var; /*!< Variable reference. */
-        prjm_eel_mem_buffer memory_buffer; /*!< megabuf/gmegabuf memory block. */
+        PRJM_EVAL_F* var; /*!< Variable reference. */
+        projectm_eval_mem_buffer memory_buffer; /*!< megabuf/gmegabuf memory block. */
     };
     struct prjm_eel_exptreenode** args; /*!< Function arguments. Last element must be a NULL pointer*/
     prjm_eel_exptreenode_list_item_t* list;  /*!< Next argument in the instruction list. */
@@ -136,14 +136,15 @@ typedef struct
     int column;
 } prjm_eel_compiler_error_t;
 
-typedef struct prjm_eel_context
+typedef struct projectm_eval_context
 {
-    prjm_eel_function_list_t functions;
-    prjm_eel_variable_list_t variables;
-    prjm_eel_mem_buffer memory;
-    prjm_eel_mem_buffer global_memory;
-    prjm_eel_compiler_error_t error;
-    prjm_eel_exptreenode_t* compile_result;
+    prjm_eel_function_list_t functions; /*!< Functions available to this context. Initialized with the intrinsics table. */
+    prjm_eel_variable_list_t variables; /*!< List of registered variables in this context. */
+    PRJM_EVAL_F (*global_variables)[100]; /*!< Pointer to array with 100 global variables, reg00 to reg99. */
+    projectm_eval_mem_buffer memory; /*!< The context-local memory buffer, referred to as megabuf. */
+    projectm_eval_mem_buffer global_memory; /*!< The global memory buffer, referred to as gmegabuf. */
+    prjm_eel_compiler_error_t error; /*!< Holds information about the last compile error. */
+    prjm_eel_exptreenode_t* compile_result; /*!< The result of the last compilation. Used temporarily during compilation. */
 } prjm_eel_compiler_context_t;
 
 typedef struct

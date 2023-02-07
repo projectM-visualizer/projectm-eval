@@ -216,7 +216,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
         prjm_eel_function_def_t* const_func = prjm_eel_compiler_get_function(cctx, "/*const*/");
         const_expr->func = const_func->func;
 
-        PRJM_EEL_F* value_ptr = &const_expr->value;
+        PRJM_EVAL_F* value_ptr = &const_expr->value;
         expr->func(expr, &value_ptr);
         const_expr->value = *value_ptr;
 
@@ -230,7 +230,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
     return node;
 }
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_context_t* cctx, PRJM_EEL_F value)
+prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_context_t* cctx, PRJM_EVAL_F value)
 {
     prjm_eel_function_def_t* const_func = prjm_eel_compiler_get_function(cctx, "/*const*/");
 
@@ -250,7 +250,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_co
 prjm_eel_compiler_node_t* prjm_eel_compiler_create_variable(prjm_eel_compiler_context_t* cctx, const char* name)
 {
     /* Find existing variable or create a new one */
-    prjm_eel_variable_def_t* var = prjm_eel_register_variable(cctx, name);
+    PRJM_EVAL_F* var = prjm_eel_register_variable(cctx, name);
 
     prjm_eel_function_def_t* var_func = prjm_eel_compiler_get_function(cctx, "/*var*/");
     prjm_eel_compiler_node_t* node = prjm_eel_compiler_create_expression_empty(var_func);
