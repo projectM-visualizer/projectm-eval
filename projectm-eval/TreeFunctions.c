@@ -569,7 +569,13 @@ prjm_eel_function_decl(mod)
     invoke_arg(0, &val1_ptr);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((PRJM_EVAL_F) ((int) *val1_ptr % (int) *val2_ptr));
+    int divisor = (int) *val2_ptr;
+    if(divisor == 0)
+    {
+        assign_ret_val(0.0);
+        return;
+    }
+    assign_ret_val((PRJM_EVAL_F) ((int) *val1_ptr % divisor));
 }
 
 prjm_eel_function_decl(band_op)
