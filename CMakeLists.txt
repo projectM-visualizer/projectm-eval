@@ -28,9 +28,15 @@ project(projectm-eval
 
 include(GNUInstallDirs)
 include(FastMathOptimizations)
+include(CheckCSourceCompiles)
 
-find_package(BISON 3.8)
-find_package(FLEX 2.6)
+check_c_source_compiles("#include <math.h>\nint main() { double x = sin(1.0);return 0;}" NO_MATH_LIB_REQUIRED)
+if(NOT NO_MATH_LIB_REQUIRED)
+    list(APPEND CMAKE_REQUIRED_LIBRARIES m)
+endif()
+
+find_package(BISON 3.8 REQUIRED)
+find_package(FLEX 2.6 REQUIRED)
 
 add_subdirectory(projectm-eval)
 

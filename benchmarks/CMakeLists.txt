@@ -14,6 +14,6 @@ add_executable(projectM_EvalLib-Benchmark
 
 target_link_libraries(projectM_EvalLib-Benchmark
         PRIVATE
-        projectM_EvalLib
+        projectM::Eval
         benchmark::benchmark_main
         )

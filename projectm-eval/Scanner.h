@@ -2,12 +2,13 @@
 #define prjm_eel_HEADER_H 1
 #define prjm_eel_IN_HEADER 1
 
-#line 12 "Scanner.l"
+#line 13 "Scanner.l"
 #include "CompilerTypes.h"
 #include "Compiler.h"
 
 #include <stdio.h>
 
+#define YY_NO_UNISTD_H
 #define YY_STDINIT
 #define YY_USER_ACTION                           \
     {                                            \
@@ -348,22 +349,6 @@
 /* First, we deal with  platform-specific or compiler-specific issues. */
 
 /* begin standard C headers. */
-/* Feature test macros. Flex uses functions that require a minimum set of
- * macros defined. As defining some macros may hide function declarations that
- * user code might use, be conservative and respect user's definitions as much
- * as possible. In glibc, feature test macros may not be all set up until one
- * of the libc header (that includes <features.h>) is included. This creates
- * a circular dependency when we check the macros. <assert.h> is the safest
- * header we can include and does not declare too many functions we don't need.
- */
-#if !defined(__GNU_LIBRARY__) && defined(__STDC__)
-#include <assert.h>
-#endif
-#if !(defined(_POSIX_C_SOURCE) || defined(_XOPEN_SOURCE) || \
-    defined(_POSIX_SOURCE))
-# define _POSIX_C_SOURCE 1 /* Required for fileno() */
-# define _POSIX_SOURCE 1
-#endif
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -380,8 +365,8 @@
 
 #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 
-/* C++ systems might need __STDC_LIMIT_MACROS defined before including
- * <stdint.h>, if you want the limit (max/min) macros for int types.
+/* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
+ * if you want the limit (max/min) macros for int types. 
  */
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
@@ -641,6 +626,7 @@ void yyfree ( void * , yyscan_t yyscanner );
 #endif
 
 
+    
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
@@ -648,6 +634,7 @@ void yyfree ( void * , yyscan_t yyscanner );
  */
 #include <unistd.h>
 #endif
+    
 
 
 

@@ -7,6 +7,7 @@
 %option bison-bridge bison-locations
 %option prefix="prjm_eel_"
 %option extra-type="struct prjm_eel_scanner_state *"
+%option never-interactive
 
 %top{
 #include "CompilerTypes.h"
@@ -14,6 +15,7 @@
 
 #include <stdio.h>
 
+#define YY_NO_UNISTD_H
 #define YY_STDINIT
 #define YY_USER_ACTION                           \
     {                                            \

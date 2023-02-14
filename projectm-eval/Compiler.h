@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_PRJM_EEL_HOME_KAI_DEV_PROJECTM_EVALLIB_PROJECTM_EVAL_COMPILER_H_INCLUDED
-# define YY_PRJM_EEL_HOME_KAI_DEV_PROJECTM_EVALLIB_PROJECTM_EVAL_COMPILER_H_INCLUDED
+#ifndef YY_PRJM_EEL_C_DEV_GIT_PROJECTM_EEL_PROJECTM_EVAL_COMPILER_H_INCLUDED
+# define YY_PRJM_EEL_C_DEV_GIT_PROJECTM_EEL_PROJECTM_EVAL_COMPILER_H_INCLUDED
 /* Debug traces.  */
 #ifndef PRJM_EEL_DEBUG
 # if defined YYDEBUG
@@ -150,4 +150,4 @@ int prjm_eel_parse (prjm_eel_compiler_context_t* cctx, yyscan_t scanner);
    int yyerror(YYLTYPE* yyllocp, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner, const char* message);
 
 
-#endif /* !YY_PRJM_EEL_HOME_KAI_DEV_PROJECTM_EVALLIB_PROJECTM_EVAL_COMPILER_H_INCLUDED  */
+#endif /* !YY_PRJM_EEL_C_DEV_GIT_PROJECTM_EEL_PROJECTM_EVAL_COMPILER_H_INCLUDED  */

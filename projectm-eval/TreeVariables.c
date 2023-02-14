@@ -4,6 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef _MSC_VER
+#define strcasecmp stricmp
+#define strncasecmp _strnicmp
+#endif
+
 static PRJM_EVAL_F static_global_variables[100];
 
 static prjm_eel_variable_entry_t* find_variable_entry(prjm_eel_compiler_context_t* cctx,

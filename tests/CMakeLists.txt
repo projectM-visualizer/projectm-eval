@@ -9,7 +9,7 @@ add_executable(projectM_EvalLib_Test
 
 target_link_libraries(projectM_EvalLib_Test
         PRIVATE
-        projectM_EvalLib
+        projectM::Eval
         GTest::gtest_main
         )
 

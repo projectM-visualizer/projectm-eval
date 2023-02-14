@@ -1,4 +1,4 @@
-#include "ns-eel2.h"
+#include "ns-eel.h"
 
 #include "projectm-eval/api/projectm-eval.h"
 #include "projectm-eval/CompilerTypes.h"

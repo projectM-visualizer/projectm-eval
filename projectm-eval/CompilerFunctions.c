@@ -7,6 +7,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef _MSC_VER
+#define strcasecmp stricmp
+#define strncasecmp _strnicmp
+#endif
+
 /* Called by yyparse on error. */
 void prjm_eel_error(PRJM_EEL_LTYPE* loc, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner, char const* s)
 {

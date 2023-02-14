@@ -10,6 +10,11 @@
 #include <assert.h>
 #include <stdint.h>
 
+#ifdef _MSC_VER
+#pragma function (floor)
+#pragma function (ceil)
+#endif
+
 /**
  * @brief projectM-EvalLib intrinsic Function table.
  * Contains all predefined functions and information about their invocation. Most functions beginning
