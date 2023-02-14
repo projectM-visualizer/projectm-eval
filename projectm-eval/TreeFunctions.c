@@ -575,7 +575,7 @@ prjm_eel_function_decl(mod)
     invoke_arg(1, &val2_ptr);
 
     int divisor = (int) *val2_ptr;
-    if(divisor == 0)
+    if (divisor == 0)
     {
         assign_ret_val(0.0);
         return;
@@ -925,17 +925,27 @@ prjm_eel_function_decl(invsqrt)
 {
     assert_valid_ctx();
 
-    /* Using fast inverse square root implementation here, same as Milkdrop.
+    /*
+     * Using fast inverse square root implementation here, same as Milkdrop, except supporting doubles.
      * See https://en.wikipedia.org/wiki/Fast_inverse_square_root
      */
+#if PRJM_F_SIZE == 4
+#define INVSQRT_MAGIC_NUMBER 0x5f3759df
+#define INVSQRT_INT uint32_t
+#else
+#define INVSQRT_MAGIC_NUMBER 0x5fe6eb50c7b537a9
+#define INVSQRT_INT uint64_t
+#endif
+
     union
     {
         PRJM_EVAL_F PRJM_F_val;
-        uint32_t int_val;
+        INVSQRT_INT int_val;
     } type_conv;
 
     static const PRJM_EVAL_F three_halfs = 1.5;
     static const PRJM_EVAL_F one_half = .5;
+
 
     ctx->value = .0;
     PRJM_EVAL_F* value_ptr = &ctx->value;
@@ -944,7 +954,7 @@ prjm_eel_function_decl(invsqrt)
 
     PRJM_EVAL_F num2 = (*value_ptr) * one_half;
     type_conv.PRJM_F_val = (*value_ptr);
-    type_conv.int_val = 0x5f3759df - (type_conv.int_val >> 1);
+    type_conv.int_val = INVSQRT_MAGIC_NUMBER - (type_conv.int_val >> 1);
     type_conv.PRJM_F_val = type_conv.PRJM_F_val * (three_halfs - (num2 * type_conv.PRJM_F_val * type_conv.PRJM_F_val));
 
     assign_ret_val(type_conv.PRJM_F_val);
