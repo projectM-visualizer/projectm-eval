@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 set(LANGUAGES C)
 if(BUILD_TESTING)
     set(CMAKE_CXX_STANDARD 14)
@@ -11,7 +13,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(PROJECTM_EVAL_FLOAT_SIZE "8" CACHE STRING "Byte size of floating-point numbers. 8 to use double, 4 to use float. Default is 8.")
 
+option(ENABLE_FAST_MATH "Enables aggressive math optimizations like -ffast-math to compile faster code. Applied to Release and RelWithDebInfo configurations only." ON)
 option(BUILD_NS_EEL_SHIM "Build and install the ns-eel2 compatibility API shim." OFF)
+option(BUILD_BENCHMARKS "Build benchmarks. Requires Google Benchmark." OFF)
 
 if(NOT PROJECTM_EVAL_FLOAT_SIZE EQUAL 8 AND NOT PROJECTM_EVAL_FLOAT_SIZE EQUAL 4)
     message(FATAL_ERROR "PROJECTM_EVAL_FLOAT_SIZE must be set to either 4 (use floats) or 8 (use doubles).")
@@ -23,16 +27,16 @@ project(projectm-eval
         )
 
 include(GNUInstallDirs)
+include(FastMathOptimizations)
 
 find_package(BISON 3.8)
 find_package(FLEX 2.6)
 
 add_subdirectory(projectm-eval)
+
 if(BUILD_NS_EEL_SHIM)
     add_subdirectory(ns-eel2-shim)
 endif()
-
-add_subdirectory(SimpleCompiler)
 
 if(BUILD_TESTING)
     enable_testing()
