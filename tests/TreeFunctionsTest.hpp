@@ -1,10 +1,5 @@
 #pragma once
 
-#ifdef _MSC_VER
-#define strcasecmp stricmp
-#define strncasecmp _strnicmp
-#endif
-
 extern "C"
 {
 #include "projectm-eval/TreeFunctions.h"
