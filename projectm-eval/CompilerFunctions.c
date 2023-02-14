@@ -151,8 +151,10 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression_empty(prjm_eel_fun
     prjm_eel_compiler_node_t* node = calloc(1, sizeof(prjm_eel_compiler_node_t));
 
     node->type = PRJM_EEL_NODE_FUNC_EXPRESSION;
-    node->is_const_expr = func->is_const_eval;
-    node->is_state_changing = func->is_state_changing;
+    node->instr_is_const_expr = func->is_const_eval;
+    node->instr_is_state_changing = func->is_state_changing;
+    node->list_is_const_expr = func->is_const_eval;
+    node->list_is_state_changing = func->is_state_changing;
     node->tree_node = expr;
 
     return node;
@@ -197,9 +199,9 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
             arg->node->tree_node = NULL;
 
             /* If at least one arg is not const-evaluable, the function isn't. */
-            args_are_const_evaluable = args_are_const_evaluable && arg->node->is_const_expr;
+            args_are_const_evaluable = args_are_const_evaluable && arg->node->list_is_const_expr;
             /* If at least one arg is state-changing, the function is also. */
-            args_are_state_changing = args_are_state_changing || arg->node->is_state_changing;
+            args_are_state_changing = args_are_state_changing || arg->node->list_is_state_changing;
 
             expr_arg++;
             arg = arg->next;
@@ -211,13 +213,15 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
     prjm_eel_compiler_node_t* node = calloc(1, sizeof(prjm_eel_compiler_node_t));
 
     node->type = PRJM_EEL_NODE_FUNC_EXPRESSION;
-    node->is_const_expr = args_are_const_evaluable && func->is_const_eval;
-    node->is_state_changing = args_are_state_changing || func->is_state_changing;
+    node->instr_is_const_expr = args_are_const_evaluable && func->is_const_eval;
+    node->instr_is_state_changing = args_are_state_changing || func->is_state_changing;
+    node->list_is_const_expr = node->instr_is_const_expr;
+    node->list_is_state_changing = node->instr_is_state_changing;
     node->tree_node = expr;
 
     // Evaluate expression if constant-evaluable
-    if (node->is_const_expr &&
-        !node->is_state_changing)
+    if (node->instr_is_const_expr &&
+        !node->instr_is_state_changing)
     {
         prjm_eel_exptreenode_t* const_expr = calloc(1, sizeof(prjm_eel_exptreenode_t));
         prjm_eel_function_def_t* const_func = prjm_eel_compiler_get_function(cctx, "/*const*/");
@@ -228,8 +232,10 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
         const_expr->value = *value_ptr;
 
         node->tree_node = const_expr;
-        node->is_const_expr = const_func->is_const_eval;
-        node->is_state_changing = const_func->is_state_changing;
+        node->instr_is_const_expr = const_func->is_const_eval;
+        node->instr_is_state_changing = const_func->is_state_changing;
+        node->list_is_const_expr = const_func->is_const_eval;
+        node->list_is_state_changing = const_func->is_state_changing;
 
         prjm_eel_destroy_exptreenode(expr);
     }
@@ -248,8 +254,10 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_co
     prjm_eel_compiler_node_t* node = calloc(1, sizeof(prjm_eel_compiler_node_t));
     node->type = PRJM_EEL_NODE_FUNC_EXPRESSION;
     node->tree_node = const_expr;
-    node->is_const_expr = const_func->is_const_eval;
-    node->is_state_changing = const_func->is_state_changing;
+    node->instr_is_const_expr = const_func->is_const_eval;
+    node->instr_is_state_changing = const_func->is_state_changing;
+    node->list_is_const_expr = const_func->is_const_eval;
+    node->list_is_state_changing = const_func->is_state_changing;
 
     return node;
 }
@@ -263,6 +271,10 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_variable(prjm_eel_compiler_co
     prjm_eel_compiler_node_t* node = prjm_eel_compiler_create_expression_empty(var_func);
 
     node->tree_node->var = var;
+    node->instr_is_const_expr = var_func->is_const_eval;
+    node->instr_is_state_changing = var_func->is_state_changing;
+    node->list_is_const_expr = var_func->is_const_eval;
+    node->list_is_state_changing = var_func->is_state_changing;
 
     return node;
 }
@@ -283,7 +295,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_co
     {
         /* If previous instruction is not state-changing, we can remove it as it won't do
          * anything useful. Only the last expression's value may be of interest. */
-        if (!list->is_state_changing)
+        if (!list->instr_is_state_changing)
         {
             prjm_eel_compiler_destroy_node(list);
             return instruction;
@@ -296,8 +308,10 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_co
         new_node->tree_node->list->expr = list->tree_node;
         new_node->tree_node->list->next = NULL;
         new_node->type = PRJM_EEL_NODE_FUNC_INSTRUCTIONLIST;
-        new_node->is_const_expr = list->is_const_expr;
-        new_node->is_state_changing = list->is_state_changing;
+        new_node->instr_is_const_expr = list->instr_is_const_expr;
+        new_node->instr_is_state_changing = list->instr_is_state_changing;
+        new_node->list_is_const_expr = list->list_is_const_expr;
+        new_node->list_is_state_changing = list->list_is_state_changing;
 
         free(list);
 
@@ -313,7 +327,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_co
     {
         /* If last expression in the existing list is not state-changing, we can remove it as it won't do
          * anything useful. Only the last expression's value may be of interest. */
-        if (!node->is_state_changing && !item->next->next)
+        if (!node->instr_is_state_changing && !item->next->next)
         {
             prjm_eel_destroy_exptreenode(item->next->expr);
             free(item->next);
@@ -327,9 +341,11 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_co
     item->next->expr = instruction->tree_node;
     item->next->next = NULL;
 
-    /* Update const/state flags with last expression */
-    node->is_const_expr = instruction->is_const_expr;
-    node->is_state_changing = instruction->is_state_changing;
+    /* Update const/state flags of node and list with last expression */
+    node->instr_is_const_expr = instruction->list_is_const_expr;
+    node->instr_is_state_changing = instruction->list_is_state_changing;
+    node->list_is_const_expr = node->list_is_const_expr && instruction->list_is_const_expr;
+    node->list_is_state_changing = node->list_is_state_changing || instruction->list_is_state_changing;
 
     free(instruction);
 

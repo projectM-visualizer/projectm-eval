@@ -112,8 +112,10 @@ typedef struct prjm_eel_compiler_node
 {
     prjm_eel_compiler_node_type_t type; /*!< Node type. Mostly expression, but can contain other types as well. */
     prjm_eel_exptreenode_t* tree_node; /*!< Generated tree node for this expression */
-    bool is_const_expr; /*!< If true, this node and all sub nodes only consist of constant expressions, e.g. no variables used */
-    bool is_state_changing; /*!< If true, the function will change the execution state (set memory) */
+    bool instr_is_const_expr; /*!< If true, this node and all sub nodes only consist of constant expressions, e.g. no variables used */
+    bool instr_is_state_changing; /*!< If true, the function will change the execution state (set memory) */
+    bool list_is_const_expr; /*!< If true, the instruction list only consists of constant expressions, e.g. no variables used */
+    bool list_is_state_changing; /*!< If true, at least one node in the instruction list will change the execution state (set memory) */
 } prjm_eel_compiler_node_t;
 
 typedef struct prjm_eel_compiler_arg_item
