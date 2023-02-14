@@ -99,7 +99,7 @@ struct projectm_eval_context* projectm_eval_context_create(projectm_eval_mem_buf
 void projectm_eval_context_destroy(struct projectm_eval_context* ctx);
 
 /**
- * @brief Frees the allocated memory of the context-local buffer.
+ * @brief Frees the allocated memory of the context-local buffer, effectively resetting it.
  * This will not clear the global memory buffer associated with the context.
  * @param ctx The context which memory should be freed.
  */
@@ -107,7 +107,8 @@ void projectm_eval_context_free_memory(struct projectm_eval_context* ctx);
 
 /**
  * @brief Sets all context variables to 0.0.
- * Registered variables will be kept intact, as the pointers will not change.
+ * Registered variables will be kept intact, as the pointers will not change. Global variables reg00 to reg99
+ * will also stay unchanged.
  * @param ctx The context in which to reset the variables.
  */
 void projectm_eval_context_reset_variables(struct projectm_eval_context* ctx);
