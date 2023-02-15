@@ -182,7 +182,8 @@ These operators carry out basic mathematical operations.
 - `+`: Adds both operands.
 - `-`: Subtracts the right operand from the left.
 - `*`: Multiplies both operands.
-- `/`: Divides the left operand by the right.
+- `/`: Divides the left operand by the right. If the divisor is zero, the result of the operation is `0` instead
+  of `Inf`.
 - `%`: Converts the operands to integers and returns the remainder of the left by the right operand.
 - `^`: Calculates the left operand to the power of the right operand.
 
@@ -224,9 +225,10 @@ return a reference to the left operand.
 - `+=`: Adds the value of the right operand to the left operand and assigns the result to the left operand.
 - `-=`: Subtracts the value of the right operand from the left operand and assigns the result to the left operand.
 - `*=`: Multiplies the value of the right operand with the left operand and assigns the result to the left operand.
-- `/=`: Divides the left operand by the value of the right operand and assigns the result to the left operand.
+- `/=`: Divides the left operand by the value of the right operand and assigns the result to the left operand. If the
+  divisor is zero, the result of the operation is `0` instead of `Inf`.
 - `%=`: Calculates the remainder of the rounded integer values of the left operand divided by the right operand and
-  assigns the result to the left operand.
+  assigns the result to the left operand. If the divisor is `0`, the result will also be `0`.
 - `^=`: Calculates the left operand to the power of the right operand and assigns the result to the left operand.
 - `&=`: Calculates the binary AND of the rounded integer values of the left and right operands and assigns the result to
   the left operand.

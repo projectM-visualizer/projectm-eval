@@ -554,6 +554,12 @@ prjm_eel_function_decl(div)
     invoke_arg(0, &val1_ptr);
     invoke_arg(1, &val2_ptr);
 
+    if(fabs(*val2_ptr) < close_factor_low)
+    {
+        assign_ret_val(0.0);
+        return;
+    }
+
     assign_ret_val(*val1_ptr / *val2_ptr);
 }
 
@@ -724,6 +730,12 @@ prjm_eel_function_decl(divop)
 
     invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
+
+    if(fabs(*val2_ptr) < close_factor_low)
+    {
+        assign_ret_val(0.0);
+        return;
+    }
 
     assign_ret_val(**ret_val / *val2_ptr);
 }
