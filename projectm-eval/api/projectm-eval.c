@@ -58,6 +58,11 @@ void projectm_eval_code_destroy(struct projectm_eval_code* code_handle)
 
 PRJM_EVAL_F projectm_eval_code_execute(struct projectm_eval_code* code_handle)
 {
+    if (!code_handle)
+    {
+        return 0.0;
+    }
+
     PRJM_EVAL_F result = 0.0;
     PRJM_EVAL_F* result_ptr = &result;
     prjm_eel_program_t* eel_program = (prjm_eel_program_t*)code_handle;
