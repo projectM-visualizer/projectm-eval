@@ -36,7 +36,6 @@ typedef struct prjm_eel_function_def
 {
     char* name; /*!< The lower-case name of the function in the expression syntax */
     prjm_eel_expr_func_t* func; /*!< A pointer to the function implementation */
-    void* math_func; /*!< When using math_func1 or math_func2 in @a func, a pointer to the C library math function. */
     int arg_count; /*!< Number of accepted parameters, 1 to 3. */
     bool is_const_eval; /*!< If true, the function can be evaluated to a constant value at compile time. */
     bool is_state_changing; /*!< If true, the function will change the execution state (set memory) */

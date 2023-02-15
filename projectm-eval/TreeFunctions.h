@@ -73,8 +73,20 @@ prjm_eel_function_decl(andop);
 prjm_eel_function_decl(powop);
 
 /* Mathematical functions */
-prjm_eel_function_decl(math_func1);
-prjm_eel_function_decl(math_func2);
+prjm_eel_function_decl(sin);
+prjm_eel_function_decl(cos);
+prjm_eel_function_decl(tan);
+prjm_eel_function_decl(asin);
+prjm_eel_function_decl(acos);
+prjm_eel_function_decl(atan);
+prjm_eel_function_decl(atan2);
+prjm_eel_function_decl(sqrt);
+prjm_eel_function_decl(pow);
+prjm_eel_function_decl(exp);
+prjm_eel_function_decl(log);
+prjm_eel_function_decl(log10);
+prjm_eel_function_decl(floor);
+prjm_eel_function_decl(ceil);
 prjm_eel_function_decl(sigmoid);
 prjm_eel_function_decl(sqr);
 prjm_eel_function_decl(abs);

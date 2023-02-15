@@ -146,7 +146,6 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression_empty(prjm_eel_fun
     prjm_eel_exptreenode_t* expr = calloc(1, sizeof(prjm_eel_exptreenode_t));
 
     expr->func = func->func;
-    expr->math_func = func->math_func;
 
     prjm_eel_compiler_node_t* node = calloc(1, sizeof(prjm_eel_compiler_node_t));
 
@@ -167,7 +166,6 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
     prjm_eel_exptreenode_t* expr = calloc(1, sizeof(prjm_eel_exptreenode_t));
 
     expr->func = func->func;
-    expr->math_func = func->math_func;
 
     /* Need special treatment for memory access functions */
     if (strcmp(func->name, "_mem") == 0 ||
@@ -236,7 +234,6 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
         node->instr_is_state_changing = const_func->is_state_changing;
         node->list_is_const_expr = const_func->is_const_eval;
         node->list_is_state_changing = const_func->is_state_changing;
-
         prjm_eel_destroy_exptreenode(expr);
     }
 

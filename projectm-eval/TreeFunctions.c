@@ -10,11 +10,6 @@
 #include <assert.h>
 #include <stdint.h>
 
-#ifdef _MSC_VER
-#pragma function (floor)
-#pragma function (ceil)
-#endif
-
 /**
  * @brief projectM-EvalLib intrinsic Function table.
  * Contains all predefined functions and information about their invocation. Most functions beginning
@@ -23,83 +18,83 @@
  */
 static prjm_eel_function_def_t intrinsic_function_table[] = {
     /* Special intrinsic functions. Cannot be used via expression syntax. */
-    { "/*const*/", prjm_eel_func_const,         0,     0, true,  false },
-    { "/*var*/",   prjm_eel_func_var,           0,     0, false, false },
-    { "/*list*/",  prjm_eel_func_execute_list,  0,     1, true,  false },
+    { "/*const*/", prjm_eel_func_const,         0, true,  false },
+    { "/*var*/",   prjm_eel_func_var,           0, false, false },
+    { "/*list*/",  prjm_eel_func_execute_list,  1, true,  false },
 
-    { "if",        prjm_eel_func_if,            0,     3, true,  false },
-    { "_if",       prjm_eel_func_if,            0,     3, true,  false },
-    { "_and",      prjm_eel_func_band_op,       0,     2, true,  false },
-    { "_or",       prjm_eel_func_bor_op,        0,     2, true,  false },
-    { "loop",      prjm_eel_func_execute_loop,  0,     2, true,  false },
-    { "while",     prjm_eel_func_execute_while, 0,     1, true,  false },
+    { "if",        prjm_eel_func_if,            3, true,  false },
+    { "_if",       prjm_eel_func_if,            3, true,  false },
+    { "_and",      prjm_eel_func_band_op,       2, true,  false },
+    { "_or",       prjm_eel_func_bor_op,        2, true,  false },
+    { "loop",      prjm_eel_func_execute_loop,  2, true,  false },
+    { "while",     prjm_eel_func_execute_while, 1, true,  false },
 
-    { "_not",      prjm_eel_func_bnot,          0,     1, true,  false },
-    { "bnot",      prjm_eel_func_bnot,          0,     1, true,  false },
-    { "_equal",    prjm_eel_func_equal,         0,     2, true,  false },
-    { "equal",     prjm_eel_func_equal,         0,     2, true,  false },
-    { "_noteq",    prjm_eel_func_notequal,      0,     2, true,  false },
-    { "_below",    prjm_eel_func_below,         0,     2, true,  false },
-    { "below",     prjm_eel_func_below,         0,     2, true,  false },
-    { "_above",    prjm_eel_func_above,         0,     2, true,  false },
-    { "above",     prjm_eel_func_above,         0,     2, true,  false },
-    { "_beleq",    prjm_eel_func_beloweq,       0,     2, true,  false },
-    { "_aboeq",    prjm_eel_func_aboveeq,       0,     2, true,  false },
+    { "_not",      prjm_eel_func_bnot,          1, true,  false },
+    { "bnot",      prjm_eel_func_bnot,         1, true,  false },
+    { "_equal",    prjm_eel_func_equal,        2, true,  false },
+    { "equal",     prjm_eel_func_equal,        2, true,  false },
+    { "_noteq",    prjm_eel_func_notequal,     2, true,  false },
+    { "_below",    prjm_eel_func_below,        2, true,  false },
+    { "below",     prjm_eel_func_below,        2, true,  false },
+    { "_above",    prjm_eel_func_above,        2, true,  false },
+    { "above",     prjm_eel_func_above,        2, true,  false },
+    { "_beleq",    prjm_eel_func_beloweq,      2, true,  false },
+    { "_aboeq",    prjm_eel_func_aboveeq,      2, true,  false },
 
-    { "_set",      prjm_eel_func_set,           0,     2, false, true },
-    { "assign",    prjm_eel_func_set,           0,     2, false, true },
-    { "_add",      prjm_eel_func_add,           0,     2, true,  false },
-    { "_sub",      prjm_eel_func_sub,           0,     2, true,  false },
-    { "_mul",      prjm_eel_func_mul,           0,     2, true,  false },
-    { "_div",      prjm_eel_func_div,           0,     2, true,  false },
-    { "_mod",      prjm_eel_func_mod,           0,     2, true,  false },
-    { "_mulop",    prjm_eel_func_mulop,         0,     2, false, true },
-    { "_divop",    prjm_eel_func_divop,         0,     2, false, true },
-    { "_orop",     prjm_eel_func_orop,          0,     2, false, true },
-    { "_andop",    prjm_eel_func_andop,         0,     2, false, true },
-    { "_addop",    prjm_eel_func_addop,         0,     2, false, true },
-    { "_subop",    prjm_eel_func_subop,         0,     2, false, true },
-    { "_modop",    prjm_eel_func_modop,         0,     2, false, true },
+    { "_set",      prjm_eel_func_set,          2, false, true },
+    { "assign",    prjm_eel_func_set,          2, false, true },
+    { "_add",      prjm_eel_func_add,          2, true,  false },
+    { "_sub",      prjm_eel_func_sub,          2, true,  false },
+    { "_mul",      prjm_eel_func_mul,          2, true,  false },
+    { "_div",      prjm_eel_func_div,          2, true,  false },
+    { "_mod",      prjm_eel_func_mod,          2, true,  false },
+    { "_mulop",    prjm_eel_func_mulop,        2, false, true },
+    { "_divop",    prjm_eel_func_divop,        2, false, true },
+    { "_orop",     prjm_eel_func_orop,         2, false, true },
+    { "_andop",    prjm_eel_func_andop,        2, false, true },
+    { "_addop",    prjm_eel_func_addop,        2, false, true },
+    { "_subop",    prjm_eel_func_subop,        2, false, true },
+    { "_modop",    prjm_eel_func_modop,        2, false, true },
 
-    { "sin",       prjm_eel_func_math_func1,    sin,   1, true,  false },
-    { "cos",       prjm_eel_func_math_func1,    cos,   1, true,  false },
-    { "tan",       prjm_eel_func_math_func1,    tan,   1, true,  false },
-    { "asin",      prjm_eel_func_math_func1,    asin,  1, true,  false },
-    { "acos",      prjm_eel_func_math_func1,    acos,  1, true,  false },
-    { "atan",      prjm_eel_func_math_func1,    atan,  1, true,  false },
-    { "atan2",     prjm_eel_func_math_func2,    atan2, 2, true,  false },
-    { "sqr",       prjm_eel_func_sqr,           0,     1, true,  false },
-    { "sqrt",      prjm_eel_func_math_func1,    sqrt,  1, true,  false },
-    { "pow",       prjm_eel_func_math_func2,    pow,   2, true,  false },
-    { "_powop",    prjm_eel_func_powop,         0,     2, false, true },
-    { "exp",       prjm_eel_func_math_func1,    exp,   1, true,  false },
-    { "_neg",      prjm_eel_func_neg,           0,     1, true,  false },
+    { "sin",       prjm_eel_func_sin,          1, true,  false },
+    { "cos",       prjm_eel_func_cos,          1, true,  false },
+    { "tan",       prjm_eel_func_tan,          1, true,  false },
+    { "asin",      prjm_eel_func_asin,         1, true,  false },
+    { "acos",      prjm_eel_func_acos,         1, true,  false },
+    { "atan",      prjm_eel_func_atan,         1, true,  false },
+    { "atan2",     prjm_eel_func_atan2,        2, true,  false },
+    { "sqr",       prjm_eel_func_sqr,          1, true,  false },
+    { "sqrt",      prjm_eel_func_sqrt,         1, true,  false },
+    { "pow",       prjm_eel_func_pow,          2, true,  false },
+    { "_powop",    prjm_eel_func_powop,        2, false, true },
+    { "exp",       prjm_eel_func_exp,          1, true,  false },
+    { "_neg",      prjm_eel_func_neg,          1, true,  false },
 
-    { "log",       prjm_eel_func_math_func1,    log,   1, true,  false },
-    { "log10",     prjm_eel_func_math_func1,    log10, 1, true,  false },
-    { "abs",       prjm_eel_func_abs,           0,     1, true,  false },
-    { "min",       prjm_eel_func_min,           0,     2, true,  false },
-    { "max",       prjm_eel_func_max,           0,     2, true,  false },
-    { "sign",      prjm_eel_func_sign,          0,     1, true,  false },
-    { "rand",      prjm_eel_func_rand,          0,     1, false, false },
-    { "floor",     prjm_eel_func_math_func1,    floor, 1, true,  false },
-    { "int",       prjm_eel_func_math_func1,    floor, 1, true,  false },
-    { "ceil",      prjm_eel_func_math_func1,    ceil,  1, true,  false },
-    { "invsqrt",   prjm_eel_func_invsqrt,       0,     1, true,  false },
-    { "sigmoid",   prjm_eel_func_sigmoid,       0,     2, true,  false },
+    { "log",       prjm_eel_func_log,          1, true,  false },
+    { "log10",     prjm_eel_func_log10,        1, true,  false },
+    { "abs",       prjm_eel_func_abs,          1, true,  false },
+    { "min",       prjm_eel_func_min,          2, true,  false },
+    { "max",       prjm_eel_func_max,          2, true,  false },
+    { "sign",      prjm_eel_func_sign,         1, true,  false },
+    { "rand",      prjm_eel_func_rand,         1, false, false },
+    { "floor",     prjm_eel_func_floor,        1, true,  false },
+    { "int",       prjm_eel_func_floor,        1, true,  false },
+    { "ceil",      prjm_eel_func_ceil,         1, true,  false },
+    { "invsqrt",   prjm_eel_func_invsqrt,      1, true,  false },
+    { "sigmoid",   prjm_eel_func_sigmoid,      2, true,  false },
 
-    { "band",      prjm_eel_func_band_func,     0,     2, true,  false },
-    { "bor",       prjm_eel_func_bor_func,      0,     2, true,  false },
+    { "band",      prjm_eel_func_band_func,    2, true,  false },
+    { "bor",       prjm_eel_func_bor_func,     2, true,  false },
 
-    { "exec2",     prjm_eel_func_exec2,         0,     2, true,  false },
-    { "exec3",     prjm_eel_func_exec3,         0,     3, true,  false },
-    { "_mem",      prjm_eel_func_mem,           0,     1, false, true },
-    { "megabuf",   prjm_eel_func_mem,           0,     1, false, true },
-    { "_gmem",     prjm_eel_func_mem,           0,     1, false, true },
-    { "gmegabuf",  prjm_eel_func_mem,           0,     1, false, true },
-    { "freembuf",  prjm_eel_func_freembuf,      0,     1, false, true },
-    { "memcpy",    prjm_eel_func_memcpy,        0,     3, false, true },
-    { "memset",    prjm_eel_func_memset,        0,     3, false, true }
+    { "exec2",     prjm_eel_func_exec2,         2, true,  false },
+    { "exec3",     prjm_eel_func_exec3,         3, true,  false },
+    { "_mem",      prjm_eel_func_mem,           1, false, true },
+    { "megabuf",   prjm_eel_func_mem,           1, false, true },
+    { "_gmem",     prjm_eel_func_mem,           1, false, true },
+    { "gmegabuf",  prjm_eel_func_mem,           1, false, true },
+    { "freembuf",  prjm_eel_func_freembuf,      1, false, true },
+    { "memcpy",    prjm_eel_func_memcpy,        3, false, true },
+    { "memset",    prjm_eel_func_memset,        3, false, true }
 };
 
 
@@ -787,23 +782,81 @@ prjm_eel_function_decl(powop)
 
 
 /* Math functions */
-prjm_eel_function_decl(math_func1)
+prjm_eel_function_decl(sin)
 {
     assert_valid_ctx();
-    assert(ctx->math_func);
 
     ctx->value = .0;
     PRJM_EVAL_F* math_arg_ptr = &ctx->value;
 
     invoke_arg(0, &math_arg_ptr);
 
-    assign_ret_val(((prjm_eel_math_func1*) ctx->math_func)(*math_arg_ptr));
+    assign_ret_val(sin(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(math_func2)
+prjm_eel_function_decl(cos)
 {
     assert_valid_ctx();
-    assert(ctx->math_func);
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(cos(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(tan)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(tan(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(asin)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(asin(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(acos)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(acos(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(atan)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(atan(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(atan2)
+{
+    assert_valid_ctx();
 
     PRJM_EVAL_F math_arg1 = .0;
     PRJM_EVAL_F math_arg2 = .0;
@@ -813,7 +866,94 @@ prjm_eel_function_decl(math_func2)
     invoke_arg(0, &math_arg1_ptr);
     invoke_arg(1, &math_arg2_ptr);
 
-    assign_ret_val(((prjm_eel_math_func2*) ctx->math_func)(*math_arg1_ptr, *math_arg2_ptr));
+    assign_ret_val(atan2(*math_arg1_ptr, *math_arg2_ptr));
+}
+
+prjm_eel_function_decl(sqrt)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(sqrt(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(pow)
+{
+    assert_valid_ctx();
+
+    PRJM_EVAL_F math_arg1 = .0;
+    PRJM_EVAL_F math_arg2 = .0;
+    PRJM_EVAL_F* math_arg1_ptr = &math_arg1;
+    PRJM_EVAL_F* math_arg2_ptr = &math_arg2;
+
+    invoke_arg(0, &math_arg1_ptr);
+    invoke_arg(1, &math_arg2_ptr);
+
+    assign_ret_val(pow(*math_arg1_ptr, *math_arg2_ptr));
+}
+
+prjm_eel_function_decl(exp)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(exp(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(log)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(log(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(log10)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(log10(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(floor)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(floor(*math_arg_ptr));
+}
+
+prjm_eel_function_decl(ceil)
+{
+    assert_valid_ctx();
+
+    ctx->value = .0;
+    PRJM_EVAL_F* math_arg_ptr = &ctx->value;
+
+    invoke_arg(0, &math_arg_ptr);
+
+    assign_ret_val(ceil(*math_arg_ptr));
 }
 
 prjm_eel_function_decl(sigmoid)
