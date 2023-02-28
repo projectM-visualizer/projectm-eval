@@ -35,8 +35,8 @@ if(NOT NO_MATH_LIB_REQUIRED)
     list(APPEND CMAKE_REQUIRED_LIBRARIES m)
 endif()
 
-find_package(BISON 3.8 REQUIRED)
-find_package(FLEX 2.6 REQUIRED)
+find_package(BISON 3.8)
+find_package(FLEX 2.6)
 
 add_subdirectory(projectm-eval)
 
