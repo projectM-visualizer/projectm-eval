@@ -106,3 +106,129 @@ PRJM_EVAL_F* prjm_eel_memory_allocate(projectm_eval_mem_buffer buffer, int index
 
     return NULL;
 }
+
+PRJM_EVAL_F* prjm_eel_memory_copy(projectm_eval_mem_buffer buffer,
+                                  PRJM_EVAL_F* dest,
+                                  PRJM_EVAL_F* src,
+                                  PRJM_EVAL_F* len)
+{
+    int offset_dest = (int) (*dest + 0.0001);
+    int offset_src = (int) (*src + 0.0001);
+    int count = (int) (*len + 0.0001);
+
+    // Trim to front if an offset is less than zero.
+    if (offset_src < 0)
+    {
+        count += offset_src;
+        offset_dest -= offset_src;
+        offset_src = 0;
+    }
+    if (offset_dest < 0)
+    {
+        count += offset_dest;
+        offset_src -= offset_dest;
+        offset_dest = 0;
+    }
+
+    PRJM_EVAL_F* src_pointer;
+    PRJM_EVAL_F* dst_pointer;
+
+    while (count > 0)
+    {
+        int copy_length = count;
+
+        int max_dst_len = PRJM_EEL_MEM_ITEMSPERBLOCK - (offset_dest & (PRJM_EEL_MEM_ITEMSPERBLOCK - 1));
+        int max_src_len = PRJM_EEL_MEM_ITEMSPERBLOCK - (offset_src & (PRJM_EEL_MEM_ITEMSPERBLOCK - 1));
+
+        if (offset_dest >= PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK ||
+            offset_src >= PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK)
+        {
+            break;
+        }
+
+        if (copy_length > max_dst_len)
+        {
+            copy_length = max_dst_len;
+        }
+        if (copy_length > max_src_len)
+        {
+            copy_length = max_src_len;
+        }
+
+        if (copy_length < 1)
+        {
+            break;
+        }
+
+        src_pointer = prjm_eel_memory_allocate(buffer, offset_src);
+        dst_pointer = prjm_eel_memory_allocate(buffer, offset_dest);
+        if (!src_pointer || !dst_pointer)
+        {
+            break;
+        }
+
+        memmove(dst_pointer, src_pointer, sizeof(PRJM_EVAL_F) * copy_length);
+        offset_src += copy_length;
+        offset_dest += copy_length;
+        count -= copy_length;
+    }
+
+    return dest;
+}
+
+PRJM_EVAL_F* prjm_eel_memory_set(projectm_eval_mem_buffer buffer,
+                                 PRJM_EVAL_F* dest,
+                                 PRJM_EVAL_F* value,
+                                 PRJM_EVAL_F* len)
+{
+    int offset_dest = (int) (*dest + 0.0001);
+    int count = (int) (*len + 0.0001);
+
+    // Trim to front
+    if (offset_dest < 0)
+    {
+        count += offset_dest;
+        offset_dest = 0;
+    }
+
+    if (offset_dest >= PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK)
+    {
+        return dest;
+    }
+
+    if (offset_dest + count > PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK)
+    {
+        count = PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK - offset_dest;
+    }
+
+    if (count < 1)
+    {
+        return dest;
+    }
+
+    PRJM_EVAL_F val = *value;
+    while(count > 0)
+    {
+        PRJM_EVAL_F* block_pointer = prjm_eel_memory_allocate(buffer, offset_dest);
+        if (!block_pointer)
+        {
+            break;
+        }
+
+        int block_count = PRJM_EEL_MEM_ITEMSPERBLOCK - (offset_dest & (PRJM_EEL_MEM_ITEMSPERBLOCK - 1));
+        if (block_count > count)
+        {
+            block_count = count;
+        }
+
+        count -= block_count;
+        offset_dest += block_count;
+
+        while (block_count--)
+        {
+            *block_pointer++ = val;
+        }
+    }
+
+    return dest;
+}

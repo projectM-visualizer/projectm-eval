@@ -384,12 +384,36 @@ prjm_eel_function_decl(memcpy)
 {
     assert_valid_ctx();
 
+    ctx->value = .0;
+    PRJM_EVAL_F src_index = .0;
+    PRJM_EVAL_F count = .0;
+    PRJM_EVAL_F* dest_index_ptr = &ctx->value;
+    PRJM_EVAL_F* src_index_ptr = &src_index;
+    PRJM_EVAL_F* count_ptr = &count;
+
+    invoke_arg(0, &dest_index_ptr);
+    invoke_arg(1, &src_index_ptr);
+    invoke_arg(2, &count_ptr);
+
+    assign_ret_ref(prjm_eel_memory_copy(ctx->memory_buffer, dest_index_ptr, src_index_ptr, count_ptr));
 }
 
 prjm_eel_function_decl(memset)
 {
     assert_valid_ctx();
 
+    ctx->value = .0;
+    PRJM_EVAL_F value = .0;
+    PRJM_EVAL_F count = .0;
+    PRJM_EVAL_F* dest_index_ptr = &ctx->value;
+    PRJM_EVAL_F* value_ptr = &value;
+    PRJM_EVAL_F* count_ptr = &count;
+
+    invoke_arg(0, &dest_index_ptr);
+    invoke_arg(1, &value_ptr);
+    invoke_arg(2, &count_ptr);
+
+    assign_ret_ref(prjm_eel_memory_set(ctx->memory_buffer, dest_index_ptr, value_ptr, count_ptr));
 }
 
 
