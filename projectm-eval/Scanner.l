@@ -26,6 +26,8 @@
         yylloc_param->last_line = yylineno;      \
         yylloc_param->last_column = yycolumn;    \
     }
+
+struct prjm_eval_scanner_state;
 }
 
 
