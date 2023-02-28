@@ -376,6 +376,8 @@ prjm_eel_function_decl(freembuf)
     invoke_arg(0, ret_val);
 
     prjm_eel_memory_free(ctx->memory_buffer);
+
+    assign_ret_val(.0);
 }
 
 prjm_eel_function_decl(memcpy)
