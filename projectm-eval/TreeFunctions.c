@@ -16,85 +16,85 @@
  * with _ are not really required because they're internals of ns-eel2, but as they can be used in
  * Milkdrop, we also allow expressions to call them directly.
  */
-static prjm_eel_function_def_t intrinsic_function_table[] = {
+static prjm_eval_function_def_t intrinsic_function_table[] = {
     /* Special intrinsic functions. Cannot be used via expression syntax. */
-    { "/*const*/", prjm_eel_func_const,         0, true,  false },
-    { "/*var*/",   prjm_eel_func_var,           0, false, false },
-    { "/*list*/",  prjm_eel_func_execute_list,  1, true,  false },
+    { "/*const*/", prjm_eval_func_const,         0, true,  false },
+    { "/*var*/",   prjm_eval_func_var,           0, false, false },
+    { "/*list*/",  prjm_eval_func_execute_list,  1, true,  false },
 
-    { "if",        prjm_eel_func_if,            3, true,  false },
-    { "_if",       prjm_eel_func_if,            3, true,  false },
-    { "_and",      prjm_eel_func_band_op,       2, true,  false },
-    { "_or",       prjm_eel_func_bor_op,        2, true,  false },
-    { "loop",      prjm_eel_func_execute_loop,  2, true,  false },
-    { "while",     prjm_eel_func_execute_while, 1, true,  false },
+    { "if",        prjm_eval_func_if,            3, true,  false },
+    { "_if",       prjm_eval_func_if,            3, true,  false },
+    { "_and",      prjm_eval_func_band_op,       2, true,  false },
+    { "_or",       prjm_eval_func_bor_op,        2, true,  false },
+    { "loop",      prjm_eval_func_execute_loop,  2, true,  false },
+    { "while",     prjm_eval_func_execute_while, 1, true,  false },
 
-    { "_not",      prjm_eel_func_bnot,          1, true,  false },
-    { "bnot",      prjm_eel_func_bnot,         1, true,  false },
-    { "_equal",    prjm_eel_func_equal,        2, true,  false },
-    { "equal",     prjm_eel_func_equal,        2, true,  false },
-    { "_noteq",    prjm_eel_func_notequal,     2, true,  false },
-    { "_below",    prjm_eel_func_below,        2, true,  false },
-    { "below",     prjm_eel_func_below,        2, true,  false },
-    { "_above",    prjm_eel_func_above,        2, true,  false },
-    { "above",     prjm_eel_func_above,        2, true,  false },
-    { "_beleq",    prjm_eel_func_beloweq,      2, true,  false },
-    { "_aboeq",    prjm_eel_func_aboveeq,      2, true,  false },
+    { "_not",      prjm_eval_func_bnot,          1, true,  false },
+    { "bnot",      prjm_eval_func_bnot,         1, true,  false },
+    { "_equal",    prjm_eval_func_equal,        2, true,  false },
+    { "equal",     prjm_eval_func_equal,        2, true,  false },
+    { "_noteq",    prjm_eval_func_notequal,     2, true,  false },
+    { "_below",    prjm_eval_func_below,        2, true,  false },
+    { "below",     prjm_eval_func_below,        2, true,  false },
+    { "_above",    prjm_eval_func_above,        2, true,  false },
+    { "above",     prjm_eval_func_above,        2, true,  false },
+    { "_beleq",    prjm_eval_func_beloweq,      2, true,  false },
+    { "_aboeq",    prjm_eval_func_aboveeq,      2, true,  false },
 
-    { "_set",      prjm_eel_func_set,          2, false, true },
-    { "assign",    prjm_eel_func_set,          2, false, true },
-    { "_add",      prjm_eel_func_add,          2, true,  false },
-    { "_sub",      prjm_eel_func_sub,          2, true,  false },
-    { "_mul",      prjm_eel_func_mul,          2, true,  false },
-    { "_div",      prjm_eel_func_div,          2, true,  false },
-    { "_mod",      prjm_eel_func_mod,          2, true,  false },
-    { "_mulop",    prjm_eel_func_mulop,        2, false, true },
-    { "_divop",    prjm_eel_func_divop,        2, false, true },
-    { "_orop",     prjm_eel_func_orop,         2, false, true },
-    { "_andop",    prjm_eel_func_andop,        2, false, true },
-    { "_addop",    prjm_eel_func_addop,        2, false, true },
-    { "_subop",    prjm_eel_func_subop,        2, false, true },
-    { "_modop",    prjm_eel_func_modop,        2, false, true },
+    { "_set",      prjm_eval_func_set,          2, false, true },
+    { "assign",    prjm_eval_func_set,          2, false, true },
+    { "_add",      prjm_eval_func_add,          2, true,  false },
+    { "_sub",      prjm_eval_func_sub,          2, true,  false },
+    { "_mul",      prjm_eval_func_mul,          2, true,  false },
+    { "_div",      prjm_eval_func_div,          2, true,  false },
+    { "_mod",      prjm_eval_func_mod,          2, true,  false },
+    { "_mulop",    prjm_eval_func_mulop,        2, false, true },
+    { "_divop",    prjm_eval_func_divop,        2, false, true },
+    { "_orop",     prjm_eval_func_orop,         2, false, true },
+    { "_andop",    prjm_eval_func_andop,        2, false, true },
+    { "_addop",    prjm_eval_func_addop,        2, false, true },
+    { "_subop",    prjm_eval_func_subop,        2, false, true },
+    { "_modop",    prjm_eval_func_modop,        2, false, true },
 
-    { "sin",       prjm_eel_func_sin,          1, true,  false },
-    { "cos",       prjm_eel_func_cos,          1, true,  false },
-    { "tan",       prjm_eel_func_tan,          1, true,  false },
-    { "asin",      prjm_eel_func_asin,         1, true,  false },
-    { "acos",      prjm_eel_func_acos,         1, true,  false },
-    { "atan",      prjm_eel_func_atan,         1, true,  false },
-    { "atan2",     prjm_eel_func_atan2,        2, true,  false },
-    { "sqr",       prjm_eel_func_sqr,          1, true,  false },
-    { "sqrt",      prjm_eel_func_sqrt,         1, true,  false },
-    { "pow",       prjm_eel_func_pow,          2, true,  false },
-    { "_powop",    prjm_eel_func_powop,        2, false, true },
-    { "exp",       prjm_eel_func_exp,          1, true,  false },
-    { "_neg",      prjm_eel_func_neg,          1, true,  false },
+    { "sin",       prjm_eval_func_sin,          1, true,  false },
+    { "cos",       prjm_eval_func_cos,          1, true,  false },
+    { "tan",       prjm_eval_func_tan,          1, true,  false },
+    { "asin",      prjm_eval_func_asin,         1, true,  false },
+    { "acos",      prjm_eval_func_acos,         1, true,  false },
+    { "atan",      prjm_eval_func_atan,         1, true,  false },
+    { "atan2",     prjm_eval_func_atan2,        2, true,  false },
+    { "sqr",       prjm_eval_func_sqr,          1, true,  false },
+    { "sqrt",      prjm_eval_func_sqrt,         1, true,  false },
+    { "pow",       prjm_eval_func_pow,          2, true,  false },
+    { "_powop",    prjm_eval_func_powop,        2, false, true },
+    { "exp",       prjm_eval_func_exp,          1, true,  false },
+    { "_neg",      prjm_eval_func_neg,          1, true,  false },
 
-    { "log",       prjm_eel_func_log,          1, true,  false },
-    { "log10",     prjm_eel_func_log10,        1, true,  false },
-    { "abs",       prjm_eel_func_abs,          1, true,  false },
-    { "min",       prjm_eel_func_min,          2, true,  false },
-    { "max",       prjm_eel_func_max,          2, true,  false },
-    { "sign",      prjm_eel_func_sign,         1, true,  false },
-    { "rand",      prjm_eel_func_rand,         1, false, false },
-    { "floor",     prjm_eel_func_floor,        1, true,  false },
-    { "int",       prjm_eel_func_floor,        1, true,  false },
-    { "ceil",      prjm_eel_func_ceil,         1, true,  false },
-    { "invsqrt",   prjm_eel_func_invsqrt,      1, true,  false },
-    { "sigmoid",   prjm_eel_func_sigmoid,      2, true,  false },
+    { "log",       prjm_eval_func_log,          1, true,  false },
+    { "log10",     prjm_eval_func_log10,        1, true,  false },
+    { "abs",       prjm_eval_func_abs,          1, true,  false },
+    { "min",       prjm_eval_func_min,          2, true,  false },
+    { "max",       prjm_eval_func_max,          2, true,  false },
+    { "sign",      prjm_eval_func_sign,         1, true,  false },
+    { "rand",      prjm_eval_func_rand,         1, false, false },
+    { "floor",     prjm_eval_func_floor,        1, true,  false },
+    { "int",       prjm_eval_func_floor,        1, true,  false },
+    { "ceil",      prjm_eval_func_ceil,         1, true,  false },
+    { "invsqrt",   prjm_eval_func_invsqrt,      1, true,  false },
+    { "sigmoid",   prjm_eval_func_sigmoid,      2, true,  false },
 
-    { "band",      prjm_eel_func_band_func,    2, true,  false },
-    { "bor",       prjm_eel_func_bor_func,     2, true,  false },
+    { "band",      prjm_eval_func_band_func,    2, true,  false },
+    { "bor",       prjm_eval_func_bor_func,     2, true,  false },
 
-    { "exec2",     prjm_eel_func_exec2,         2, true,  false },
-    { "exec3",     prjm_eel_func_exec3,         3, true,  false },
-    { "_mem",      prjm_eel_func_mem,           1, false, true },
-    { "megabuf",   prjm_eel_func_mem,           1, false, true },
-    { "_gmem",     prjm_eel_func_mem,           1, false, true },
-    { "gmegabuf",  prjm_eel_func_mem,           1, false, true },
-    { "freembuf",  prjm_eel_func_freembuf,      1, false, true },
-    { "memcpy",    prjm_eel_func_memcpy,        3, false, true },
-    { "memset",    prjm_eel_func_memset,        3, false, true }
+    { "exec2",     prjm_eval_func_exec2,         2, true,  false },
+    { "exec3",     prjm_eval_func_exec3,         3, true,  false },
+    { "_mem",      prjm_eval_func_mem,           1, false, true },
+    { "megabuf",   prjm_eval_func_mem,           1, false, true },
+    { "_gmem",     prjm_eval_func_mem,           1, false, true },
+    { "gmegabuf",  prjm_eval_func_mem,           1, false, true },
+    { "freembuf",  prjm_eval_func_freembuf,      1, false, true },
+    { "memcpy",    prjm_eval_func_memcpy,        3, false, true },
+    { "memset",    prjm_eval_func_memset,        3, false, true }
 };
 
 
@@ -149,14 +149,14 @@ static const PRJM_EVAL_F close_factor_low = 1e-300;
 #define UPPER_MASK 0x80000000UL /* most significant w-r bits */
 #define LOWER_MASK 0x7fffffffUL /* least significant r bits */
 
-void prjm_eel_intrinsic_functions(prjm_eel_intrinsic_function_list_ptr list, int* count)
+void prjm_eval_intrinsic_functions(prjm_eval_intrinsic_function_list_ptr list, int* count)
 {
-    *count = sizeof(intrinsic_function_table) / sizeof(prjm_eel_function_def_t);
+    *count = sizeof(intrinsic_function_table) / sizeof(prjm_eval_function_def_t);
     *list = intrinsic_function_table;
 }
 
 /* This is Milkdrop's original rand() implementation. */
-static unsigned int prjm_eel_genrand_int32(void)
+static unsigned int prjm_eval_genrand_int32(void)
 {
     unsigned int y;
     static unsigned int mag01[2] = { 0x0UL, MATRIX_A };
@@ -216,14 +216,14 @@ static unsigned int prjm_eel_genrand_int32(void)
 }
 
 /* Variable and constant access */
-prjm_eel_function_decl(const)
+prjm_eval_function_decl(const)
 {
     assert_valid_ctx();
 
     assign_ret_val(ctx->value);
 }
 
-prjm_eel_function_decl(var)
+prjm_eval_function_decl(var)
 {
     assert_valid_ctx();
     assert(ctx->var);
@@ -233,14 +233,14 @@ prjm_eel_function_decl(var)
 
 
 /* Execution control structures */
-prjm_eel_function_decl(execute_list)
+prjm_eval_function_decl(execute_list)
 {
     assert_valid_ctx();
     assert(ctx->list);
 
     ctx->value = .0;
     PRJM_EVAL_F* value_ptr = &ctx->value;
-    prjm_eel_exptreenode_list_item_t* item = ctx->list;
+    prjm_eval_exptreenode_list_item_t* item = ctx->list;
     while (item)
     {
         assert(item->expr);
@@ -255,7 +255,7 @@ prjm_eel_function_decl(execute_list)
     assign_ret_ref(value_ptr);
 }
 
-prjm_eel_function_decl(execute_loop)
+prjm_eval_function_decl(execute_loop)
 {
     assert_valid_ctx();
 
@@ -280,7 +280,7 @@ prjm_eel_function_decl(execute_loop)
     assign_ret_ref(value_ptr);
 }
 
-prjm_eel_function_decl(execute_while)
+prjm_eval_function_decl(execute_while)
 {
     assert_valid_ctx();
 
@@ -295,7 +295,7 @@ prjm_eel_function_decl(execute_while)
     assign_ret_ref(value_ptr);
 }
 
-prjm_eel_function_decl(if)
+prjm_eval_function_decl(if)
 {
     assert_valid_ctx();
 
@@ -311,7 +311,7 @@ prjm_eel_function_decl(if)
     invoke_arg(2, ret_val);
 }
 
-prjm_eel_function_decl(exec2)
+prjm_eval_function_decl(exec2)
 {
     assert_valid_ctx();
 
@@ -322,7 +322,7 @@ prjm_eel_function_decl(exec2)
     invoke_arg(1, ret_val);
 }
 
-prjm_eel_function_decl(exec3)
+prjm_eval_function_decl(exec3)
 {
     assert_valid_ctx();
 
@@ -334,7 +334,7 @@ prjm_eel_function_decl(exec3)
     invoke_arg(2, ret_val);
 }
 
-prjm_eel_function_decl(set)
+prjm_eval_function_decl(set)
 {
     assert_valid_ctx();
 
@@ -349,7 +349,7 @@ prjm_eel_function_decl(set)
 
 
 /* Memory access functions */
-prjm_eel_function_decl(mem)
+prjm_eval_function_decl(mem)
 {
     assert_valid_ctx();
     assert(ctx->memory_buffer);
@@ -358,7 +358,7 @@ prjm_eel_function_decl(mem)
     PRJM_EVAL_F* index_ptr = &ctx->value;
     invoke_arg(0, &index_ptr);
 
-    PRJM_EVAL_F* mem_addr = prjm_eel_memory_allocate(ctx->memory_buffer, (int)(*index_ptr + 0.0001));
+    PRJM_EVAL_F* mem_addr = prjm_eval_memory_allocate(ctx->memory_buffer, (int) (*index_ptr + 0.0001));
     if (mem_addr)
     {
         assign_ret_ref(mem_addr);
@@ -368,19 +368,19 @@ prjm_eel_function_decl(mem)
     assign_ret_val(.0);
 }
 
-prjm_eel_function_decl(freembuf)
+prjm_eval_function_decl(freembuf)
 {
     assert_valid_ctx();
     assert(ctx->memory_buffer);
 
     invoke_arg(0, ret_val);
 
-    prjm_eel_memory_free(ctx->memory_buffer);
+    prjm_eval_memory_free(ctx->memory_buffer);
 
     assign_ret_val(.0);
 }
 
-prjm_eel_function_decl(memcpy)
+prjm_eval_function_decl(memcpy)
 {
     assert_valid_ctx();
 
@@ -395,10 +395,10 @@ prjm_eel_function_decl(memcpy)
     invoke_arg(1, &src_index_ptr);
     invoke_arg(2, &count_ptr);
 
-    assign_ret_ref(prjm_eel_memory_copy(ctx->memory_buffer, dest_index_ptr, src_index_ptr, count_ptr));
+    assign_ret_ref(prjm_eval_memory_copy(ctx->memory_buffer, dest_index_ptr, src_index_ptr, count_ptr));
 }
 
-prjm_eel_function_decl(memset)
+prjm_eval_function_decl(memset)
 {
     assert_valid_ctx();
 
@@ -413,14 +413,14 @@ prjm_eel_function_decl(memset)
     invoke_arg(1, &value_ptr);
     invoke_arg(2, &count_ptr);
 
-    assign_ret_ref(prjm_eel_memory_set(ctx->memory_buffer, dest_index_ptr, value_ptr, count_ptr));
+    assign_ret_ref(prjm_eval_memory_set(ctx->memory_buffer, dest_index_ptr, value_ptr, count_ptr));
 }
 
 
 
 /* Operators */
 
-prjm_eel_function_decl(bnot)
+prjm_eval_function_decl(bnot)
 {
     assert_valid_ctx();
 
@@ -432,7 +432,7 @@ prjm_eel_function_decl(bnot)
     assign_ret_val(fabs(*value_ptr) < close_factor_low ? 1.0 : 0.0);
 }
 
-prjm_eel_function_decl(equal)
+prjm_eval_function_decl(equal)
 {
     assert_valid_ctx();
 
@@ -447,7 +447,7 @@ prjm_eel_function_decl(equal)
     assign_ret_val(fabs(*val1_ptr - *val2_ptr) < close_factor_low ? 1.0 : 0.0);
 }
 
-prjm_eel_function_decl(notequal)
+prjm_eval_function_decl(notequal)
 {
     assert_valid_ctx();
 
@@ -461,7 +461,7 @@ prjm_eel_function_decl(notequal)
     assign_ret_val(fabs(*val1_ptr - *val2_ptr) > close_factor_low ? 1.0 : 0.0);
 }
 
-prjm_eel_function_decl(below)
+prjm_eval_function_decl(below)
 {
     assert_valid_ctx();
 
@@ -476,7 +476,7 @@ prjm_eel_function_decl(below)
     assign_ret_val((*val1_ptr < *val2_ptr) ? 1.0 : 0.0);
 }
 
-prjm_eel_function_decl(above)
+prjm_eval_function_decl(above)
 {
     assert_valid_ctx();
 
@@ -491,7 +491,7 @@ prjm_eel_function_decl(above)
     assign_ret_val((*val1_ptr > *val2_ptr) ? 1.0 : 0.0);
 }
 
-prjm_eel_function_decl(beloweq)
+prjm_eval_function_decl(beloweq)
 {
     assert_valid_ctx();
 
@@ -506,7 +506,7 @@ prjm_eel_function_decl(beloweq)
     assign_ret_val((*val1_ptr <= *val2_ptr) ? 1.0 : 0.0);
 }
 
-prjm_eel_function_decl(aboveeq)
+prjm_eval_function_decl(aboveeq)
 {
     assert_valid_ctx();
 
@@ -521,7 +521,7 @@ prjm_eel_function_decl(aboveeq)
     assign_ret_val((*val1_ptr >= *val2_ptr) ? 1.0 : 0.0);
 }
 
-prjm_eel_function_decl(add)
+prjm_eval_function_decl(add)
 {
     assert_valid_ctx();
 
@@ -536,7 +536,7 @@ prjm_eel_function_decl(add)
     assign_ret_val(*val1_ptr + *val2_ptr);
 }
 
-prjm_eel_function_decl(sub)
+prjm_eval_function_decl(sub)
 {
     assert_valid_ctx();
 
@@ -551,7 +551,7 @@ prjm_eel_function_decl(sub)
     assign_ret_val(*val1_ptr - *val2_ptr);
 }
 
-prjm_eel_function_decl(mul)
+prjm_eval_function_decl(mul)
 {
     assert_valid_ctx();
 
@@ -566,7 +566,7 @@ prjm_eel_function_decl(mul)
     assign_ret_val(*val1_ptr * *val2_ptr);
 }
 
-prjm_eel_function_decl(div)
+prjm_eval_function_decl(div)
 {
     assert_valid_ctx();
 
@@ -587,7 +587,7 @@ prjm_eel_function_decl(div)
     assign_ret_val(*val1_ptr / *val2_ptr);
 }
 
-prjm_eel_function_decl(mod)
+prjm_eval_function_decl(mod)
 {
     assert_valid_ctx();
 
@@ -608,7 +608,7 @@ prjm_eel_function_decl(mod)
     assign_ret_val((PRJM_EVAL_F) ((int) *val1_ptr % divisor));
 }
 
-prjm_eel_function_decl(band_op)
+prjm_eval_function_decl(band_op)
 {
     assert_valid_ctx();
 
@@ -635,7 +635,7 @@ prjm_eel_function_decl(band_op)
     }
 }
 
-prjm_eel_function_decl(bor_op)
+prjm_eval_function_decl(bor_op)
 {
     assert_valid_ctx();
 
@@ -662,7 +662,7 @@ prjm_eel_function_decl(bor_op)
     }
 }
 
-prjm_eel_function_decl(band_func)
+prjm_eval_function_decl(band_func)
 {
     assert_valid_ctx();
 
@@ -678,7 +678,7 @@ prjm_eel_function_decl(band_func)
     assign_ret_val(fabs(*val1_ptr) > close_factor && fabs(*val2_ptr) > close_factor ? 1.0 : 0.0);
 }
 
-prjm_eel_function_decl(bor_func)
+prjm_eval_function_decl(bor_func)
 {
     assert_valid_ctx();
 
@@ -694,7 +694,7 @@ prjm_eel_function_decl(bor_func)
     assign_ret_val(fabs(*val1_ptr) > close_factor || fabs(*val2_ptr) > close_factor ? 1.0 : 0.0);
 }
 
-prjm_eel_function_decl(neg)
+prjm_eval_function_decl(neg)
 {
     assert_valid_ctx();
 
@@ -706,7 +706,7 @@ prjm_eel_function_decl(neg)
     assign_ret_val(-(*val1_ptr));
 }
 
-prjm_eel_function_decl(addop)
+prjm_eval_function_decl(addop)
 {
     assert_valid_ctx();
 
@@ -719,7 +719,7 @@ prjm_eel_function_decl(addop)
     assign_ret_val(**ret_val + *val2_ptr);
 }
 
-prjm_eel_function_decl(subop)
+prjm_eval_function_decl(subop)
 {
     assert_valid_ctx();
 
@@ -732,7 +732,7 @@ prjm_eel_function_decl(subop)
     assign_ret_val(**ret_val - *val2_ptr);
 }
 
-prjm_eel_function_decl(mulop)
+prjm_eval_function_decl(mulop)
 {
     assert_valid_ctx();
 
@@ -745,7 +745,7 @@ prjm_eel_function_decl(mulop)
     assign_ret_val(**ret_val * *val2_ptr);
 }
 
-prjm_eel_function_decl(divop)
+prjm_eval_function_decl(divop)
 {
     assert_valid_ctx();
 
@@ -764,7 +764,7 @@ prjm_eel_function_decl(divop)
     assign_ret_val(**ret_val / *val2_ptr);
 }
 
-prjm_eel_function_decl(orop)
+prjm_eval_function_decl(orop)
 {
     assert_valid_ctx();
 
@@ -777,7 +777,7 @@ prjm_eel_function_decl(orop)
     assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) | (int)(*val2_ptr)));
 }
 
-prjm_eel_function_decl(andop)
+prjm_eval_function_decl(andop)
 {
     assert_valid_ctx();
 
@@ -790,7 +790,7 @@ prjm_eel_function_decl(andop)
     assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) & (int)(*val2_ptr)));
 }
 
-prjm_eel_function_decl(modop)
+prjm_eval_function_decl(modop)
 {
     assert_valid_ctx();
 
@@ -809,7 +809,7 @@ prjm_eel_function_decl(modop)
     assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) % divisor));
 }
 
-prjm_eel_function_decl(powop)
+prjm_eval_function_decl(powop)
 {
     assert_valid_ctx();
 
@@ -824,7 +824,7 @@ prjm_eel_function_decl(powop)
 
 
 /* Math functions */
-prjm_eel_function_decl(sin)
+prjm_eval_function_decl(sin)
 {
     assert_valid_ctx();
 
@@ -836,7 +836,7 @@ prjm_eel_function_decl(sin)
     assign_ret_val(sin(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(cos)
+prjm_eval_function_decl(cos)
 {
     assert_valid_ctx();
 
@@ -848,7 +848,7 @@ prjm_eel_function_decl(cos)
     assign_ret_val(cos(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(tan)
+prjm_eval_function_decl(tan)
 {
     assert_valid_ctx();
 
@@ -860,7 +860,7 @@ prjm_eel_function_decl(tan)
     assign_ret_val(tan(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(asin)
+prjm_eval_function_decl(asin)
 {
     assert_valid_ctx();
 
@@ -872,7 +872,7 @@ prjm_eel_function_decl(asin)
     assign_ret_val(asin(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(acos)
+prjm_eval_function_decl(acos)
 {
     assert_valid_ctx();
 
@@ -884,7 +884,7 @@ prjm_eel_function_decl(acos)
     assign_ret_val(acos(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(atan)
+prjm_eval_function_decl(atan)
 {
     assert_valid_ctx();
 
@@ -896,7 +896,7 @@ prjm_eel_function_decl(atan)
     assign_ret_val(atan(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(atan2)
+prjm_eval_function_decl(atan2)
 {
     assert_valid_ctx();
 
@@ -911,7 +911,7 @@ prjm_eel_function_decl(atan2)
     assign_ret_val(atan2(*math_arg1_ptr, *math_arg2_ptr));
 }
 
-prjm_eel_function_decl(sqrt)
+prjm_eval_function_decl(sqrt)
 {
     assert_valid_ctx();
 
@@ -923,7 +923,7 @@ prjm_eel_function_decl(sqrt)
     assign_ret_val(sqrt(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(pow)
+prjm_eval_function_decl(pow)
 {
     assert_valid_ctx();
 
@@ -938,7 +938,7 @@ prjm_eel_function_decl(pow)
     assign_ret_val(pow(*math_arg1_ptr, *math_arg2_ptr));
 }
 
-prjm_eel_function_decl(exp)
+prjm_eval_function_decl(exp)
 {
     assert_valid_ctx();
 
@@ -950,7 +950,7 @@ prjm_eel_function_decl(exp)
     assign_ret_val(exp(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(log)
+prjm_eval_function_decl(log)
 {
     assert_valid_ctx();
 
@@ -962,7 +962,7 @@ prjm_eel_function_decl(log)
     assign_ret_val(log(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(log10)
+prjm_eval_function_decl(log10)
 {
     assert_valid_ctx();
 
@@ -974,7 +974,7 @@ prjm_eel_function_decl(log10)
     assign_ret_val(log10(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(floor)
+prjm_eval_function_decl(floor)
 {
     assert_valid_ctx();
 
@@ -986,7 +986,7 @@ prjm_eel_function_decl(floor)
     assign_ret_val(floor(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(ceil)
+prjm_eval_function_decl(ceil)
 {
     assert_valid_ctx();
 
@@ -998,7 +998,7 @@ prjm_eel_function_decl(ceil)
     assign_ret_val(ceil(*math_arg_ptr));
 }
 
-prjm_eel_function_decl(sigmoid)
+prjm_eval_function_decl(sigmoid)
 {
     assert_valid_ctx();
 
@@ -1014,7 +1014,7 @@ prjm_eel_function_decl(sigmoid)
     assign_ret_val((PRJM_EVAL_F) (fabs(t) > close_factor ? 1.0 / t : .0));
 }
 
-prjm_eel_function_decl(sqr)
+prjm_eval_function_decl(sqr)
 {
     assert_valid_ctx();
 
@@ -1026,7 +1026,7 @@ prjm_eel_function_decl(sqr)
     assign_ret_val((*value_ptr) * (*value_ptr));
 }
 
-prjm_eel_function_decl(abs)
+prjm_eval_function_decl(abs)
 {
     assert_valid_ctx();
 
@@ -1038,7 +1038,7 @@ prjm_eel_function_decl(abs)
     assign_ret_val(fabs(*value_ptr));
 }
 
-prjm_eel_function_decl(min)
+prjm_eval_function_decl(min)
 {
     assert_valid_ctx();
 
@@ -1053,7 +1053,7 @@ prjm_eel_function_decl(min)
     assign_ret_val((*math_arg1_ptr) < (*math_arg2_ptr) ? (*math_arg1_ptr) : (*math_arg2_ptr));
 }
 
-prjm_eel_function_decl(max)
+prjm_eval_function_decl(max)
 {
     assert_valid_ctx();
 
@@ -1068,7 +1068,7 @@ prjm_eel_function_decl(max)
     assign_ret_val((*math_arg1_ptr) > (*math_arg2_ptr) ? (*math_arg1_ptr) : (*math_arg2_ptr));
 }
 
-prjm_eel_function_decl(sign)
+prjm_eval_function_decl(sign)
 {
     assert_valid_ctx();
 
@@ -1085,7 +1085,7 @@ prjm_eel_function_decl(sign)
     assign_ret_val((*value_ptr) < .0 ? -1. : 1.);
 }
 
-prjm_eel_function_decl(rand)
+prjm_eval_function_decl(rand)
 {
     assert_valid_ctx();
 
@@ -1100,10 +1100,10 @@ prjm_eel_function_decl(rand)
         rand_max = 1.;
     }
 
-    assign_ret_val((PRJM_EVAL_F) (prjm_eel_genrand_int32() * (1.0 / (double) 0xFFFFFFFF * rand_max)));
+    assign_ret_val((PRJM_EVAL_F) (prjm_eval_genrand_int32() * (1.0 / (double) 0xFFFFFFFF * rand_max)));
 }
 
-prjm_eel_function_decl(invsqrt)
+prjm_eval_function_decl(invsqrt)
 {
     assert_valid_ctx();
 

@@ -13,7 +13,7 @@
 #endif
 
 /* Called by yyparse on error. */
-void prjm_eel_error(PRJM_EEL_LTYPE* loc, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner, char const* s)
+void prjm_eval_error(PRJM_EVAL_LTYPE* loc, prjm_eval_compiler_context_t* cctx, yyscan_t yyscanner, char const* s)
 {
     cctx->error.error = strdup(s);
     cctx->error.line = loc->first_line;
@@ -21,21 +21,21 @@ void prjm_eel_error(PRJM_EEL_LTYPE* loc, prjm_eel_compiler_context_t* cctx, yysc
     cctx->error.column_end = loc->last_column;
 }
 
-void prjm_eel_compiler_destroy_arglist(prjm_eel_compiler_arg_list_t* arglist)
+void prjm_eval_compiler_destroy_arglist(prjm_eval_compiler_arg_list_t* arglist)
 {
     if (!arglist)
     {
         return;
     }
 
-    prjm_eel_compiler_arg_node_t* arg = arglist->begin;
+    prjm_eval_compiler_arg_node_t* arg = arglist->begin;
     while (arg)
     {
-        prjm_eel_compiler_arg_node_t* free_arg = arg;
+        prjm_eval_compiler_arg_node_t* free_arg = arg;
         arg = arg->next;
         if (free_arg->node)
         {
-            prjm_eel_compiler_destroy_node(free_arg->node);
+            prjm_eval_compiler_destroy_node(free_arg->node);
         }
         free(free_arg);
     }
@@ -43,18 +43,18 @@ void prjm_eel_compiler_destroy_arglist(prjm_eel_compiler_arg_list_t* arglist)
     free(arglist);
 }
 
-void prjm_eel_compiler_destroy_node(prjm_eel_compiler_node_t* node)
+void prjm_eval_compiler_destroy_node(prjm_eval_compiler_node_t* node)
 {
     if (node->tree_node)
     {
-        prjm_eel_destroy_exptreenode(node->tree_node);
+        prjm_eval_destroy_exptreenode(node->tree_node);
     }
     free(node);
 }
 
-bool prjm_eel_compiler_name_is_function(prjm_eel_compiler_context_t* cctx, const char* name)
+bool prjm_eval_compiler_name_is_function(prjm_eval_compiler_context_t* cctx, const char* name)
 {
-    prjm_eel_function_list_item_t* entry = cctx->functions.first;
+    prjm_eval_function_list_item_t* entry = cctx->functions.first;
     while (entry)
     {
         if (strcmp(entry->function->name, name) == 0)
@@ -68,9 +68,9 @@ bool prjm_eel_compiler_name_is_function(prjm_eel_compiler_context_t* cctx, const
     return false;
 }
 
-prjm_eel_function_def_t* prjm_eel_compiler_get_function(prjm_eel_compiler_context_t* cctx, const char* name)
+prjm_eval_function_def_t* prjm_eval_compiler_get_function(prjm_eval_compiler_context_t* cctx, const char* name)
 {
-    prjm_eel_function_list_item_t* func = cctx->functions.first;
+    prjm_eval_function_list_item_t* func = cctx->functions.first;
     while (func)
     {
         if (strcasecmp(func->function->name, name) == 0)
@@ -84,10 +84,10 @@ prjm_eel_function_def_t* prjm_eel_compiler_get_function(prjm_eel_compiler_contex
     return NULL;
 }
 
-prjm_eel_compiler_arg_list_t* prjm_eel_compiler_add_argument(prjm_eel_compiler_arg_list_t* arglist,
-                                                             prjm_eel_compiler_node_t* arg)
+prjm_eval_compiler_arg_list_t* prjm_eval_compiler_add_argument(prjm_eval_compiler_arg_list_t* arglist,
+                                                               prjm_eval_compiler_node_t* arg)
 {
-    prjm_eel_compiler_arg_node_t* arg_node = calloc(1, sizeof(prjm_eel_compiler_arg_node_t));
+    prjm_eval_compiler_arg_node_t* arg_node = calloc(1, sizeof(prjm_eval_compiler_arg_node_t));
 
     if (arg_node == NULL)
     {
@@ -98,7 +98,7 @@ prjm_eel_compiler_arg_list_t* prjm_eel_compiler_add_argument(prjm_eel_compiler_a
 
     if (!arglist)
     {
-        arglist = calloc(1, sizeof(prjm_eel_compiler_arg_list_t));
+        arglist = calloc(1, sizeof(prjm_eval_compiler_arg_list_t));
         if (!arglist)
         {
             free(arg_node);
@@ -117,39 +117,39 @@ prjm_eel_compiler_arg_list_t* prjm_eel_compiler_add_argument(prjm_eel_compiler_a
     return arglist;
 }
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_function(prjm_eel_compiler_context_t* cctx,
-                                                            const char* name,
-                                                            prjm_eel_compiler_arg_list_t* arglist,
-                                                            char** error)
+prjm_eval_compiler_node_t* prjm_eval_compiler_create_function(prjm_eval_compiler_context_t* cctx,
+                                                             const char* name,
+                                                             prjm_eval_compiler_arg_list_t* arglist,
+                                                             char** error)
 {
-    prjm_eel_function_def_t* func = prjm_eel_compiler_get_function(cctx, name);
+    prjm_eval_function_def_t* func = prjm_eval_compiler_get_function(cctx, name);
     if (!func)
     {
-        PRJM_EEL_FORMAT_ERROR(*error, "Unknown function \"%s\".", name)
+        PRJM_EVAL_FORMAT_ERROR(*error, "Unknown function \"%s\".", name)
         return NULL;
     }
 
     if (func->arg_count != arglist->count)
     {
-        PRJM_EEL_FORMAT_ERROR(*error, "Invalid argument count for function \"%s\": Expected %d, but %d given.",
+        PRJM_EVAL_FORMAT_ERROR(*error, "Invalid argument count for function \"%s\": Expected %d, but %d given.",
                               name, func->arg_count, arglist->count)
         return NULL;
     }
 
-    prjm_eel_compiler_node_t* node = prjm_eel_compiler_create_expression(cctx, func, arglist);
+    prjm_eval_compiler_node_t* node = prjm_eval_compiler_create_expression(cctx, func, arglist);
 
     return node;
 }
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression_empty(prjm_eel_function_def_t* func)
+prjm_eval_compiler_node_t* prjm_eval_compiler_create_expression_empty(prjm_eval_function_def_t* func)
 {
-    prjm_eel_exptreenode_t* expr = calloc(1, sizeof(prjm_eel_exptreenode_t));
+    prjm_eval_exptreenode_t* expr = calloc(1, sizeof(prjm_eval_exptreenode_t));
 
     expr->func = func->func;
 
-    prjm_eel_compiler_node_t* node = calloc(1, sizeof(prjm_eel_compiler_node_t));
+    prjm_eval_compiler_node_t* node = calloc(1, sizeof(prjm_eval_compiler_node_t));
 
-    node->type = PRJM_EEL_NODE_FUNC_EXPRESSION;
+    node->type = PRJM_EVAL_NODE_FUNC_EXPRESSION;
     node->instr_is_const_expr = func->is_const_eval;
     node->instr_is_state_changing = func->is_state_changing;
     node->list_is_const_expr = func->is_const_eval;
@@ -159,11 +159,11 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression_empty(prjm_eel_fun
     return node;
 }
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_context_t* cctx,
-                                                              prjm_eel_function_def_t* func,
-                                                              prjm_eel_compiler_arg_list_t* arglist)
+prjm_eval_compiler_node_t* prjm_eval_compiler_create_expression(prjm_eval_compiler_context_t* cctx,
+                                                               prjm_eval_function_def_t* func,
+                                                               prjm_eval_compiler_arg_list_t* arglist)
 {
-    prjm_eel_exptreenode_t* expr = calloc(1, sizeof(prjm_eel_exptreenode_t));
+    prjm_eval_exptreenode_t* expr = calloc(1, sizeof(prjm_eval_exptreenode_t));
 
     expr->func = func->func;
 
@@ -186,10 +186,10 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
     bool args_are_state_changing = false;
     if (arglist && arglist->count > 0)
     {
-        expr->args = calloc(arglist->count + 1, sizeof(prjm_eel_exptreenode_t*));
+        expr->args = calloc(arglist->count + 1, sizeof(prjm_eval_exptreenode_t*));
 
-        prjm_eel_compiler_arg_node_t* arg = arglist->begin;
-        prjm_eel_exptreenode_t** expr_arg = expr->args;
+        prjm_eval_compiler_arg_node_t* arg = arglist->begin;
+        prjm_eval_exptreenode_t** expr_arg = expr->args;
         while (arg)
         {
             /* Move expression to arguments */
@@ -206,11 +206,11 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
         }
     }
 
-    prjm_eel_compiler_destroy_arglist(arglist);
+    prjm_eval_compiler_destroy_arglist(arglist);
 
-    prjm_eel_compiler_node_t* node = calloc(1, sizeof(prjm_eel_compiler_node_t));
+    prjm_eval_compiler_node_t* node = calloc(1, sizeof(prjm_eval_compiler_node_t));
 
-    node->type = PRJM_EEL_NODE_FUNC_EXPRESSION;
+    node->type = PRJM_EVAL_NODE_FUNC_EXPRESSION;
     node->instr_is_const_expr = args_are_const_evaluable && func->is_const_eval;
     node->instr_is_state_changing = args_are_state_changing || func->is_state_changing;
     node->list_is_const_expr = node->instr_is_const_expr;
@@ -221,8 +221,8 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
     if (node->instr_is_const_expr &&
         !node->instr_is_state_changing)
     {
-        prjm_eel_exptreenode_t* const_expr = calloc(1, sizeof(prjm_eel_exptreenode_t));
-        prjm_eel_function_def_t* const_func = prjm_eel_compiler_get_function(cctx, "/*const*/");
+        prjm_eval_exptreenode_t* const_expr = calloc(1, sizeof(prjm_eval_exptreenode_t));
+        prjm_eval_function_def_t* const_func = prjm_eval_compiler_get_function(cctx, "/*const*/");
         const_expr->func = const_func->func;
 
         PRJM_EVAL_F* value_ptr = &const_expr->value;
@@ -234,22 +234,22 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_expression(prjm_eel_compiler_
         node->instr_is_state_changing = const_func->is_state_changing;
         node->list_is_const_expr = const_func->is_const_eval;
         node->list_is_state_changing = const_func->is_state_changing;
-        prjm_eel_destroy_exptreenode(expr);
+        prjm_eval_destroy_exptreenode(expr);
     }
 
     return node;
 }
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_context_t* cctx, PRJM_EVAL_F value)
+prjm_eval_compiler_node_t* prjm_eval_compiler_create_constant(prjm_eval_compiler_context_t* cctx, PRJM_EVAL_F value)
 {
-    prjm_eel_function_def_t* const_func = prjm_eel_compiler_get_function(cctx, "/*const*/");
+    prjm_eval_function_def_t* const_func = prjm_eval_compiler_get_function(cctx, "/*const*/");
 
-    prjm_eel_exptreenode_t* const_expr = calloc(1, sizeof(prjm_eel_exptreenode_t));
+    prjm_eval_exptreenode_t* const_expr = calloc(1, sizeof(prjm_eval_exptreenode_t));
     const_expr->func = const_func->func;
     const_expr->value = value;
 
-    prjm_eel_compiler_node_t* node = calloc(1, sizeof(prjm_eel_compiler_node_t));
-    node->type = PRJM_EEL_NODE_FUNC_EXPRESSION;
+    prjm_eval_compiler_node_t* node = calloc(1, sizeof(prjm_eval_compiler_node_t));
+    node->type = PRJM_EVAL_NODE_FUNC_EXPRESSION;
     node->tree_node = const_expr;
     node->instr_is_const_expr = const_func->is_const_eval;
     node->instr_is_state_changing = const_func->is_state_changing;
@@ -259,13 +259,13 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_constant(prjm_eel_compiler_co
     return node;
 }
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_create_variable(prjm_eel_compiler_context_t* cctx, const char* name)
+prjm_eval_compiler_node_t* prjm_eval_compiler_create_variable(prjm_eval_compiler_context_t* cctx, const char* name)
 {
     /* Find existing variable or create a new one */
-    PRJM_EVAL_F* var = prjm_eel_register_variable(cctx, name);
+    PRJM_EVAL_F* var = prjm_eval_register_variable(cctx, name);
 
-    prjm_eel_function_def_t* var_func = prjm_eel_compiler_get_function(cctx, "/*var*/");
-    prjm_eel_compiler_node_t* node = prjm_eel_compiler_create_expression_empty(var_func);
+    prjm_eval_function_def_t* var_func = prjm_eval_compiler_get_function(cctx, "/*var*/");
+    prjm_eval_compiler_node_t* node = prjm_eval_compiler_create_expression_empty(var_func);
 
     node->tree_node->var = var;
     node->instr_is_const_expr = var_func->is_const_eval;
@@ -276,35 +276,35 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_create_variable(prjm_eel_compiler_co
     return node;
 }
 
-prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_context_t* cctx,
-                                                            prjm_eel_compiler_node_t* list,
-                                                            prjm_eel_compiler_node_t* instruction)
+prjm_eval_compiler_node_t* prjm_eval_compiler_add_instruction(prjm_eval_compiler_context_t* cctx,
+                                                             prjm_eval_compiler_node_t* list,
+                                                             prjm_eval_compiler_node_t* instruction)
 {
     if (!list)
     {
         return NULL;
     }
 
-    prjm_eel_compiler_node_t* node = list;
+    prjm_eval_compiler_node_t* node = list;
 
     /* Convert single expression to instruction list if needed. */
-    if (list->type != PRJM_EEL_NODE_FUNC_INSTRUCTIONLIST)
+    if (list->type != PRJM_EVAL_NODE_FUNC_INSTRUCTIONLIST)
     {
         /* If previous instruction is not state-changing, we can remove it as it won't do
          * anything useful. Only the last expression's value may be of interest. */
         if (!list->instr_is_state_changing)
         {
-            prjm_eel_compiler_destroy_node(list);
+            prjm_eval_compiler_destroy_node(list);
             return instruction;
         }
 
-        prjm_eel_function_def_t* list_func = prjm_eel_compiler_get_function(cctx, "/*list*/");
+        prjm_eval_function_def_t* list_func = prjm_eval_compiler_get_function(cctx, "/*list*/");
 
-        prjm_eel_compiler_node_t* new_node = prjm_eel_compiler_create_expression_empty(list_func);
-        new_node->tree_node->list = malloc(sizeof(prjm_eel_exptreenode_list_item_t));
+        prjm_eval_compiler_node_t* new_node = prjm_eval_compiler_create_expression_empty(list_func);
+        new_node->tree_node->list = malloc(sizeof(prjm_eval_exptreenode_list_item_t));
         new_node->tree_node->list->expr = list->tree_node;
         new_node->tree_node->list->next = NULL;
-        new_node->type = PRJM_EEL_NODE_FUNC_INSTRUCTIONLIST;
+        new_node->type = PRJM_EVAL_NODE_FUNC_INSTRUCTIONLIST;
         new_node->instr_is_const_expr = list->instr_is_const_expr;
         new_node->instr_is_state_changing = list->instr_is_state_changing;
         new_node->list_is_const_expr = list->list_is_const_expr;
@@ -319,14 +319,14 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_co
     assert(node->tree_node);
     assert(node->tree_node->list);
 
-    prjm_eel_exptreenode_list_item_t* item = node->tree_node->list;
+    prjm_eval_exptreenode_list_item_t* item = node->tree_node->list;
     while (item->next)
     {
         /* If last expression in the existing list is not state-changing, we can remove it as it won't do
          * anything useful. Only the last expression's value may be of interest. */
         if (!node->instr_is_state_changing && !item->next->next)
         {
-            prjm_eel_destroy_exptreenode(item->next->expr);
+            prjm_eval_destroy_exptreenode(item->next->expr);
             free(item->next);
             break;
         }
@@ -334,7 +334,7 @@ prjm_eel_compiler_node_t* prjm_eel_compiler_add_instruction(prjm_eel_compiler_co
         item = item->next;
     }
 
-    item->next = malloc(sizeof(prjm_eel_exptreenode_list_item_t));
+    item->next = malloc(sizeof(prjm_eval_exptreenode_list_item_t));
     item->next->expr = instruction->tree_node;
     item->next->next = NULL;
 

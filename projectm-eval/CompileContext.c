@@ -9,32 +9,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-prjm_eel_compiler_context_t* prjm_eel_create_compile_context(projectm_eval_mem_buffer global_memory,
-                                                             PRJM_EVAL_F (* global_variables)[100])
+prjm_eval_compiler_context_t* prjm_eval_create_compile_context(projectm_eval_mem_buffer global_memory,
+                                                               PRJM_EVAL_F (* global_variables)[100])
 {
-    prjm_eel_compiler_context_t* cctx = calloc(1, sizeof(prjm_eel_compiler_context_t));
+    prjm_eval_compiler_context_t* cctx = calloc(1, sizeof(prjm_eval_compiler_context_t));
 
-    prjm_eel_intrinsic_function_list intrinsics;
+    prjm_eval_intrinsic_function_list intrinsics;
     int intrinsics_count = 0;
-    prjm_eel_intrinsic_functions(&intrinsics, &intrinsics_count);
+    prjm_eval_intrinsic_functions(&intrinsics, &intrinsics_count);
 
     assert(intrinsics);
     assert(intrinsics_count);
 
-    prjm_eel_function_list_item_t* last_func = NULL;
+    prjm_eval_function_list_item_t* last_func = NULL;
     for (int index = intrinsics_count - 1; index >= 0; --index)
     {
         assert(&intrinsics[index]);
-        prjm_eel_function_list_item_t* func = malloc(sizeof(prjm_eel_function_list_item_t));
-        func->function = malloc(sizeof(prjm_eel_function_def_t));
-        memcpy(func->function, &intrinsics[index], sizeof(prjm_eel_function_def_t));
+        prjm_eval_function_list_item_t* func = malloc(sizeof(prjm_eval_function_list_item_t));
+        func->function = malloc(sizeof(prjm_eval_function_def_t));
+        memcpy(func->function, &intrinsics[index], sizeof(prjm_eval_function_def_t));
         func->function->name = strdup(intrinsics[index].name);
         func->next = last_func;
         last_func = func;
     }
     cctx->functions.first = last_func;
 
-    cctx->memory = prjm_eel_memory_create_buffer();
+    cctx->memory = prjm_eval_memory_create_buffer();
 
     if (global_memory)
     {
@@ -42,7 +42,7 @@ prjm_eel_compiler_context_t* prjm_eel_create_compile_context(projectm_eval_mem_b
     }
     else
     {
-        cctx->global_memory = prjm_eel_memory_global();
+        cctx->global_memory = prjm_eval_memory_global();
     }
 
     cctx->global_variables = global_variables;
@@ -50,14 +50,14 @@ prjm_eel_compiler_context_t* prjm_eel_create_compile_context(projectm_eval_mem_b
     return cctx;
 }
 
-void prjm_eel_destroy_compile_context(prjm_eel_compiler_context_t* cctx)
+void prjm_eval_destroy_compile_context(prjm_eval_compiler_context_t* cctx)
 {
     assert(cctx);
 
-    prjm_eel_function_list_item_t* func = cctx->functions.first;
+    prjm_eval_function_list_item_t* func = cctx->functions.first;
     while (func)
     {
-        prjm_eel_function_list_item_t* free_func = func;
+        prjm_eval_function_list_item_t* free_func = func;
         func = func->next;
 
         free(free_func->function->name);
@@ -65,10 +65,10 @@ void prjm_eel_destroy_compile_context(prjm_eel_compiler_context_t* cctx)
         free(free_func);
     }
 
-    prjm_eel_variable_entry_t* var = cctx->variables.first;
+    prjm_eval_variable_entry_t* var = cctx->variables.first;
     while (var)
     {
-        prjm_eel_variable_entry_t* free_var = var;
+        prjm_eval_variable_entry_t* free_var = var;
         var = var->next;
 
         free(free_var->variable->name);
@@ -76,37 +76,37 @@ void prjm_eel_destroy_compile_context(prjm_eel_compiler_context_t* cctx)
         free(free_var);
     }
 
-    prjm_eel_destroy_exptreenode(cctx->compile_result);
-    prjm_eel_memory_destroy_buffer(cctx->memory);
+    prjm_eval_destroy_exptreenode(cctx->compile_result);
+    prjm_eval_memory_destroy_buffer(cctx->memory);
 
     free(cctx->error.error);
 
     free(cctx);
 }
 
-prjm_eel_program_t* prjm_eel_compile_code(prjm_eel_compiler_context_t* cctx, const char* code)
+prjm_eval_program_t* prjm_eval_compile_code(prjm_eval_compiler_context_t* cctx, const char* code)
 {
     yyscan_t scanner;
 
-    prjm_eel_lex_init(&scanner);
-    YY_BUFFER_STATE bufferState = prjm_eel__scan_string(code, scanner);
+    prjm_eval_lex_init(&scanner);
+    YY_BUFFER_STATE bufferState = prjm_eval__scan_string(code, scanner);
 
     bufferState->yy_bs_lineno = 1;
     bufferState->yy_bs_column = 0;
 
-    int result = prjm_eel_parse(cctx, scanner);
+    int result = prjm_eval_parse(cctx, scanner);
 
-    prjm_eel__delete_buffer(bufferState, scanner);
-    prjm_eel_lex_destroy(scanner);
+    prjm_eval__delete_buffer(bufferState, scanner);
+    prjm_eval_lex_destroy(scanner);
 
     if (result > 0)
     {
-        prjm_eel_destroy_exptreenode(cctx->compile_result);
+        prjm_eval_destroy_exptreenode(cctx->compile_result);
         cctx->compile_result = NULL;
         return NULL;
     }
 
-    prjm_eel_program_t* program = malloc(sizeof(prjm_eel_program_t));
+    prjm_eval_program_t* program = malloc(sizeof(prjm_eval_program_t));
     program->cctx = cctx;
     program->program = cctx->compile_result;
     cctx->compile_result = NULL;
@@ -114,22 +114,22 @@ prjm_eel_program_t* prjm_eel_compile_code(prjm_eel_compiler_context_t* cctx, con
     return program;
 }
 
-void prjm_eel_destroy_code(prjm_eel_program_t* program)
+void prjm_eval_destroy_code(prjm_eval_program_t* program)
 {
     if (!program)
     {
         return;
     }
 
-    prjm_eel_destroy_exptreenode(program->program);
+    prjm_eval_destroy_exptreenode(program->program);
     free(program);
 }
 
-void prjm_eel_reset_context_vars(prjm_eel_compiler_context_t* cctx)
+void prjm_eval_reset_context_vars(prjm_eval_compiler_context_t* cctx)
 {
     assert(cctx);
 
-    prjm_eel_variable_entry_t* var = cctx->variables.first;
+    prjm_eval_variable_entry_t* var = cctx->variables.first;
     while (var)
     {
         var->variable->value = .0f;
@@ -137,7 +137,7 @@ void prjm_eel_reset_context_vars(prjm_eel_compiler_context_t* cctx)
     }
 }
 
-const char* prjm_eel_compiler_get_error(prjm_eel_compiler_context_t* cctx, int* line, int* column_start, int* column_end)
+const char* prjm_eval_compiler_get_error(prjm_eval_compiler_context_t* cctx, int* line, int* column_start, int* column_end)
 {
     assert(cctx);
 

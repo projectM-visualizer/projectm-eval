@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-void prjm_eel_destroy_exptreenode(prjm_eel_exptreenode_t* expr)
+void prjm_eval_destroy_exptreenode(prjm_eval_exptreenode_t* expr)
 {
     if (!expr)
     {
@@ -12,10 +12,10 @@ void prjm_eel_destroy_exptreenode(prjm_eel_exptreenode_t* expr)
     /* Free arguments */
     if (expr->args)
     {
-        prjm_eel_exptreenode_t** arg = expr->args;
+        prjm_eval_exptreenode_t** arg = expr->args;
         while (*arg)
         {
-            prjm_eel_destroy_exptreenode(*arg);
+            prjm_eval_destroy_exptreenode(*arg);
             arg++;
         }
 
@@ -25,12 +25,12 @@ void prjm_eel_destroy_exptreenode(prjm_eel_exptreenode_t* expr)
     /* Free execution list */
     if (expr->list)
     {
-        prjm_eel_exptreenode_list_item_t* item = expr->list;
+        prjm_eval_exptreenode_list_item_t* item = expr->list;
         while(item)
         {
-            prjm_eel_exptreenode_list_item_t* free_item = item;
+            prjm_eval_exptreenode_list_item_t* free_item = item;
             item = item->next;
-            prjm_eel_destroy_exptreenode(free_item->expr);
+            prjm_eval_destroy_exptreenode(free_item->expr);
             free(free_item);
         }
     }

@@ -35,22 +35,22 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_PRJM_EEL_C_DEV_GIT_PROJECTM_EEL_PROJECTM_EVAL_COMPILER_H_INCLUDED
-# define YY_PRJM_EEL_C_DEV_GIT_PROJECTM_EEL_PROJECTM_EVAL_COMPILER_H_INCLUDED
+#ifndef YY_PRJM_EVAL_COMPILER_H_INCLUDED
+# define YY_PRJM_EVAL_COMPILER_H_INCLUDED
 /* Debug traces.  */
-#ifndef PRJM_EEL_DEBUG
+#ifndef PRJM_EVAL_DEBUG
 # if defined YYDEBUG
 #if YYDEBUG
-#   define PRJM_EEL_DEBUG 1
+#   define PRJM_EVAL_DEBUG 1
 #  else
-#   define PRJM_EEL_DEBUG 0
+#   define PRJM_EVAL_DEBUG 0
 #  endif
 # else /* ! defined YYDEBUG */
-#  define PRJM_EEL_DEBUG 0
+#  define PRJM_EVAL_DEBUG 0
 # endif /* ! defined YYDEBUG */
-#endif  /* ! defined PRJM_EEL_DEBUG */
-#if PRJM_EEL_DEBUG
-extern int prjm_eel_debug;
+#endif  /* ! defined PRJM_EVAL_DEBUG */
+#if PRJM_EVAL_DEBUG
+extern int prjm_eval_debug;
 #endif
 /* "%code requires" blocks.  */
 
@@ -63,14 +63,14 @@ typedef void* yyscan_t;
 
 
 /* Token kinds.  */
-#ifndef PRJM_EEL_TOKENTYPE
-# define PRJM_EEL_TOKENTYPE
-  enum prjm_eel_tokentype
+#ifndef PRJM_EVAL_TOKENTYPE
+# define PRJM_EVAL_TOKENTYPE
+  enum prjm_eval_tokentype
   {
-    PRJM_EEL_EMPTY = -2,
-    PRJM_EEL_EOF = 0,              /* "end of file"  */
-    PRJM_EEL_error = 256,          /* error  */
-    PRJM_EEL_UNDEF = 257,          /* "invalid token"  */
+    PRJM_EVAL_EMPTY = -2,
+    PRJM_EVAL_EOF = 0,             /* "end of file"  */
+    PRJM_EVAL_error = 256,         /* error  */
+    PRJM_EVAL_UNDEF = 257,         /* "invalid token"  */
     GMEM = 258,                    /* GMEM  */
     ADDOP = 259,                   /* ADDOP  */
     SUBOP = 260,                   /* SUBOP  */
@@ -92,62 +92,62 @@ typedef void* yyscan_t;
     NEG = 276,                     /* NEG  */
     POS = 277                      /* POS  */
   };
-  typedef enum prjm_eel_tokentype prjm_eel_token_kind_t;
+  typedef enum prjm_eval_tokentype prjm_eval_token_kind_t;
 #endif
 
 /* Value type.  */
-#if ! defined PRJM_EEL_STYPE && ! defined PRJM_EEL_STYPE_IS_DECLARED
-union PRJM_EEL_STYPE
+#if ! defined PRJM_EVAL_STYPE && ! defined PRJM_EVAL_STYPE_IS_DECLARED
+union PRJM_EVAL_STYPE
 {
   PRJM_EVAL_F NUM;                         /* NUM  */
   char* VAR;                               /* VAR  */
   char* FUNC;                              /* FUNC  */
-  prjm_eel_compiler_arg_list_t* yykind_46; /* function-arglist  */
-  prjm_eel_compiler_node_t* program;       /* program  */
-  prjm_eel_compiler_node_t* function;      /* function  */
-  prjm_eel_compiler_node_t* parentheses;   /* parentheses  */
-  prjm_eel_compiler_node_t* yykind_48;     /* instruction-list  */
-  prjm_eel_compiler_node_t* expression;    /* expression  */
+  prjm_eval_compiler_arg_list_t* yykind_46; /* function-arglist  */
+  prjm_eval_compiler_node_t* program;      /* program  */
+  prjm_eval_compiler_node_t* function;     /* function  */
+  prjm_eval_compiler_node_t* parentheses;  /* parentheses  */
+  prjm_eval_compiler_node_t* yykind_48;    /* instruction-list  */
+  prjm_eval_compiler_node_t* expression;   /* expression  */
 
 
 };
-typedef union PRJM_EEL_STYPE PRJM_EEL_STYPE;
-# define PRJM_EEL_STYPE_IS_TRIVIAL 1
-# define PRJM_EEL_STYPE_IS_DECLARED 1
+typedef union PRJM_EVAL_STYPE PRJM_EVAL_STYPE;
+# define PRJM_EVAL_STYPE_IS_TRIVIAL 1
+# define PRJM_EVAL_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined PRJM_EEL_LTYPE && ! defined PRJM_EEL_LTYPE_IS_DECLARED
-typedef struct PRJM_EEL_LTYPE PRJM_EEL_LTYPE;
-struct PRJM_EEL_LTYPE
+#if ! defined PRJM_EVAL_LTYPE && ! defined PRJM_EVAL_LTYPE_IS_DECLARED
+typedef struct PRJM_EVAL_LTYPE PRJM_EVAL_LTYPE;
+struct PRJM_EVAL_LTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
 };
-# define PRJM_EEL_LTYPE_IS_DECLARED 1
-# define PRJM_EEL_LTYPE_IS_TRIVIAL 1
+# define PRJM_EVAL_LTYPE_IS_DECLARED 1
+# define PRJM_EVAL_LTYPE_IS_TRIVIAL 1
 #endif
 
 
 
 
-int prjm_eel_parse (prjm_eel_compiler_context_t* cctx, yyscan_t scanner);
+int prjm_eval_parse (prjm_eval_compiler_context_t* cctx, yyscan_t scanner);
 
 /* "%code provides" blocks.  */
 
 
-    #define YYSTYPE PRJM_EEL_STYPE
-    #define YYLTYPE PRJM_EEL_LTYPE
+    #define YYSTYPE PRJM_EVAL_STYPE
+    #define YYLTYPE PRJM_EVAL_LTYPE
 
     #define YYERROR_VERBOSE
 
    #define YY_DECL \
-       int yylex(YYSTYPE* yylval_param, YYLTYPE* yylloc_param, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner)
+       int yylex(YYSTYPE* yylval_param, YYLTYPE* yylloc_param, prjm_eval_compiler_context_t* cctx, yyscan_t yyscanner)
    YY_DECL;
 
-   int yyerror(YYLTYPE* yyllocp, prjm_eel_compiler_context_t* cctx, yyscan_t yyscanner, const char* message);
+   int yyerror(YYLTYPE* yyllocp, prjm_eval_compiler_context_t* cctx, yyscan_t yyscanner, const char* message);
 
 
-#endif /* !YY_PRJM_EEL_C_DEV_GIT_PROJECTM_EEL_PROJECTM_EVAL_COMPILER_H_INCLUDED  */
+#endif /* !YY_PRJM_EVAL_COMPILER_H_INCLUDED  */

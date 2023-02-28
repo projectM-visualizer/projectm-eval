@@ -64,14 +64,14 @@
 #define YYPULL 1
 
 /* Substitute the type names.  */
-#define YYSTYPE         PRJM_EEL_STYPE
-#define YYLTYPE         PRJM_EEL_LTYPE
+#define YYSTYPE         PRJM_EVAL_STYPE
+#define YYLTYPE         PRJM_EVAL_LTYPE
 /* Substitute the variable and function names.  */
-#define yyparse         prjm_eel_parse
-#define yylex           prjm_eel_lex
-#define yyerror         prjm_eel_error
-#define yydebug         prjm_eel_debug
-#define yynerrs         prjm_eel_nerrs
+#define yyparse         prjm_eval_parse
+#define yylex           prjm_eval_lex
+#define yyerror         prjm_eval_error
+#define yydebug         prjm_eval_debug
+#define yynerrs         prjm_eval_nerrs
 
 
 # ifndef YY_CAST
@@ -394,8 +394,8 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-         || (defined PRJM_EEL_LTYPE_IS_TRIVIAL && PRJM_EEL_LTYPE_IS_TRIVIAL \
-             && defined PRJM_EEL_STYPE_IS_TRIVIAL && PRJM_EEL_STYPE_IS_TRIVIAL)))
+         || (defined PRJM_EVAL_LTYPE_IS_TRIVIAL && PRJM_EVAL_LTYPE_IS_TRIVIAL \
+             && defined PRJM_EVAL_STYPE_IS_TRIVIAL && PRJM_EVAL_STYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -514,7 +514,7 @@ static const yytype_int8 yytranslate[] =
       15,    16,    17,    18,    19,    20,    36,    37
 };
 
-#if PRJM_EEL_DEBUG
+#if PRJM_EVAL_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
@@ -768,7 +768,7 @@ static const yytype_int8 yyr2[] =
 enum { YYENOMEM = -2 };
 
 #define yyerrok         (yyerrstatus = 0)
-#define yyclearin       (yychar = PRJM_EEL_EMPTY)
+#define yyclearin       (yychar = PRJM_EVAL_EMPTY)
 
 #define YYACCEPT        goto yyacceptlab
 #define YYABORT         goto yyabortlab
@@ -780,7 +780,7 @@ enum { YYENOMEM = -2 };
 
 #define YYBACKUP(Token, Value)                                    \
   do                                                              \
-    if (yychar == PRJM_EEL_EMPTY)                                        \
+    if (yychar == PRJM_EVAL_EMPTY)                                        \
       {                                                           \
         yychar = (Token);                                         \
         yylval = (Value);                                         \
@@ -797,8 +797,8 @@ enum { YYENOMEM = -2 };
   while (0)
 
 /* Backward compatibility with an undocumented macro.
-   Use PRJM_EEL_error or PRJM_EEL_UNDEF. */
-#define YYERRCODE PRJM_EEL_UNDEF
+   Use PRJM_EVAL_error or PRJM_EVAL_UNDEF. */
+#define YYERRCODE PRJM_EVAL_UNDEF
 
 /* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
    If N is 0, then set CURRENT to the empty location which ends
@@ -828,7 +828,7 @@ enum { YYENOMEM = -2 };
 
 
 /* Enable debugging if requested.  */
-#if PRJM_EEL_DEBUG
+#if PRJM_EVAL_DEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
@@ -854,7 +854,7 @@ do {                                            \
       undocumented and private YY_LOCATION_PRINT macros.  */
 #   define YYLOCATION_PRINT(File, Loc)  YY_LOCATION_PRINT(File, *(Loc))
 
-#  elif defined PRJM_EEL_LTYPE_IS_TRIVIAL && PRJM_EEL_LTYPE_IS_TRIVIAL
+#  elif defined PRJM_EVAL_LTYPE_IS_TRIVIAL && PRJM_EVAL_LTYPE_IS_TRIVIAL
 
 /* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
 
@@ -919,7 +919,7 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, prjm_eel_compiler_context_t* cctx, yyscan_t scanner)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, prjm_eval_compiler_context_t* cctx, yyscan_t scanner)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
@@ -940,7 +940,7 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, prjm_eel_compiler_context_t* cctx, yyscan_t scanner)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, prjm_eval_compiler_context_t* cctx, yyscan_t scanner)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
@@ -981,7 +981,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp,
-                 int yyrule, prjm_eel_compiler_context_t* cctx, yyscan_t scanner)
+                 int yyrule, prjm_eval_compiler_context_t* cctx, yyscan_t scanner)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -1009,12 +1009,12 @@ do {                                    \
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
 int yydebug;
-#else /* !PRJM_EEL_DEBUG */
+#else /* !PRJM_EVAL_DEBUG */
 # define YYDPRINTF(Args) ((void) 0)
 # define YY_SYMBOL_PRINT(Title, Kind, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
-#endif /* !PRJM_EEL_DEBUG */
+#endif /* !PRJM_EVAL_DEBUG */
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
@@ -1046,7 +1046,7 @@ int yydebug;
    required.  Return YYENOMEM if memory is exhausted.  */
 static int
 yy_lac_stack_realloc (YYPTRDIFF_T *yycapacity, YYPTRDIFF_T yyadd,
-#if PRJM_EEL_DEBUG
+#if PRJM_EVAL_DEBUG
                       char const *yydebug_prefix,
                       char const *yydebug_suffix,
 #endif
@@ -1150,7 +1150,7 @@ do {                                                                    \
    the parser stacks to try to find a new initial context in which the
    current lookahead is syntactically acceptable.  If it fails to find
    such a context, it discards the lookahead.  */
-#if PRJM_EEL_DEBUG
+#if PRJM_EVAL_DEBUG
 # define YY_LAC_DISCARD(Event)                                           \
 do {                                                                     \
   if (yy_lac_established)                                                \
@@ -1260,7 +1260,7 @@ yy_lac (yy_state_t *yyesa, yy_state_t **yyes,
         else
           {
             if (yy_lac_stack_realloc (yyes_capacity, 1,
-#if PRJM_EEL_DEBUG
+#if PRJM_EVAL_DEBUG
                                       " (", ")",
 #endif
                                       yyes, yyesa, &yyesp, yyes_prev))
@@ -1558,7 +1558,7 @@ yysyntax_error (YYPTRDIFF_T *yymsg_alloc, char **yymsg,
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, prjm_eel_compiler_context_t* cctx, yyscan_t scanner)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, prjm_eval_compiler_context_t* cctx, yyscan_t scanner)
 {
   YY_USE (yyvaluep);
   YY_USE (yylocationp);
@@ -1583,7 +1583,7 @@ yydestruct (const char *yymsg,
 `----------*/
 
 int
-yyparse (prjm_eel_compiler_context_t* cctx, yyscan_t scanner)
+yyparse (prjm_eval_compiler_context_t* cctx, yyscan_t scanner)
 {
 /* Lookahead token kind.  */
 int yychar;
@@ -1597,7 +1597,7 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 
 /* Location data for the lookahead symbol.  */
 static YYLTYPE yyloc_default
-# if defined PRJM_EEL_LTYPE_IS_TRIVIAL && PRJM_EEL_LTYPE_IS_TRIVIAL
+# if defined PRJM_EVAL_LTYPE_IS_TRIVIAL && PRJM_EVAL_LTYPE_IS_TRIVIAL
   = { 1, 1, 1, 1 }
 # endif
 ;
@@ -1663,7 +1663,7 @@ YYLTYPE yylloc = yyloc_default;
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
-  yychar = PRJM_EEL_EMPTY; /* Cause a token to be read.  */
+  yychar = PRJM_EVAL_EMPTY; /* Cause a token to be read.  */
 
   yylsp[0] = yylloc;
   goto yysetstate;
@@ -1779,25 +1779,25 @@ yybackup:
   /* Not known => get a lookahead token if don't already have one.  */
 
   /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
-  if (yychar == PRJM_EEL_EMPTY)
+  if (yychar == PRJM_EVAL_EMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
       yychar = yylex (&yylval, &yylloc, cctx, scanner);
     }
 
-  if (yychar <= PRJM_EEL_EOF)
+  if (yychar <= PRJM_EVAL_EOF)
     {
-      yychar = PRJM_EEL_EOF;
+      yychar = PRJM_EVAL_EOF;
       yytoken = YYSYMBOL_YYEOF;
       YYDPRINTF ((stderr, "Now at end of input.\n"));
     }
-  else if (yychar == PRJM_EEL_error)
+  else if (yychar == PRJM_EVAL_error)
     {
       /* The scanner already issued an error message, process directly
          to error recovery.  But do not keep the error token as
          lookahead, it is too special and may lead us to an endless
          loop in error recovery. */
-      yychar = PRJM_EEL_UNDEF;
+      yychar = PRJM_EVAL_UNDEF;
       yytoken = YYSYMBOL_YYerror;
       yyerror_range[1] = yylloc;
       goto yyerrlab1;
@@ -1840,7 +1840,7 @@ yybackup:
   *++yylsp = yylloc;
 
   /* Discard the shifted token.  */
-  yychar = PRJM_EEL_EMPTY;
+  yychar = PRJM_EVAL_EMPTY;
   YY_LAC_DISCARD ("shift");
   goto yynewstate;
 
@@ -1890,15 +1890,15 @@ yyreduce:
     break;
 
   case 3: /* function: FUNC '(' function-arglist ')'  */
-                                            { PRJM_EEL_FUNC((yyval.function), (yyvsp[-3].FUNC), (yyvsp[-1].yykind_46)); free((yyvsp[-3].FUNC)); }
+                                            { PRJM_EVAL_FUNC((yyval.function), (yyvsp[-3].FUNC), (yyvsp[-1].yykind_46)); free((yyvsp[-3].FUNC)); }
     break;
 
   case 4: /* function-arglist: instruction-list  */
-                                                     { (yyval.yykind_46) = prjm_eel_compiler_add_argument(NULL, (yyvsp[0].yykind_48)); }
+                                                     { (yyval.yykind_46) = prjm_eval_compiler_add_argument(NULL, (yyvsp[0].yykind_48)); }
     break;
 
   case 5: /* function-arglist: function-arglist ',' instruction-list  */
-                                                     { (yyval.yykind_46) = prjm_eel_compiler_add_argument((yyvsp[-2].yykind_46), (yyvsp[0].yykind_48)); }
+                                                     { (yyval.yykind_46) = prjm_eval_compiler_add_argument((yyvsp[-2].yykind_46), (yyvsp[0].yykind_48)); }
     break;
 
   case 6: /* parentheses: '(' instruction-list ')'  */
@@ -1910,7 +1910,7 @@ yyreduce:
     break;
 
   case 8: /* instruction-list: instruction-list ';' expression  */
-                                              { (yyval.yykind_48) = prjm_eel_compiler_add_instruction(cctx, (yyvsp[-2].yykind_48), (yyvsp[0].expression)); }
+                                              { (yyval.yykind_48) = prjm_eval_compiler_add_instruction(cctx, (yyvsp[-2].yykind_48), (yyvsp[0].expression)); }
     break;
 
   case 9: /* instruction-list: instruction-list ';' empty-expression  */
@@ -1918,101 +1918,101 @@ yyreduce:
     break;
 
   case 12: /* expression: NUM  */
-                                               { (yyval.expression) = prjm_eel_compiler_create_constant(cctx, (yyvsp[0].NUM)); }
+                                               { (yyval.expression) = prjm_eval_compiler_create_constant(cctx, (yyvsp[0].NUM)); }
     break;
 
   case 13: /* expression: VAR  */
-            { (yyval.expression) = prjm_eel_compiler_create_variable(cctx, (yyvsp[0].VAR)); free((yyvsp[0].VAR)); }
+            { (yyval.expression) = prjm_eval_compiler_create_variable(cctx, (yyvsp[0].VAR)); free((yyvsp[0].VAR)); }
     break;
 
   case 14: /* expression: GMEM '[' ']'  */
-                                             { prjm_eel_compiler_node_t* gmem_zero_idx =  prjm_eel_compiler_create_constant(cctx, .0);
-                                               PRJM_EEL_FUNC1((yyval.expression), "_gmem", gmem_zero_idx)
+                                             { prjm_eval_compiler_node_t* gmem_zero_idx =  prjm_eval_compiler_create_constant(cctx, .0);
+                                               PRJM_EVAL_FUNC1((yyval.expression), "_gmem", gmem_zero_idx)
                                                }
     break;
 
   case 15: /* expression: GMEM '[' expression ']'  */
-                                             { PRJM_EEL_FUNC1((yyval.expression), "_gmem", (yyvsp[-1].expression)) }
+                                             { PRJM_EVAL_FUNC1((yyval.expression), "_gmem", (yyvsp[-1].expression)) }
     break;
 
   case 16: /* expression: expression '[' ']'  */
-                                             { PRJM_EEL_FUNC1((yyval.expression), "_mem", (yyvsp[-2].expression)) }
+                                             { PRJM_EVAL_FUNC1((yyval.expression), "_mem", (yyvsp[-2].expression)) }
     break;
 
   case 17: /* expression: expression '[' expression ']'  */
                                              { /* Create additional "idx + offs" operation as arg to _mem */
-                                               prjm_eel_compiler_node_t* idx_plus_offset;
-                                               PRJM_EEL_FUNC2(idx_plus_offset, "_add", (yyvsp[-3].expression), (yyvsp[-1].expression))
-                                               PRJM_EEL_FUNC1((yyval.expression), "_mem", idx_plus_offset)
+                                               prjm_eval_compiler_node_t* idx_plus_offset;
+                                               PRJM_EVAL_FUNC2(idx_plus_offset, "_add", (yyvsp[-3].expression), (yyvsp[-1].expression))
+                                               PRJM_EVAL_FUNC1((yyval.expression), "_mem", idx_plus_offset)
                                                }
     break;
 
   case 18: /* expression: expression ADDOP expression  */
-                                                   { PRJM_EEL_FUNC2((yyval.expression), "_addop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                   { PRJM_EVAL_FUNC2((yyval.expression), "_addop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 19: /* expression: expression SUBOP expression  */
-                                                   { PRJM_EEL_FUNC2((yyval.expression), "_subop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                   { PRJM_EVAL_FUNC2((yyval.expression), "_subop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 20: /* expression: expression MODOP expression  */
-                                                   { PRJM_EEL_FUNC2((yyval.expression), "_modop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                   { PRJM_EVAL_FUNC2((yyval.expression), "_modop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 21: /* expression: expression OROP expression  */
-                                                   { PRJM_EEL_FUNC2((yyval.expression), "_orop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                   { PRJM_EVAL_FUNC2((yyval.expression), "_orop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 22: /* expression: expression ANDOP expression  */
-                                                   { PRJM_EEL_FUNC2((yyval.expression), "_andop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                   { PRJM_EVAL_FUNC2((yyval.expression), "_andop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 23: /* expression: expression DIVOP expression  */
-                                                   { PRJM_EEL_FUNC2((yyval.expression), "_divop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                   { PRJM_EVAL_FUNC2((yyval.expression), "_divop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 24: /* expression: expression MULOP expression  */
-                                                   { PRJM_EEL_FUNC2((yyval.expression), "_mulop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                   { PRJM_EVAL_FUNC2((yyval.expression), "_mulop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 25: /* expression: expression POWOP expression  */
-                                                   { PRJM_EEL_FUNC2((yyval.expression), "_powop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                   { PRJM_EVAL_FUNC2((yyval.expression), "_powop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 26: /* expression: expression EQUAL expression  */
-                                               { PRJM_EEL_FUNC2((yyval.expression), "_equal", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "_equal", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 27: /* expression: expression BELEQ expression  */
-                                               { PRJM_EEL_FUNC2((yyval.expression), "_beleq", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "_beleq", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 28: /* expression: expression ABOEQ expression  */
-                                               { PRJM_EEL_FUNC2((yyval.expression), "_aboeq", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "_aboeq", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 29: /* expression: expression NOTEQ expression  */
-                                               { PRJM_EEL_FUNC2((yyval.expression), "_noteq", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "_noteq", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 30: /* expression: expression '<' expression  */
-                                               { PRJM_EEL_FUNC2((yyval.expression), "_below", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "_below", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 31: /* expression: expression '>' expression  */
-                                               { PRJM_EEL_FUNC2((yyval.expression), "_above", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "_above", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 32: /* expression: expression BOOLOR expression  */
-                                               { PRJM_EEL_FUNC2((yyval.expression), "bor", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "bor", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 33: /* expression: expression BOOLAND expression  */
-                                               { PRJM_EEL_FUNC2((yyval.expression), "band", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "band", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 34: /* expression: expression '=' expression  */
-                                                   { PRJM_EEL_FUNC2((yyval.expression), "_set", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                   { PRJM_EVAL_FUNC2((yyval.expression), "_set", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 35: /* expression: function  */
@@ -2020,43 +2020,43 @@ yyreduce:
     break;
 
   case 36: /* expression: expression '?' expression ':' expression  */
-                                                                      { PRJM_EEL_FUNC3((yyval.expression), "_if", (yyvsp[-4].expression), (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                                                      { PRJM_EVAL_FUNC3((yyval.expression), "_if", (yyvsp[-4].expression), (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 37: /* expression: expression '+' expression  */
-                                         { PRJM_EEL_FUNC2((yyval.expression), "_add", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "_add", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 38: /* expression: expression '-' expression  */
-                                         { PRJM_EEL_FUNC2((yyval.expression), "_sub", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "_sub", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 39: /* expression: expression '*' expression  */
-                                         { PRJM_EEL_FUNC2((yyval.expression), "_mul", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "_mul", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 40: /* expression: expression '/' expression  */
-                                         { PRJM_EEL_FUNC2((yyval.expression), "_div", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "_div", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 41: /* expression: expression '%' expression  */
-                                         { PRJM_EEL_FUNC2((yyval.expression), "_mod", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "_mod", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 42: /* expression: expression '^' expression  */
-                                         { PRJM_EEL_FUNC2((yyval.expression), "pow", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "pow", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 43: /* expression: expression '|' expression  */
-                                         { PRJM_EEL_FUNC2((yyval.expression), "bor", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "bor", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 44: /* expression: expression '&' expression  */
-                                         { PRJM_EEL_FUNC2((yyval.expression), "band", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "band", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 45: /* expression: '-' expression  */
-                                         { PRJM_EEL_FUNC1((yyval.expression), "_neg", (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC1((yyval.expression), "_neg", (yyvsp[0].expression)) }
     break;
 
   case 46: /* expression: '+' expression  */
@@ -2064,7 +2064,7 @@ yyreduce:
     break;
 
   case 47: /* expression: '!' expression  */
-                                         { PRJM_EEL_FUNC1((yyval.expression), "_not", (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC1((yyval.expression), "_not", (yyvsp[0].expression)) }
     break;
 
   case 48: /* expression: parentheses  */
@@ -2117,7 +2117,7 @@ yyreduce:
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
      user semantic actions for why this is necessary.  */
-  yytoken = yychar == PRJM_EEL_EMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
+  yytoken = yychar == PRJM_EVAL_EMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
   if (!yyerrstatus)
     {
@@ -2127,7 +2127,7 @@ yyerrlab:
           = {yyssp, yyesa, &yyes, &yyes_capacity, yytoken, &yylloc};
         char const *yymsgp = YY_("syntax error");
         int yysyntax_error_status;
-        if (yychar != PRJM_EEL_EMPTY)
+        if (yychar != PRJM_EVAL_EMPTY)
           YY_LAC_ESTABLISH;
         yysyntax_error_status = yysyntax_error (&yymsg_alloc, &yymsg, &yyctx);
         if (yysyntax_error_status == 0)
@@ -2163,17 +2163,17 @@ yyerrlab:
       /* If just tried and failed to reuse lookahead token after an
          error, discard it.  */
 
-      if (yychar <= PRJM_EEL_EOF)
+      if (yychar <= PRJM_EVAL_EOF)
         {
           /* Return failure if at end of input.  */
-          if (yychar == PRJM_EEL_EOF)
+          if (yychar == PRJM_EVAL_EOF)
             YYABORT;
         }
       else
         {
           yydestruct ("Error: discarding",
                       yytoken, &yylval, &yylloc, cctx, scanner);
-          yychar = PRJM_EEL_EMPTY;
+          yychar = PRJM_EVAL_EMPTY;
         }
     }
 
@@ -2282,7 +2282,7 @@ yyexhaustedlab:
 | yyreturnlab -- parsing is finished, clean up and return.  |
 `----------------------------------------------------------*/
 yyreturnlab:
-  if (yychar != PRJM_EEL_EMPTY)
+  if (yychar != PRJM_EVAL_EMPTY)
     {
       /* Make sure we have latest lookahead translation.  See comments at
          user semantic actions for why this is necessary.  */

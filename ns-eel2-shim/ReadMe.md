@@ -13,20 +13,20 @@ Here's a short overview of what the shim provides, what is missing and which dif
 The following API functions are drop-in compatible with the original `ns-eel2.h` header and the projectM functions they
 map to, if any:
 
-- NSEEL_HOSTSTUB_EnterMutex -> _prjm_eel_memory_host_lock_mutex_
-- NSEEL_HOSTSTUB_LeaveMutex -> _prjm_eel_memory_host_unlock_mutex_
-- NSEEL_quit -> _prjm_eel_memory_global_destroy_
-- NSEEL_VM_alloc -> _pjrm_eel_context_create_
-- NSEEL_VM_free -> _pjrm_eel_context_destroy_
-- NSEEL_VM_resetvars -> _pjrm_eel_context_reset_variables_
-- NSEEL_VM_regvar -> _pjrm_eel_context_register_variable_
-- NSEEL_VM_freeRAM -> _pjrm_eel_context_free_memory_
+- NSEEL_HOSTSTUB_EnterMutex -> _prjm_eval_memory_host_lock_mutex_
+- NSEEL_HOSTSTUB_LeaveMutex -> _prjm_eval_memory_host_unlock_mutex_
+- NSEEL_quit -> _prjm_eval_memory_global_destroy_
+- NSEEL_VM_alloc -> _pjrm_eval_context_create_
+- NSEEL_VM_free -> _pjrm_eval_context_destroy_
+- NSEEL_VM_resetvars -> _pjrm_eval_context_reset_variables_
+- NSEEL_VM_regvar -> _pjrm_eval_context_register_variable_
+- NSEEL_VM_freeRAM -> _pjrm_eval_context_free_memory_
 - NSEEL_VM_SetGRAM -> _(none)_
-- NSEEL_VM_FreeGRAM -> _prjm_eel_memory_buffer_destroy_
-- NSEEL_code_compile -> _pjrm_eel_code_compile_
-- NSEEL_code_getcodeerror -> _prjm_eel_get_error_
-- NSEEL_code_execute -> _pjrm_eel_code_execute_
-- NSEEL_code_free -> _pjrm_eel_code_destroy_
+- NSEEL_VM_FreeGRAM -> _prjm_eval_memory_buffer_destroy_
+- NSEEL_code_compile -> _pjrm_eval_code_compile_
+- NSEEL_code_getcodeerror -> _prjm_eval_get_error_
+- NSEEL_code_execute -> _pjrm_eval_code_execute_
+- NSEEL_code_free -> _pjrm_eval_code_destroy_
 
 ### Unimplemented API Functions
 

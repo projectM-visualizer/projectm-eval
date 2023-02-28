@@ -13,85 +13,85 @@
  * @param list A pointer which will receive the list reference.
  * @param count The number of elements inserted into the list.
  */
-void prjm_eel_intrinsic_functions(prjm_eel_intrinsic_function_list_ptr list, int* count);
+void prjm_eval_intrinsic_functions(prjm_eval_intrinsic_function_list_ptr list, int* count);
 
 /**
  * @brief Abbreviates parser function declaration.
- * @param func The name of the function, appended to "prjm_eel_func_".
+ * @param func The name of the function, appended to "prjm_eval_func_".
  */
-#define prjm_eel_function_decl(func) \
-    void prjm_eel_func_ ## func(struct prjm_eel_exptreenode* ctx, PRJM_EVAL_F** ret_val)
+#define prjm_eval_function_decl(func) \
+    void prjm_eval_func_ ## func(struct prjm_eval_exptreenode* ctx, PRJM_EVAL_F** ret_val)
 
 /* Variable and constant access */
-prjm_eel_function_decl(const);
-prjm_eel_function_decl(var);
+prjm_eval_function_decl(const);
+prjm_eval_function_decl(var);
 
 /* Execution control structures */
-prjm_eel_function_decl(execute_list);
-prjm_eel_function_decl(execute_loop);
-prjm_eel_function_decl(execute_while);
-prjm_eel_function_decl(if);
-prjm_eel_function_decl(exec2);
-prjm_eel_function_decl(exec3);
+prjm_eval_function_decl(execute_list);
+prjm_eval_function_decl(execute_loop);
+prjm_eval_function_decl(execute_while);
+prjm_eval_function_decl(if);
+prjm_eval_function_decl(exec2);
+prjm_eval_function_decl(exec3);
 
 /* Assignment function */
-prjm_eel_function_decl(set);
+prjm_eval_function_decl(set);
 
 /* Memory access function */
-prjm_eel_function_decl(mem);
-prjm_eel_function_decl(freembuf);
-prjm_eel_function_decl(memcpy);
-prjm_eel_function_decl(memset);
+prjm_eval_function_decl(mem);
+prjm_eval_function_decl(freembuf);
+prjm_eval_function_decl(memcpy);
+prjm_eval_function_decl(memset);
 
 /* Operators */
-prjm_eel_function_decl(bnot);
-prjm_eel_function_decl(equal);
-prjm_eel_function_decl(notequal);
-prjm_eel_function_decl(below);
-prjm_eel_function_decl(above);
-prjm_eel_function_decl(beloweq);
-prjm_eel_function_decl(aboveeq);
-prjm_eel_function_decl(add);
-prjm_eel_function_decl(sub);
-prjm_eel_function_decl(mul);
-prjm_eel_function_decl(div);
-prjm_eel_function_decl(mod);
-prjm_eel_function_decl(band_op);
-prjm_eel_function_decl(bor_op);
-prjm_eel_function_decl(band_func);
-prjm_eel_function_decl(bor_func);
-prjm_eel_function_decl(neg);
+prjm_eval_function_decl(bnot);
+prjm_eval_function_decl(equal);
+prjm_eval_function_decl(notequal);
+prjm_eval_function_decl(below);
+prjm_eval_function_decl(above);
+prjm_eval_function_decl(beloweq);
+prjm_eval_function_decl(aboveeq);
+prjm_eval_function_decl(add);
+prjm_eval_function_decl(sub);
+prjm_eval_function_decl(mul);
+prjm_eval_function_decl(div);
+prjm_eval_function_decl(mod);
+prjm_eval_function_decl(band_op);
+prjm_eval_function_decl(bor_op);
+prjm_eval_function_decl(band_func);
+prjm_eval_function_decl(bor_func);
+prjm_eval_function_decl(neg);
 
 /* Compound assignment operators */
-prjm_eel_function_decl(addop);
-prjm_eel_function_decl(subop);
-prjm_eel_function_decl(mulop);
-prjm_eel_function_decl(divop);
-prjm_eel_function_decl(modop);
-prjm_eel_function_decl(orop);
-prjm_eel_function_decl(andop);
-prjm_eel_function_decl(powop);
+prjm_eval_function_decl(addop);
+prjm_eval_function_decl(subop);
+prjm_eval_function_decl(mulop);
+prjm_eval_function_decl(divop);
+prjm_eval_function_decl(modop);
+prjm_eval_function_decl(orop);
+prjm_eval_function_decl(andop);
+prjm_eval_function_decl(powop);
 
 /* Mathematical functions */
-prjm_eel_function_decl(sin);
-prjm_eel_function_decl(cos);
-prjm_eel_function_decl(tan);
-prjm_eel_function_decl(asin);
-prjm_eel_function_decl(acos);
-prjm_eel_function_decl(atan);
-prjm_eel_function_decl(atan2);
-prjm_eel_function_decl(sqrt);
-prjm_eel_function_decl(pow);
-prjm_eel_function_decl(exp);
-prjm_eel_function_decl(log);
-prjm_eel_function_decl(log10);
-prjm_eel_function_decl(floor);
-prjm_eel_function_decl(ceil);
-prjm_eel_function_decl(sigmoid);
-prjm_eel_function_decl(sqr);
-prjm_eel_function_decl(abs);
-prjm_eel_function_decl(min);
-prjm_eel_function_decl(max);
-prjm_eel_function_decl(sign);
-prjm_eel_function_decl(rand);
-prjm_eel_function_decl(invsqrt);
+prjm_eval_function_decl(sin);
+prjm_eval_function_decl(cos);
+prjm_eval_function_decl(tan);
+prjm_eval_function_decl(asin);
+prjm_eval_function_decl(acos);
+prjm_eval_function_decl(atan);
+prjm_eval_function_decl(atan2);
+prjm_eval_function_decl(sqrt);
+prjm_eval_function_decl(pow);
+prjm_eval_function_decl(exp);
+prjm_eval_function_decl(log);
+prjm_eval_function_decl(log10);
+prjm_eval_function_decl(floor);
+prjm_eval_function_decl(ceil);
+prjm_eval_function_decl(sigmoid);
+prjm_eval_function_decl(sqr);
+prjm_eval_function_decl(abs);
+prjm_eval_function_decl(min);
+prjm_eval_function_decl(max);
+prjm_eval_function_decl(sign);
+prjm_eval_function_decl(rand);
+prjm_eval_function_decl(invsqrt);

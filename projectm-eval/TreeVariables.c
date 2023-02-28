@@ -11,11 +11,11 @@
 
 static PRJM_EVAL_F static_global_variables[100];
 
-static prjm_eel_variable_entry_t* find_variable_entry(prjm_eel_compiler_context_t* cctx,
-                                                      const char* name)
+static prjm_eval_variable_entry_t* find_variable_entry(prjm_eval_compiler_context_t* cctx,
+                                                       const char* name)
 {
     /* Find existing variable */
-    prjm_eel_variable_entry_t* var = cctx->variables.first;
+    prjm_eval_variable_entry_t* var = cctx->variables.first;
     while (var)
     {
         if (strcasecmp(var->variable->name, name) == 0)
@@ -28,7 +28,7 @@ static prjm_eel_variable_entry_t* find_variable_entry(prjm_eel_compiler_context_
     return var;
 }
 
-PRJM_EVAL_F* prjm_eel_register_variable(prjm_eel_compiler_context_t* cctx, const char* name)
+PRJM_EVAL_F* prjm_eval_register_variable(prjm_eval_compiler_context_t* cctx, const char* name)
 {
     if (strlen(name) == 5 &&
         strncasecmp(name, "reg", 3) == 0 &&
@@ -50,13 +50,13 @@ PRJM_EVAL_F* prjm_eel_register_variable(prjm_eel_compiler_context_t* cctx, const
         return (*cctx->global_variables) + var_index;
     }
 
-    prjm_eel_variable_entry_t* var = find_variable_entry(cctx, name);
+    prjm_eval_variable_entry_t* var = find_variable_entry(cctx, name);
 
     /* Create if it doesn't exist */
     if (!var)
     {
-        var = malloc(sizeof(prjm_eel_variable_entry_t));
-        var->variable = calloc(1, sizeof(prjm_eel_variable_def_t));
+        var = malloc(sizeof(prjm_eval_variable_entry_t));
+        var->variable = calloc(1, sizeof(prjm_eval_variable_def_t));
         var->variable->name = strdup(name);
         var->variable->value = .0f;
         var->next = cctx->variables.first;

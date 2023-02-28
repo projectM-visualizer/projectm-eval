@@ -3,23 +3,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PRJM_EEL_MEM_BLOCKS 128
-#define PRJM_EEL_MEM_ITEMSPERBLOCK 65536
+#define PRJM_EVAL_MEM_BLOCKS 128
+#define PRJM_EVAL_MEM_ITEMSPERBLOCK 65536
 
 static projectm_eval_mem_buffer static_global_memory;
 
-void prjm_eel_memory_destroy_global()
+void prjm_eval_memory_destroy_global()
 {
-    prjm_eel_memory_destroy_buffer(static_global_memory);
+    prjm_eval_memory_destroy_buffer(static_global_memory);
 }
 
-projectm_eval_mem_buffer prjm_eel_memory_global()
+projectm_eval_mem_buffer prjm_eval_memory_global()
 {
     if (!static_global_memory)
     {
         projectm_eval_memory_host_lock_mutex();
 
-        static_global_memory = prjm_eel_memory_create_buffer();
+        static_global_memory = prjm_eval_memory_create_buffer();
 
         projectm_eval_memory_host_unlock_mutex();
     }
@@ -27,19 +27,19 @@ projectm_eval_mem_buffer prjm_eel_memory_global()
     return static_global_memory;
 }
 
-projectm_eval_mem_buffer prjm_eel_memory_create_buffer()
+projectm_eval_mem_buffer prjm_eval_memory_create_buffer()
 {
-    return calloc(PRJM_EEL_MEM_BLOCKS, sizeof(PRJM_EVAL_F*));
+    return calloc(PRJM_EVAL_MEM_BLOCKS, sizeof(PRJM_EVAL_F*));
 }
 
-void prjm_eel_memory_destroy_buffer(projectm_eval_mem_buffer buffer)
+void prjm_eval_memory_destroy_buffer(projectm_eval_mem_buffer buffer)
 {
-    prjm_eel_memory_free(buffer);
+    prjm_eval_memory_free(buffer);
 
     free(buffer);
 }
 
-void prjm_eel_memory_free(projectm_eval_mem_buffer buffer)
+void prjm_eval_memory_free(projectm_eval_mem_buffer buffer)
 {
     if (!buffer)
     {
@@ -48,7 +48,7 @@ void prjm_eel_memory_free(projectm_eval_mem_buffer buffer)
 
     projectm_eval_memory_host_lock_mutex();
 
-    for (int block = 0; block < PRJM_EEL_MEM_BLOCKS; ++block)
+    for (int block = 0; block < PRJM_EVAL_MEM_BLOCKS; ++block)
     {
         if (buffer[block])
         {
@@ -56,24 +56,24 @@ void prjm_eel_memory_free(projectm_eval_mem_buffer buffer)
         }
     }
 
-    memset(buffer, 0, PRJM_EEL_MEM_BLOCKS * sizeof(PRJM_EVAL_F*));
+    memset(buffer, 0, PRJM_EVAL_MEM_BLOCKS * sizeof(PRJM_EVAL_F*));
 
     projectm_eval_memory_host_unlock_mutex();
 }
 
-void prjm_eel_memory_free_block(projectm_eval_mem_buffer buffer, int block)
+void prjm_eval_memory_free_block(projectm_eval_mem_buffer buffer, int block)
 {
     if (block < 0)
     {
         block = 0;
     }
-    if (block < PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK)
+    if (block < PRJM_EVAL_MEM_BLOCKS * PRJM_EVAL_MEM_ITEMSPERBLOCK)
     {
         // Set int following the block pointer to the starting index of the first index/block to be freed.
     }
 }
 
-PRJM_EVAL_F* prjm_eel_memory_allocate(projectm_eval_mem_buffer buffer, int index)
+PRJM_EVAL_F* prjm_eval_memory_allocate(projectm_eval_mem_buffer buffer, int index)
 {
     int block;
     if (!buffer)
@@ -81,7 +81,7 @@ PRJM_EVAL_F* prjm_eel_memory_allocate(projectm_eval_mem_buffer buffer, int index
         return NULL;
     }
 
-    if (index >= 0 && (block = index / PRJM_EEL_MEM_ITEMSPERBLOCK) < PRJM_EEL_MEM_BLOCKS)
+    if (index >= 0 && (block = index / PRJM_EVAL_MEM_ITEMSPERBLOCK) < PRJM_EVAL_MEM_BLOCKS)
     {
         PRJM_EVAL_F* cur_block = buffer[block];
 
@@ -91,7 +91,7 @@ PRJM_EVAL_F* prjm_eel_memory_allocate(projectm_eval_mem_buffer buffer, int index
 
             if (!(cur_block = buffer[block]))
             {
-                cur_block = buffer[block] = calloc(sizeof(PRJM_EVAL_F), PRJM_EEL_MEM_ITEMSPERBLOCK);
+                cur_block = buffer[block] = calloc(sizeof(PRJM_EVAL_F), PRJM_EVAL_MEM_ITEMSPERBLOCK);
             }
             if (!cur_block)
             {
@@ -101,16 +101,16 @@ PRJM_EVAL_F* prjm_eel_memory_allocate(projectm_eval_mem_buffer buffer, int index
             projectm_eval_memory_host_unlock_mutex();
         }
 
-        return cur_block + (index & (PRJM_EEL_MEM_ITEMSPERBLOCK - 1));
+        return cur_block + (index & (PRJM_EVAL_MEM_ITEMSPERBLOCK - 1));
     }
 
     return NULL;
 }
 
-PRJM_EVAL_F* prjm_eel_memory_copy(projectm_eval_mem_buffer buffer,
-                                  PRJM_EVAL_F* dest,
-                                  PRJM_EVAL_F* src,
-                                  PRJM_EVAL_F* len)
+PRJM_EVAL_F* prjm_eval_memory_copy(projectm_eval_mem_buffer buffer,
+                                   PRJM_EVAL_F* dest,
+                                   PRJM_EVAL_F* src,
+                                   PRJM_EVAL_F* len)
 {
     int offset_dest = (int) (*dest + 0.0001);
     int offset_src = (int) (*src + 0.0001);
@@ -137,11 +137,11 @@ PRJM_EVAL_F* prjm_eel_memory_copy(projectm_eval_mem_buffer buffer,
     {
         int copy_length = count;
 
-        int max_dst_len = PRJM_EEL_MEM_ITEMSPERBLOCK - (offset_dest & (PRJM_EEL_MEM_ITEMSPERBLOCK - 1));
-        int max_src_len = PRJM_EEL_MEM_ITEMSPERBLOCK - (offset_src & (PRJM_EEL_MEM_ITEMSPERBLOCK - 1));
+        int max_dst_len = PRJM_EVAL_MEM_ITEMSPERBLOCK - (offset_dest & (PRJM_EVAL_MEM_ITEMSPERBLOCK - 1));
+        int max_src_len = PRJM_EVAL_MEM_ITEMSPERBLOCK - (offset_src & (PRJM_EVAL_MEM_ITEMSPERBLOCK - 1));
 
-        if (offset_dest >= PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK ||
-            offset_src >= PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK)
+        if (offset_dest >= PRJM_EVAL_MEM_BLOCKS * PRJM_EVAL_MEM_ITEMSPERBLOCK ||
+            offset_src >= PRJM_EVAL_MEM_BLOCKS * PRJM_EVAL_MEM_ITEMSPERBLOCK)
         {
             break;
         }
@@ -160,8 +160,8 @@ PRJM_EVAL_F* prjm_eel_memory_copy(projectm_eval_mem_buffer buffer,
             break;
         }
 
-        src_pointer = prjm_eel_memory_allocate(buffer, offset_src);
-        dst_pointer = prjm_eel_memory_allocate(buffer, offset_dest);
+        src_pointer = prjm_eval_memory_allocate(buffer, offset_src);
+        dst_pointer = prjm_eval_memory_allocate(buffer, offset_dest);
         if (!src_pointer || !dst_pointer)
         {
             break;
@@ -176,10 +176,10 @@ PRJM_EVAL_F* prjm_eel_memory_copy(projectm_eval_mem_buffer buffer,
     return dest;
 }
 
-PRJM_EVAL_F* prjm_eel_memory_set(projectm_eval_mem_buffer buffer,
-                                 PRJM_EVAL_F* dest,
-                                 PRJM_EVAL_F* value,
-                                 PRJM_EVAL_F* len)
+PRJM_EVAL_F* prjm_eval_memory_set(projectm_eval_mem_buffer buffer,
+                                  PRJM_EVAL_F* dest,
+                                  PRJM_EVAL_F* value,
+                                  PRJM_EVAL_F* len)
 {
     int offset_dest = (int) (*dest + 0.0001);
     int count = (int) (*len + 0.0001);
@@ -191,14 +191,14 @@ PRJM_EVAL_F* prjm_eel_memory_set(projectm_eval_mem_buffer buffer,
         offset_dest = 0;
     }
 
-    if (offset_dest >= PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK)
+    if (offset_dest >= PRJM_EVAL_MEM_BLOCKS * PRJM_EVAL_MEM_ITEMSPERBLOCK)
     {
         return dest;
     }
 
-    if (offset_dest + count > PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK)
+    if (offset_dest + count > PRJM_EVAL_MEM_BLOCKS * PRJM_EVAL_MEM_ITEMSPERBLOCK)
     {
-        count = PRJM_EEL_MEM_BLOCKS * PRJM_EEL_MEM_ITEMSPERBLOCK - offset_dest;
+        count = PRJM_EVAL_MEM_BLOCKS * PRJM_EVAL_MEM_ITEMSPERBLOCK - offset_dest;
     }
 
     if (count < 1)
@@ -209,13 +209,13 @@ PRJM_EVAL_F* prjm_eel_memory_set(projectm_eval_mem_buffer buffer,
     PRJM_EVAL_F val = *value;
     while(count > 0)
     {
-        PRJM_EVAL_F* block_pointer = prjm_eel_memory_allocate(buffer, offset_dest);
+        PRJM_EVAL_F* block_pointer = prjm_eval_memory_allocate(buffer, offset_dest);
         if (!block_pointer)
         {
             break;
         }
 
-        int block_count = PRJM_EEL_MEM_ITEMSPERBLOCK - (offset_dest & (PRJM_EEL_MEM_ITEMSPERBLOCK - 1));
+        int block_count = PRJM_EVAL_MEM_ITEMSPERBLOCK - (offset_dest & (PRJM_EVAL_MEM_ITEMSPERBLOCK - 1));
         if (block_count > count)
         {
             block_count = count;

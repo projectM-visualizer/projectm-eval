@@ -5,8 +5,8 @@
 %option 8bit
 %option yylineno
 %option bison-bridge bison-locations
-%option prefix="prjm_eel_"
-%option extra-type="struct prjm_eel_scanner_state *"
+%option prefix="prjm_eval_"
+%option extra-type="struct prjm_eval_scanner_state *"
 %option never-interactive
 
 %top{
@@ -70,7 +70,7 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
                         return NUM;
                     }
 {NAME}              {
-                        if (prjm_eel_compiler_name_is_function(cctx, yytext))
+                        if (prjm_eval_compiler_name_is_function(cctx, yytext))
                         {
                             yylval->FUNC = strdup(yytext);
                             return FUNC;
@@ -119,9 +119,9 @@ NAME            [_a-zA-Z][_a-zA-Z0-9]*
 ";"			        { return ';'; }
 
     /* Ignored whitespace */
-[ \r\n\t\v\f]	        { }
+[ \r\n\t\v\f]	    { }
 
     /* All other tokens are invalid */
-.                   { return PRJM_EEL_UNDEF; }
+.                   { return PRJM_EVAL_UNDEF; }
 
 %%

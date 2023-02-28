@@ -37,7 +37,7 @@ void NSEEL_VM_resetvars(NSEEL_VMCTX ctx)
 
 EEL_F *NSEEL_VM_regvar(NSEEL_VMCTX ctx, const char *name)
 {
-    return prjm_eel_register_variable((struct projectm_eval_context*)ctx, name);
+    return prjm_eval_register_variable((struct projectm_eval_context*) ctx, name);
 }
 
 void NSEEL_VM_freeRAM(NSEEL_VMCTX ctx)

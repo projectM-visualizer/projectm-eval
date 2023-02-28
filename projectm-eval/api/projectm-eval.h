@@ -31,7 +31,7 @@ struct projectm_eval_context;
 
 /**
  * @brief Opaque type for compiled programs.
- * This code handle refers to a single compiled program. A program is always tied to a prjm_eel_context_t
+ * This code handle refers to a single compiled program. A program is always tied to a prjm_eval_context_t
  * and will become invalid once the context has been destroyed. A context can contain any number of code
  * handles, and code handles can be destroyed and recompiled at any time.
  */
@@ -79,7 +79,7 @@ void projectm_eval_memory_global_destroy();
 
 /**
  * @brief Creates a new execution context.
- * @param global_mem An optional pointer to a prjm_eel_mem_buffer_t which will be used as the global
+ * @param global_mem An optional pointer to a prjm_eval_mem_buffer_t which will be used as the global
  *                   memory buffer (gmegabuf) or NULL to use the built-in global buffer.
  *                   This buffer must not be destroyed before he last context using it was destroyed.
  * @param global_variables An optional pointer to an array of 100 variables to be used as global storage for

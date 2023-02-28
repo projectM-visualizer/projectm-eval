@@ -1,6 +1,6 @@
-#ifndef prjm_eel_HEADER_H
-#define prjm_eel_HEADER_H 1
-#define prjm_eel_IN_HEADER 1
+#ifndef prjm_eval_HEADER_H
+#define prjm_eval_HEADER_H 1
+#define prjm_eval_IN_HEADER 1
 
 #line 13 "Scanner.l"
 #include "CompilerTypes.h"
@@ -57,228 +57,228 @@
 
 
 #ifdef yy_create_buffer
-#define prjm_eel__create_buffer_ALREADY_DEFINED
+#define prjm_eval__create_buffer_ALREADY_DEFINED
 #else
-#define yy_create_buffer prjm_eel__create_buffer
+#define yy_create_buffer prjm_eval__create_buffer
 #endif
 
     
 #ifdef yy_delete_buffer
-#define prjm_eel__delete_buffer_ALREADY_DEFINED
+#define prjm_eval__delete_buffer_ALREADY_DEFINED
 #else
-#define yy_delete_buffer prjm_eel__delete_buffer
+#define yy_delete_buffer prjm_eval__delete_buffer
 #endif
 
     
 #ifdef yy_scan_buffer
-#define prjm_eel__scan_buffer_ALREADY_DEFINED
+#define prjm_eval__scan_buffer_ALREADY_DEFINED
 #else
-#define yy_scan_buffer prjm_eel__scan_buffer
+#define yy_scan_buffer prjm_eval__scan_buffer
 #endif
 
     
 #ifdef yy_scan_string
-#define prjm_eel__scan_string_ALREADY_DEFINED
+#define prjm_eval__scan_string_ALREADY_DEFINED
 #else
-#define yy_scan_string prjm_eel__scan_string
+#define yy_scan_string prjm_eval__scan_string
 #endif
 
     
 #ifdef yy_scan_bytes
-#define prjm_eel__scan_bytes_ALREADY_DEFINED
+#define prjm_eval__scan_bytes_ALREADY_DEFINED
 #else
-#define yy_scan_bytes prjm_eel__scan_bytes
+#define yy_scan_bytes prjm_eval__scan_bytes
 #endif
 
     
 #ifdef yy_init_buffer
-#define prjm_eel__init_buffer_ALREADY_DEFINED
+#define prjm_eval__init_buffer_ALREADY_DEFINED
 #else
-#define yy_init_buffer prjm_eel__init_buffer
+#define yy_init_buffer prjm_eval__init_buffer
 #endif
 
     
 #ifdef yy_flush_buffer
-#define prjm_eel__flush_buffer_ALREADY_DEFINED
+#define prjm_eval__flush_buffer_ALREADY_DEFINED
 #else
-#define yy_flush_buffer prjm_eel__flush_buffer
+#define yy_flush_buffer prjm_eval__flush_buffer
 #endif
 
     
 #ifdef yy_load_buffer_state
-#define prjm_eel__load_buffer_state_ALREADY_DEFINED
+#define prjm_eval__load_buffer_state_ALREADY_DEFINED
 #else
-#define yy_load_buffer_state prjm_eel__load_buffer_state
+#define yy_load_buffer_state prjm_eval__load_buffer_state
 #endif
 
     
 #ifdef yy_switch_to_buffer
-#define prjm_eel__switch_to_buffer_ALREADY_DEFINED
+#define prjm_eval__switch_to_buffer_ALREADY_DEFINED
 #else
-#define yy_switch_to_buffer prjm_eel__switch_to_buffer
+#define yy_switch_to_buffer prjm_eval__switch_to_buffer
 #endif
 
     
 #ifdef yypush_buffer_state
-#define prjm_eel_push_buffer_state_ALREADY_DEFINED
+#define prjm_eval_push_buffer_state_ALREADY_DEFINED
 #else
-#define yypush_buffer_state prjm_eel_push_buffer_state
+#define yypush_buffer_state prjm_eval_push_buffer_state
 #endif
 
     
 #ifdef yypop_buffer_state
-#define prjm_eel_pop_buffer_state_ALREADY_DEFINED
+#define prjm_eval_pop_buffer_state_ALREADY_DEFINED
 #else
-#define yypop_buffer_state prjm_eel_pop_buffer_state
+#define yypop_buffer_state prjm_eval_pop_buffer_state
 #endif
 
     
 #ifdef yyensure_buffer_stack
-#define prjm_eel_ensure_buffer_stack_ALREADY_DEFINED
+#define prjm_eval_ensure_buffer_stack_ALREADY_DEFINED
 #else
-#define yyensure_buffer_stack prjm_eel_ensure_buffer_stack
+#define yyensure_buffer_stack prjm_eval_ensure_buffer_stack
 #endif
 
     
 #ifdef yylex
-#define prjm_eel_lex_ALREADY_DEFINED
+#define prjm_eval_lex_ALREADY_DEFINED
 #else
-#define yylex prjm_eel_lex
+#define yylex prjm_eval_lex
 #endif
 
     
 #ifdef yyrestart
-#define prjm_eel_restart_ALREADY_DEFINED
+#define prjm_eval_restart_ALREADY_DEFINED
 #else
-#define yyrestart prjm_eel_restart
+#define yyrestart prjm_eval_restart
 #endif
 
     
 #ifdef yylex_init
-#define prjm_eel_lex_init_ALREADY_DEFINED
+#define prjm_eval_lex_init_ALREADY_DEFINED
 #else
-#define yylex_init prjm_eel_lex_init
+#define yylex_init prjm_eval_lex_init
 #endif
 
     
 #ifdef yylex_init_extra
-#define prjm_eel_lex_init_extra_ALREADY_DEFINED
+#define prjm_eval_lex_init_extra_ALREADY_DEFINED
 #else
-#define yylex_init_extra prjm_eel_lex_init_extra
+#define yylex_init_extra prjm_eval_lex_init_extra
 #endif
 
     
 #ifdef yylex_destroy
-#define prjm_eel_lex_destroy_ALREADY_DEFINED
+#define prjm_eval_lex_destroy_ALREADY_DEFINED
 #else
-#define yylex_destroy prjm_eel_lex_destroy
+#define yylex_destroy prjm_eval_lex_destroy
 #endif
 
     
 #ifdef yyget_debug
-#define prjm_eel_get_debug_ALREADY_DEFINED
+#define prjm_eval_get_debug_ALREADY_DEFINED
 #else
-#define yyget_debug prjm_eel_get_debug
+#define yyget_debug prjm_eval_get_debug
 #endif
 
     
 #ifdef yyset_debug
-#define prjm_eel_set_debug_ALREADY_DEFINED
+#define prjm_eval_set_debug_ALREADY_DEFINED
 #else
-#define yyset_debug prjm_eel_set_debug
+#define yyset_debug prjm_eval_set_debug
 #endif
 
     
 #ifdef yyget_extra
-#define prjm_eel_get_extra_ALREADY_DEFINED
+#define prjm_eval_get_extra_ALREADY_DEFINED
 #else
-#define yyget_extra prjm_eel_get_extra
+#define yyget_extra prjm_eval_get_extra
 #endif
 
     
 #ifdef yyset_extra
-#define prjm_eel_set_extra_ALREADY_DEFINED
+#define prjm_eval_set_extra_ALREADY_DEFINED
 #else
-#define yyset_extra prjm_eel_set_extra
+#define yyset_extra prjm_eval_set_extra
 #endif
 
     
 #ifdef yyget_in
-#define prjm_eel_get_in_ALREADY_DEFINED
+#define prjm_eval_get_in_ALREADY_DEFINED
 #else
-#define yyget_in prjm_eel_get_in
+#define yyget_in prjm_eval_get_in
 #endif
 
     
 #ifdef yyset_in
-#define prjm_eel_set_in_ALREADY_DEFINED
+#define prjm_eval_set_in_ALREADY_DEFINED
 #else
-#define yyset_in prjm_eel_set_in
+#define yyset_in prjm_eval_set_in
 #endif
 
     
 #ifdef yyget_out
-#define prjm_eel_get_out_ALREADY_DEFINED
+#define prjm_eval_get_out_ALREADY_DEFINED
 #else
-#define yyget_out prjm_eel_get_out
+#define yyget_out prjm_eval_get_out
 #endif
 
     
 #ifdef yyset_out
-#define prjm_eel_set_out_ALREADY_DEFINED
+#define prjm_eval_set_out_ALREADY_DEFINED
 #else
-#define yyset_out prjm_eel_set_out
+#define yyset_out prjm_eval_set_out
 #endif
 
     
 #ifdef yyget_leng
-#define prjm_eel_get_leng_ALREADY_DEFINED
+#define prjm_eval_get_leng_ALREADY_DEFINED
 #else
-#define yyget_leng prjm_eel_get_leng
+#define yyget_leng prjm_eval_get_leng
 #endif
 
     
 #ifdef yyget_text
-#define prjm_eel_get_text_ALREADY_DEFINED
+#define prjm_eval_get_text_ALREADY_DEFINED
 #else
-#define yyget_text prjm_eel_get_text
+#define yyget_text prjm_eval_get_text
 #endif
 
     
 #ifdef yyget_lineno
-#define prjm_eel_get_lineno_ALREADY_DEFINED
+#define prjm_eval_get_lineno_ALREADY_DEFINED
 #else
-#define yyget_lineno prjm_eel_get_lineno
+#define yyget_lineno prjm_eval_get_lineno
 #endif
 
     
 #ifdef yyset_lineno
-#define prjm_eel_set_lineno_ALREADY_DEFINED
+#define prjm_eval_set_lineno_ALREADY_DEFINED
 #else
-#define yyset_lineno prjm_eel_set_lineno
+#define yyset_lineno prjm_eval_set_lineno
 #endif
 
     
         
 #ifdef yyget_column
-#define prjm_eel_get_column_ALREADY_DEFINED
+#define prjm_eval_get_column_ALREADY_DEFINED
 #else
-#define yyget_column prjm_eel_get_column
+#define yyget_column prjm_eval_get_column
 #endif
 
         
 #ifdef yyset_column
-#define prjm_eel_set_column_ALREADY_DEFINED
+#define prjm_eval_set_column_ALREADY_DEFINED
 #else
-#define yyset_column prjm_eel_set_column
+#define yyset_column prjm_eval_set_column
 #endif
 
     
     
 #ifdef yywrap
-#define prjm_eel_wrap_ALREADY_DEFINED
+#define prjm_eval_wrap_ALREADY_DEFINED
 #else
-#define yywrap prjm_eel_wrap
+#define yywrap prjm_eval_wrap
 #endif
 
 
@@ -286,16 +286,16 @@
 
     
 #ifdef yyget_lval
-#define prjm_eel_get_lval_ALREADY_DEFINED
+#define prjm_eval_get_lval_ALREADY_DEFINED
 #else
-#define yyget_lval prjm_eel_get_lval
+#define yyget_lval prjm_eval_get_lval
 #endif
 
     
 #ifdef yyset_lval
-#define prjm_eel_set_lval_ALREADY_DEFINED
+#define prjm_eval_set_lval_ALREADY_DEFINED
 #else
-#define yyset_lval prjm_eel_set_lval
+#define yyset_lval prjm_eval_set_lval
 #endif
 
 
@@ -303,39 +303,39 @@
 
     
 #ifdef yyget_lloc
-#define prjm_eel_get_lloc_ALREADY_DEFINED
+#define prjm_eval_get_lloc_ALREADY_DEFINED
 #else
-#define yyget_lloc prjm_eel_get_lloc
+#define yyget_lloc prjm_eval_get_lloc
 #endif
 
     
 #ifdef yyset_lloc
-#define prjm_eel_set_lloc_ALREADY_DEFINED
+#define prjm_eval_set_lloc_ALREADY_DEFINED
 #else
-#define yyset_lloc prjm_eel_set_lloc
+#define yyset_lloc prjm_eval_set_lloc
 #endif
 
 
 
 
 #ifdef yyalloc
-#define prjm_eel_alloc_ALREADY_DEFINED
+#define prjm_eval_alloc_ALREADY_DEFINED
 #else
-#define yyalloc prjm_eel_alloc
+#define yyalloc prjm_eval_alloc
 #endif
 
     
 #ifdef yyrealloc
-#define prjm_eel_realloc_ALREADY_DEFINED
+#define prjm_eval_realloc_ALREADY_DEFINED
 #else
-#define yyrealloc prjm_eel_realloc
+#define yyrealloc prjm_eval_realloc
 #endif
 
     
 #ifdef yyfree
-#define prjm_eel_free_ALREADY_DEFINED
+#define prjm_eval_free_ALREADY_DEFINED
 #else
-#define yyfree prjm_eel_free
+#define yyfree prjm_eval_free
 #endif
 
 
@@ -603,7 +603,7 @@ void yyfree ( void * , yyscan_t yyscanner );
 
 /* Begin user sect3 */
 
-#define prjm_eel_wrap(yyscanner) (/*CONSTCOND*/1)
+#define prjm_eval_wrap(yyscanner) (/*CONSTCOND*/1)
 #define YY_SKIP_YYWRAP
 
 
@@ -638,7 +638,7 @@ void yyfree ( void * , yyscan_t yyscanner );
 
 
 
-#define YY_EXTRA_TYPE struct prjm_eel_scanner_state *
+#define YY_EXTRA_TYPE struct prjm_eval_scanner_state *
 
 
 
@@ -855,152 +855,152 @@ extern int yylex \
 #undef YY_DECL
 #endif
 
-#ifndef prjm_eel__create_buffer_ALREADY_DEFINED
+#ifndef prjm_eval__create_buffer_ALREADY_DEFINED
 #undef yy_create_buffer
 #endif
-#ifndef prjm_eel__delete_buffer_ALREADY_DEFINED
+#ifndef prjm_eval__delete_buffer_ALREADY_DEFINED
 #undef yy_delete_buffer
 #endif
-#ifndef prjm_eel__scan_buffer_ALREADY_DEFINED
+#ifndef prjm_eval__scan_buffer_ALREADY_DEFINED
 #undef yy_scan_buffer
 #endif
-#ifndef prjm_eel__scan_string_ALREADY_DEFINED
+#ifndef prjm_eval__scan_string_ALREADY_DEFINED
 #undef yy_scan_string
 #endif
-#ifndef prjm_eel__scan_bytes_ALREADY_DEFINED
+#ifndef prjm_eval__scan_bytes_ALREADY_DEFINED
 #undef yy_scan_bytes
 #endif
-#ifndef prjm_eel__init_buffer_ALREADY_DEFINED
+#ifndef prjm_eval__init_buffer_ALREADY_DEFINED
 #undef yy_init_buffer
 #endif
-#ifndef prjm_eel__flush_buffer_ALREADY_DEFINED
+#ifndef prjm_eval__flush_buffer_ALREADY_DEFINED
 #undef yy_flush_buffer
 #endif
-#ifndef prjm_eel__load_buffer_state_ALREADY_DEFINED
+#ifndef prjm_eval__load_buffer_state_ALREADY_DEFINED
 #undef yy_load_buffer_state
 #endif
-#ifndef prjm_eel__switch_to_buffer_ALREADY_DEFINED
+#ifndef prjm_eval__switch_to_buffer_ALREADY_DEFINED
 #undef yy_switch_to_buffer
 #endif
-#ifndef prjm_eel_push_buffer_state_ALREADY_DEFINED
+#ifndef prjm_eval_push_buffer_state_ALREADY_DEFINED
 #undef yypush_buffer_state
 #endif
-#ifndef prjm_eel_pop_buffer_state_ALREADY_DEFINED
+#ifndef prjm_eval_pop_buffer_state_ALREADY_DEFINED
 #undef yypop_buffer_state
 #endif
-#ifndef prjm_eel_ensure_buffer_stack_ALREADY_DEFINED
+#ifndef prjm_eval_ensure_buffer_stack_ALREADY_DEFINED
 #undef yyensure_buffer_stack
 #endif
-#ifndef prjm_eel_lex_ALREADY_DEFINED
+#ifndef prjm_eval_lex_ALREADY_DEFINED
 #undef yylex
 #endif
-#ifndef prjm_eel_restart_ALREADY_DEFINED
+#ifndef prjm_eval_restart_ALREADY_DEFINED
 #undef yyrestart
 #endif
-#ifndef prjm_eel_lex_init_ALREADY_DEFINED
+#ifndef prjm_eval_lex_init_ALREADY_DEFINED
 #undef yylex_init
 #endif
-#ifndef prjm_eel_lex_init_extra_ALREADY_DEFINED
+#ifndef prjm_eval_lex_init_extra_ALREADY_DEFINED
 #undef yylex_init_extra
 #endif
-#ifndef prjm_eel_lex_destroy_ALREADY_DEFINED
+#ifndef prjm_eval_lex_destroy_ALREADY_DEFINED
 #undef yylex_destroy
 #endif
-#ifndef prjm_eel_get_debug_ALREADY_DEFINED
+#ifndef prjm_eval_get_debug_ALREADY_DEFINED
 #undef yyget_debug
 #endif
-#ifndef prjm_eel_set_debug_ALREADY_DEFINED
+#ifndef prjm_eval_set_debug_ALREADY_DEFINED
 #undef yyset_debug
 #endif
-#ifndef prjm_eel_get_extra_ALREADY_DEFINED
+#ifndef prjm_eval_get_extra_ALREADY_DEFINED
 #undef yyget_extra
 #endif
-#ifndef prjm_eel_set_extra_ALREADY_DEFINED
+#ifndef prjm_eval_set_extra_ALREADY_DEFINED
 #undef yyset_extra
 #endif
-#ifndef prjm_eel_get_in_ALREADY_DEFINED
+#ifndef prjm_eval_get_in_ALREADY_DEFINED
 #undef yyget_in
 #endif
-#ifndef prjm_eel_set_in_ALREADY_DEFINED
+#ifndef prjm_eval_set_in_ALREADY_DEFINED
 #undef yyset_in
 #endif
-#ifndef prjm_eel_get_out_ALREADY_DEFINED
+#ifndef prjm_eval_get_out_ALREADY_DEFINED
 #undef yyget_out
 #endif
-#ifndef prjm_eel_set_out_ALREADY_DEFINED
+#ifndef prjm_eval_set_out_ALREADY_DEFINED
 #undef yyset_out
 #endif
-#ifndef prjm_eel_get_leng_ALREADY_DEFINED
+#ifndef prjm_eval_get_leng_ALREADY_DEFINED
 #undef yyget_leng
 #endif
-#ifndef prjm_eel_get_text_ALREADY_DEFINED
+#ifndef prjm_eval_get_text_ALREADY_DEFINED
 #undef yyget_text
 #endif
-#ifndef prjm_eel_get_lineno_ALREADY_DEFINED
+#ifndef prjm_eval_get_lineno_ALREADY_DEFINED
 #undef yyget_lineno
 #endif
-#ifndef prjm_eel_set_lineno_ALREADY_DEFINED
+#ifndef prjm_eval_set_lineno_ALREADY_DEFINED
 #undef yyset_lineno
 #endif
-#ifndef prjm_eel_get_column_ALREADY_DEFINED
+#ifndef prjm_eval_get_column_ALREADY_DEFINED
 #undef yyget_column
 #endif
-#ifndef prjm_eel_set_column_ALREADY_DEFINED
+#ifndef prjm_eval_set_column_ALREADY_DEFINED
 #undef yyset_column
 #endif
-#ifndef prjm_eel_wrap_ALREADY_DEFINED
+#ifndef prjm_eval_wrap_ALREADY_DEFINED
 #undef yywrap
 #endif
-#ifndef prjm_eel_get_lval_ALREADY_DEFINED
+#ifndef prjm_eval_get_lval_ALREADY_DEFINED
 #undef yyget_lval
 #endif
-#ifndef prjm_eel_set_lval_ALREADY_DEFINED
+#ifndef prjm_eval_set_lval_ALREADY_DEFINED
 #undef yyset_lval
 #endif
-#ifndef prjm_eel_get_lloc_ALREADY_DEFINED
+#ifndef prjm_eval_get_lloc_ALREADY_DEFINED
 #undef yyget_lloc
 #endif
-#ifndef prjm_eel_set_lloc_ALREADY_DEFINED
+#ifndef prjm_eval_set_lloc_ALREADY_DEFINED
 #undef yyset_lloc
 #endif
-#ifndef prjm_eel_alloc_ALREADY_DEFINED
+#ifndef prjm_eval_alloc_ALREADY_DEFINED
 #undef yyalloc
 #endif
-#ifndef prjm_eel_realloc_ALREADY_DEFINED
+#ifndef prjm_eval_realloc_ALREADY_DEFINED
 #undef yyrealloc
 #endif
-#ifndef prjm_eel_free_ALREADY_DEFINED
+#ifndef prjm_eval_free_ALREADY_DEFINED
 #undef yyfree
 #endif
-#ifndef prjm_eel_text_ALREADY_DEFINED
+#ifndef prjm_eval_text_ALREADY_DEFINED
 #undef yytext
 #endif
-#ifndef prjm_eel_leng_ALREADY_DEFINED
+#ifndef prjm_eval_leng_ALREADY_DEFINED
 #undef yyleng
 #endif
-#ifndef prjm_eel_in_ALREADY_DEFINED
+#ifndef prjm_eval_in_ALREADY_DEFINED
 #undef yyin
 #endif
-#ifndef prjm_eel_out_ALREADY_DEFINED
+#ifndef prjm_eval_out_ALREADY_DEFINED
 #undef yyout
 #endif
-#ifndef prjm_eel__flex_debug_ALREADY_DEFINED
+#ifndef prjm_eval__flex_debug_ALREADY_DEFINED
 #undef yy_flex_debug
 #endif
-#ifndef prjm_eel_lineno_ALREADY_DEFINED
+#ifndef prjm_eval_lineno_ALREADY_DEFINED
 #undef yylineno
 #endif
-#ifndef prjm_eel_tables_fload_ALREADY_DEFINED
+#ifndef prjm_eval_tables_fload_ALREADY_DEFINED
 #undef yytables_fload
 #endif
-#ifndef prjm_eel_tables_destroy_ALREADY_DEFINED
+#ifndef prjm_eval_tables_destroy_ALREADY_DEFINED
 #undef yytables_destroy
 #endif
-#ifndef prjm_eel_TABLES_NAME_ALREADY_DEFINED
+#ifndef prjm_eval_TABLES_NAME_ALREADY_DEFINED
 #undef yyTABLES_NAME
 #endif
 
 
 
-#undef prjm_eel_IN_HEADER
-#endif /* prjm_eel_HEADER_H */
+#undef prjm_eval_IN_HEADER
+#endif /* prjm_eval_HEADER_H */
