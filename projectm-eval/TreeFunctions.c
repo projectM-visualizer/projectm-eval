@@ -114,10 +114,8 @@ static const PRJM_EVAL_F close_factor = COMPARE_CLOSEFACTOR;
  */
 #if PRJM_F_SIZE == 4
 static const PRJM_EVAL_F close_factor_low = 1e-41;
-#define LRINT lrintf
 #else
 static const PRJM_EVAL_F close_factor_low = 1e-300;
-#define LRINT lrint
 #endif
 
 /* Maximum number of loop iterations */
@@ -360,7 +358,7 @@ prjm_eel_function_decl(mem)
     PRJM_EVAL_F* index_ptr = &ctx->value;
     invoke_arg(0, &index_ptr);
 
-    PRJM_EVAL_F* mem_addr = prjm_eel_memory_allocate(ctx->memory_buffer, (int) lrint(*index_ptr + 0.0001));
+    PRJM_EVAL_F* mem_addr = prjm_eel_memory_allocate(ctx->memory_buffer, (int)(*index_ptr + 0.0001));
     if (mem_addr)
     {
         assign_ret_ref(mem_addr);
@@ -750,7 +748,7 @@ prjm_eel_function_decl(orop)
     invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((PRJM_EVAL_F) (LRINT(**ret_val) | LRINT(*val2_ptr)));
+    assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) | (int)(*val2_ptr)));
 }
 
 prjm_eel_function_decl(andop)
@@ -763,7 +761,7 @@ prjm_eel_function_decl(andop)
     invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((PRJM_EVAL_F) (LRINT(**ret_val) & LRINT(*val2_ptr)));
+    assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) & (int)(*val2_ptr)));
 }
 
 prjm_eel_function_decl(modop)
@@ -776,7 +774,13 @@ prjm_eel_function_decl(modop)
     invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
-    assign_ret_val((PRJM_EVAL_F) (LRINT(**ret_val) % LRINT(*val2_ptr)));
+    int divisor = (int) *val2_ptr;
+    if (divisor == 0)
+    {
+        assign_ret_val(0.0);
+        return;
+    }
+    assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) % divisor));
 }
 
 prjm_eel_function_decl(powop)
