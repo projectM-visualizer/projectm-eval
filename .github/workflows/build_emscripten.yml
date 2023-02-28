@@ -35,7 +35,6 @@ jobs:
       - name: Update Packages
         run: |
           sudo apt-get update
-          sudo apt-get upgrade
 
       - name: Configure Release
         run: emcmake cmake -G "Unix Makefiles" -S "${{ github.workspace }}" -B "${{ github.workspace }}/cmake-build" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/install" -DCMAKE_VERBOSE_MAKEFILE=YES
