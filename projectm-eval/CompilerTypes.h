@@ -88,7 +88,6 @@ typedef struct prjm_eel_exptreenode_list_item
 typedef struct prjm_eel_exptreenode
 {
     prjm_eel_expr_func_t* func;
-    void* math_func;
     PRJM_EVAL_F value; /*!< A constant, numerical value. Also used as temp value. */
     union
     {
