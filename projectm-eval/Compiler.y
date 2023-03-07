@@ -63,7 +63,8 @@ typedef void* yyscan_t;
 %left '>' ABOEQ
 %left '<' BELEQ
 %left '-' '+'
-%left '*' '/' '%'
+%left '*' '/'
+%left '%'
 %right '!'
 %left '^'
 %precedence NEG POS /* unary minus or plus */
