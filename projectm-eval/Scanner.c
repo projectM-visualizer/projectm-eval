@@ -16,6 +16,8 @@
         yylloc_param->last_column = yycolumn;    \
     }
 
+struct prjm_eval_scanner_state;
+
 
 
 #define  YY_INT_ALIGNED short int
@@ -345,6 +347,7 @@
 /* First, we deal with  platform-specific or compiler-specific issues. */
 
 /* begin standard C headers. */
+
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -361,8 +364,8 @@
 
 #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 
-/* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
- * if you want the limit (max/min) macros for int types. 
+/* C++ systems might need __STDC_LIMIT_MACROS defined before including
+ * <stdint.h>, if you want the limit (max/min) macros for int types.
  */
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
@@ -752,8 +755,8 @@ static void yynoreturn yy_fatal_error ( const char* msg , yyscan_t yyscanner );
 	yyg->yy_hold_char = *yy_cp; \
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
-#define YY_NUM_RULES 49
-#define YY_END_OF_BUFFER 50
+#define YY_NUM_RULES 51
+#define YY_END_OF_BUFFER 52
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -763,10 +766,10 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[80] =
     {   0,
-        0,    0,    0,    0,    0,    0,   50,   48,   47,   47,
-       37,   48,   35,   48,   39,   40,   33,   31,   45,   32,
-       48,   34,   13,   44,   46,   29,   38,   30,   43,   14,
-       14,   41,   42,   36,   48,   49,    3,   49,    6,    5,
+        0,    0,    0,    0,    0,    0,   52,   50,   49,   49,
+       39,   50,   35,   37,   41,   42,   33,   31,   47,   32,
+       50,   34,   13,   46,   48,   29,   40,   30,   45,   14,
+       14,   43,   44,   36,   38,   51,    3,   51,    6,    5,
        26,    0,   10,    0,    0,   17,   28,   19,   21,   15,
        16,   13,    1,    4,   20,   13,   13,    0,   24,   23,
        25,   14,   14,   22,   18,   27,    2,    0,    0,    9,
@@ -886,11 +889,11 @@ static const flex_int16_t yy_chk[169] =
 
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[50] =
+static const flex_int32_t yy_rule_can_match_eol[52] =
     {   0,
 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 1, 0, 0,     };
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,     };
 
 /* The intent behind this definition is that it'll catch
  * any uses of REJECT which flex missed.
@@ -915,7 +918,6 @@ static const flex_int32_t yy_rule_can_match_eol[50] =
 
 
 
-    
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
@@ -923,7 +925,6 @@ static const flex_int32_t yy_rule_can_match_eol[50] =
  */
 #include <unistd.h>
 #endif
-    
 
 
 
@@ -1545,58 +1546,66 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-{ return '!'; }
+{ return '%'; }
 	YY_BREAK
 case 38:
+YY_RULE_SETUP
+{ return '^'; }
+	YY_BREAK
+case 39:
+YY_RULE_SETUP
+{ return '!'; }
+	YY_BREAK
+case 40:
 YY_RULE_SETUP
 { return '='; }
 	YY_BREAK
 /* Syntactic elements */
-case 39:
+case 41:
 YY_RULE_SETUP
 { return '('; }
 	YY_BREAK
-case 40:
+case 42:
 YY_RULE_SETUP
 { return ')'; }
 	YY_BREAK
-case 41:
+case 43:
 YY_RULE_SETUP
 { return '['; }
 	YY_BREAK
-case 42:
+case 44:
 YY_RULE_SETUP
 { return ']'; }
 	YY_BREAK
-case 43:
+case 45:
 YY_RULE_SETUP
 { return '?'; }
 	YY_BREAK
-case 44:
+case 46:
 YY_RULE_SETUP
 { return ':'; }
 	YY_BREAK
-case 45:
+case 47:
 YY_RULE_SETUP
 { return ','; }
 	YY_BREAK
 /* Expression terminator */
-case 46:
+case 48:
 YY_RULE_SETUP
 { return ';'; }
 	YY_BREAK
 /* Ignored whitespace */
-case 47:
-/* rule 47 can match eol */
+case 49:
+/* rule 49 can match eol */
 YY_RULE_SETUP
 { }
 	YY_BREAK
 /* All other tokens are invalid */
-case 48:
+case 50:
 YY_RULE_SETUP
 { return PRJM_EVAL_UNDEF; }
 	YY_BREAK
-case 49:
+case 51:
 YY_RULE_SETUP
 ECHO;
 	YY_BREAK
