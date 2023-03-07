@@ -465,7 +465,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  8
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  48
+#define YYNRULES  49
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  93
 
@@ -518,11 +518,11 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    76,    76,    86,    90,    91,    95,    99,   100,   101,
-     105,   106,   112,   113,   116,   119,   120,   121,   128,   129,
-     130,   131,   132,   133,   134,   135,   138,   139,   140,   141,
-     142,   143,   146,   147,   150,   153,   156,   159,   160,   161,
-     162,   163,   164,   165,   166,   169,   170,   171,   174
+       0,    76,    76,    77,    87,    91,    92,    96,   100,   101,
+     102,   106,   107,   113,   114,   117,   120,   121,   122,   129,
+     130,   131,   132,   133,   134,   135,   136,   139,   140,   141,
+     142,   143,   144,   147,   148,   151,   154,   157,   160,   161,
+     162,   163,   164,   165,   166,   167,   170,   171,   172,   175
 };
 #endif
 
@@ -585,16 +585,16 @@ static const yytype_int16 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,    12,    13,     0,     0,     0,     0,     0,     0,
-      35,    48,     2,     7,     0,     0,    45,    46,    47,     0,
-       1,    10,     0,     0,     0,     0,     0,     0,     0,     0,
+       2,     0,    13,    14,     0,     0,     0,     0,     0,     0,
+      36,    49,     3,     8,     0,     0,    46,    47,    48,     0,
+       1,    11,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,    14,
-       0,     0,     4,     6,     0,     9,     8,    18,    19,    20,
-      21,    22,    23,    24,    25,    26,    27,    28,    29,    32,
-      33,    34,     0,    43,    44,    31,    30,    38,    37,    39,
-      40,    41,    42,    16,     0,    15,     0,     3,    11,     0,
-      17,     5,    36
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    15,
+       0,     0,     5,     7,     0,    10,     9,    19,    20,    21,
+      22,    23,    24,    25,    26,    27,    28,    29,    30,    33,
+      34,    35,     0,    44,    45,    32,    31,    39,    38,    40,
+      41,    42,    43,    17,     0,    16,     0,     4,    12,     0,
+      18,     6,    37
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -747,21 +747,21 @@ static const yytype_int8 yystos[] =
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    43,    44,    45,    46,    46,    47,    48,    48,    48,
-      49,    49,    50,    50,    50,    50,    50,    50,    50,    50,
+       0,    43,    44,    44,    45,    46,    46,    47,    48,    48,
+      48,    49,    49,    50,    50,    50,    50,    50,    50,    50,
       50,    50,    50,    50,    50,    50,    50,    50,    50,    50,
       50,    50,    50,    50,    50,    50,    50,    50,    50,    50,
-      50,    50,    50,    50,    50,    50,    50,    50,    50
+      50,    50,    50,    50,    50,    50,    50,    50,    50,    50
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     4,     1,     3,     3,     1,     3,     3,
-       0,     2,     1,     1,     3,     4,     3,     4,     3,     3,
+       0,     2,     0,     1,     4,     1,     3,     3,     1,     3,
+       3,     0,     2,     1,     1,     3,     4,     3,     4,     3,
        3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
-       3,     3,     3,     3,     3,     1,     5,     3,     3,     3,
-       3,     3,     3,     3,     3,     2,     2,     2,     1
+       3,     3,     3,     3,     3,     3,     1,     5,     3,     3,
+       3,     3,     3,     3,     3,     3,     2,     2,     2,     1
 };
 
 
@@ -1880,7 +1880,11 @@ yyreduce:
     int yychar_backup = yychar;
     switch (yyn)
       {
-  case 2: /* program: instruction-list  */
+  case 2: /* program: %empty  */
+         { cctx->compile_result = NULL; }
+    break;
+
+  case 3: /* program: instruction-list  */
                             {
         if((yyvsp[0].yykind_48)) {
             cctx->compile_result = (yyvsp[0].yykind_48)->tree_node;
@@ -1889,57 +1893,57 @@ yyreduce:
     }
     break;
 
-  case 3: /* function: FUNC '(' function-arglist ')'  */
+  case 4: /* function: FUNC '(' function-arglist ')'  */
                                             { PRJM_EVAL_FUNC((yyval.function), (yyvsp[-3].FUNC), (yyvsp[-1].yykind_46)); free((yyvsp[-3].FUNC)); }
     break;
 
-  case 4: /* function-arglist: instruction-list  */
+  case 5: /* function-arglist: instruction-list  */
                                                      { (yyval.yykind_46) = prjm_eval_compiler_add_argument(NULL, (yyvsp[0].yykind_48)); }
     break;
 
-  case 5: /* function-arglist: function-arglist ',' instruction-list  */
+  case 6: /* function-arglist: function-arglist ',' instruction-list  */
                                                      { (yyval.yykind_46) = prjm_eval_compiler_add_argument((yyvsp[-2].yykind_46), (yyvsp[0].yykind_48)); }
     break;
 
-  case 6: /* parentheses: '(' instruction-list ')'  */
+  case 7: /* parentheses: '(' instruction-list ')'  */
                                   { (yyval.parentheses) = (yyvsp[-1].yykind_48); }
     break;
 
-  case 7: /* instruction-list: expression  */
+  case 8: /* instruction-list: expression  */
                                               { (yyval.yykind_48) = (yyvsp[0].expression); }
     break;
 
-  case 8: /* instruction-list: instruction-list ';' expression  */
+  case 9: /* instruction-list: instruction-list ';' expression  */
                                               { (yyval.yykind_48) = prjm_eval_compiler_add_instruction(cctx, (yyvsp[-2].yykind_48), (yyvsp[0].expression)); }
     break;
 
-  case 9: /* instruction-list: instruction-list ';' empty-expression  */
+  case 10: /* instruction-list: instruction-list ';' empty-expression  */
                                               { (yyval.yykind_48) = (yyvsp[-2].yykind_48); }
     break;
 
-  case 12: /* expression: NUM  */
+  case 13: /* expression: NUM  */
                                                { (yyval.expression) = prjm_eval_compiler_create_constant(cctx, (yyvsp[0].NUM)); }
     break;
 
-  case 13: /* expression: VAR  */
+  case 14: /* expression: VAR  */
             { (yyval.expression) = prjm_eval_compiler_create_variable(cctx, (yyvsp[0].VAR)); free((yyvsp[0].VAR)); }
     break;
 
-  case 14: /* expression: GMEM '[' ']'  */
+  case 15: /* expression: GMEM '[' ']'  */
                                              { prjm_eval_compiler_node_t* gmem_zero_idx =  prjm_eval_compiler_create_constant(cctx, .0);
                                                PRJM_EVAL_FUNC1((yyval.expression), "_gmem", gmem_zero_idx)
                                                }
     break;
 
-  case 15: /* expression: GMEM '[' expression ']'  */
+  case 16: /* expression: GMEM '[' expression ']'  */
                                              { PRJM_EVAL_FUNC1((yyval.expression), "_gmem", (yyvsp[-1].expression)) }
     break;
 
-  case 16: /* expression: expression '[' ']'  */
+  case 17: /* expression: expression '[' ']'  */
                                              { PRJM_EVAL_FUNC1((yyval.expression), "_mem", (yyvsp[-2].expression)) }
     break;
 
-  case 17: /* expression: expression '[' expression ']'  */
+  case 18: /* expression: expression '[' expression ']'  */
                                              { /* Create additional "idx + offs" operation as arg to _mem */
                                                prjm_eval_compiler_node_t* idx_plus_offset;
                                                PRJM_EVAL_FUNC2(idx_plus_offset, "_add", (yyvsp[-3].expression), (yyvsp[-1].expression))
@@ -1947,127 +1951,127 @@ yyreduce:
                                                }
     break;
 
-  case 18: /* expression: expression ADDOP expression  */
+  case 19: /* expression: expression ADDOP expression  */
                                                    { PRJM_EVAL_FUNC2((yyval.expression), "_addop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 19: /* expression: expression SUBOP expression  */
+  case 20: /* expression: expression SUBOP expression  */
                                                    { PRJM_EVAL_FUNC2((yyval.expression), "_subop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 20: /* expression: expression MODOP expression  */
+  case 21: /* expression: expression MODOP expression  */
                                                    { PRJM_EVAL_FUNC2((yyval.expression), "_modop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 21: /* expression: expression OROP expression  */
+  case 22: /* expression: expression OROP expression  */
                                                    { PRJM_EVAL_FUNC2((yyval.expression), "_orop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 22: /* expression: expression ANDOP expression  */
+  case 23: /* expression: expression ANDOP expression  */
                                                    { PRJM_EVAL_FUNC2((yyval.expression), "_andop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 23: /* expression: expression DIVOP expression  */
+  case 24: /* expression: expression DIVOP expression  */
                                                    { PRJM_EVAL_FUNC2((yyval.expression), "_divop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 24: /* expression: expression MULOP expression  */
+  case 25: /* expression: expression MULOP expression  */
                                                    { PRJM_EVAL_FUNC2((yyval.expression), "_mulop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 25: /* expression: expression POWOP expression  */
+  case 26: /* expression: expression POWOP expression  */
                                                    { PRJM_EVAL_FUNC2((yyval.expression), "_powop", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 26: /* expression: expression EQUAL expression  */
+  case 27: /* expression: expression EQUAL expression  */
                                                { PRJM_EVAL_FUNC2((yyval.expression), "_equal", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 27: /* expression: expression BELEQ expression  */
+  case 28: /* expression: expression BELEQ expression  */
                                                { PRJM_EVAL_FUNC2((yyval.expression), "_beleq", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 28: /* expression: expression ABOEQ expression  */
+  case 29: /* expression: expression ABOEQ expression  */
                                                { PRJM_EVAL_FUNC2((yyval.expression), "_aboeq", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 29: /* expression: expression NOTEQ expression  */
+  case 30: /* expression: expression NOTEQ expression  */
                                                { PRJM_EVAL_FUNC2((yyval.expression), "_noteq", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 30: /* expression: expression '<' expression  */
+  case 31: /* expression: expression '<' expression  */
                                                { PRJM_EVAL_FUNC2((yyval.expression), "_below", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 31: /* expression: expression '>' expression  */
+  case 32: /* expression: expression '>' expression  */
                                                { PRJM_EVAL_FUNC2((yyval.expression), "_above", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 32: /* expression: expression BOOLOR expression  */
+  case 33: /* expression: expression BOOLOR expression  */
                                                { PRJM_EVAL_FUNC2((yyval.expression), "bor", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 33: /* expression: expression BOOLAND expression  */
+  case 34: /* expression: expression BOOLAND expression  */
                                                { PRJM_EVAL_FUNC2((yyval.expression), "band", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 34: /* expression: expression '=' expression  */
+  case 35: /* expression: expression '=' expression  */
                                                    { PRJM_EVAL_FUNC2((yyval.expression), "_set", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 35: /* expression: function  */
+  case 36: /* expression: function  */
                                   { (yyval.expression) = (yyvsp[0].function); }
     break;
 
-  case 36: /* expression: expression '?' expression ':' expression  */
+  case 37: /* expression: expression '?' expression ':' expression  */
                                                                       { PRJM_EVAL_FUNC3((yyval.expression), "_if", (yyvsp[-4].expression), (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 37: /* expression: expression '+' expression  */
+  case 38: /* expression: expression '+' expression  */
                                          { PRJM_EVAL_FUNC2((yyval.expression), "_add", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 38: /* expression: expression '-' expression  */
+  case 39: /* expression: expression '-' expression  */
                                          { PRJM_EVAL_FUNC2((yyval.expression), "_sub", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 39: /* expression: expression '*' expression  */
+  case 40: /* expression: expression '*' expression  */
                                          { PRJM_EVAL_FUNC2((yyval.expression), "_mul", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 40: /* expression: expression '/' expression  */
+  case 41: /* expression: expression '/' expression  */
                                          { PRJM_EVAL_FUNC2((yyval.expression), "_div", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 41: /* expression: expression '%' expression  */
+  case 42: /* expression: expression '%' expression  */
                                          { PRJM_EVAL_FUNC2((yyval.expression), "_mod", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 42: /* expression: expression '^' expression  */
+  case 43: /* expression: expression '^' expression  */
                                          { PRJM_EVAL_FUNC2((yyval.expression), "pow", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 43: /* expression: expression '|' expression  */
+  case 44: /* expression: expression '|' expression  */
                                          { PRJM_EVAL_FUNC2((yyval.expression), "bor", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 44: /* expression: expression '&' expression  */
+  case 45: /* expression: expression '&' expression  */
                                          { PRJM_EVAL_FUNC2((yyval.expression), "band", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
-  case 45: /* expression: '-' expression  */
+  case 46: /* expression: '-' expression  */
                                          { PRJM_EVAL_FUNC1((yyval.expression), "_neg", (yyvsp[0].expression)) }
     break;
 
-  case 46: /* expression: '+' expression  */
+  case 47: /* expression: '+' expression  */
                                          { (yyval.expression) = (yyvsp[0].expression); }
     break;
 
-  case 47: /* expression: '!' expression  */
+  case 48: /* expression: '!' expression  */
                                          { PRJM_EVAL_FUNC1((yyval.expression), "_not", (yyvsp[0].expression)) }
     break;
 
-  case 48: /* expression: parentheses  */
+  case 49: /* expression: parentheses  */
                                           { (yyval.expression) = (yyvsp[0].parentheses); }
     break;
 

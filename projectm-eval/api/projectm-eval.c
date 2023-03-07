@@ -65,9 +65,15 @@ PRJM_EVAL_F projectm_eval_code_execute(struct projectm_eval_code* code_handle)
 
     PRJM_EVAL_F result = 0.0;
     PRJM_EVAL_F* result_ptr = &result;
-    prjm_eval_program_t* eel_program = (prjm_eval_program_t*)code_handle;
+    prjm_eval_program_t* eval_program = (prjm_eval_program_t*)code_handle;
 
-    eel_program->program->func(eel_program->program, &result_ptr);
+    // Empty program.
+    if (!eval_program->program)
+    {
+        return 0.0;
+    }
+
+    eval_program->program->func(eval_program->program, &result_ptr);
 
     return *result_ptr;
 }
