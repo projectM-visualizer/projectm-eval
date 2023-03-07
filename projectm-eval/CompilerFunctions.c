@@ -57,7 +57,7 @@ bool prjm_eval_compiler_name_is_function(prjm_eval_compiler_context_t* cctx, con
     prjm_eval_function_list_item_t* entry = cctx->functions.first;
     while (entry)
     {
-        if (strcmp(entry->function->name, name) == 0)
+        if (strcasecmp(entry->function->name, name) == 0)
         {
             return true;
         }

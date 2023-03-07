@@ -63,7 +63,8 @@ typedef void* yyscan_t;
 %left '>' ABOEQ
 %left '<' BELEQ
 %left '-' '+'
-%left '*' '/' '%'
+%left '*' '/'
+%left '%'
 %right '!'
 %left '^'
 %precedence NEG POS /* unary minus or plus */
@@ -73,7 +74,8 @@ typedef void* yyscan_t;
 %% /* The grammar follows. */
 
 program:
-  instruction-list[topnode] {
+  %empty { cctx->compile_result = NULL; }
+| instruction-list[topnode] {
         if($topnode) {
             cctx->compile_result = $topnode->tree_node;
         };

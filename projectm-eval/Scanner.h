@@ -20,6 +20,8 @@
         yylloc_param->last_column = yycolumn;    \
     }
 
+struct prjm_eval_scanner_state;
+
 
 
 #define  YY_INT_ALIGNED short int
@@ -349,6 +351,7 @@
 /* First, we deal with  platform-specific or compiler-specific issues. */
 
 /* begin standard C headers. */
+
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -365,8 +368,8 @@
 
 #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 
-/* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
- * if you want the limit (max/min) macros for int types. 
+/* C++ systems might need __STDC_LIMIT_MACROS defined before including
+ * <stdint.h>, if you want the limit (max/min) macros for int types.
  */
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
@@ -626,7 +629,6 @@ void yyfree ( void * , yyscan_t yyscanner );
 #endif
 
 
-    
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
@@ -634,7 +636,6 @@ void yyfree ( void * , yyscan_t yyscanner );
  */
 #include <unistd.h>
 #endif
-    
 
 
 
