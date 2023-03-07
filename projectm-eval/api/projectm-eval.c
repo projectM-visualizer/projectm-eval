@@ -77,3 +77,16 @@ PRJM_EVAL_F projectm_eval_code_execute(struct projectm_eval_code* code_handle)
 
     return *result_ptr;
 }
+
+const char* projectm_eval_get_error(struct projectm_eval_context* ctx, int* line, int* column)
+{
+    if (line)
+    {
+        *line = ctx->error.line;
+    }
+    if (column)
+    {
+        *column = ctx->error.column_start;
+    }
+    return ctx->error.error;
+}
