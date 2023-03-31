@@ -1100,7 +1100,7 @@ prjm_eval_function_decl(rand)
         rand_max = 1.;
     }
 
-    assign_ret_val((PRJM_EVAL_F) (prjm_eval_genrand_int32() * (1.0 / (double) 0xFFFFFFFF * rand_max)));
+    assign_ret_val((PRJM_EVAL_F) (prjm_eval_genrand_int32() * (1.0 / (double) 0xFFFFFFFF) * rand_max));
 }
 
 prjm_eval_function_decl(invsqrt)
