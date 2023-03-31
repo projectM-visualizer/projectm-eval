@@ -4,6 +4,8 @@ find_package(GTest 1.10 REQUIRED NO_MODULE)
 add_executable(projectM_EvalLib_Test
         InstructionListTest.cpp
         InstructionListTest.hpp
+        PrecedenceTest.cpp
+        PrecedenceTest.hpp
         Stubs.cpp
         TreeFunctionsTest.cpp
         )

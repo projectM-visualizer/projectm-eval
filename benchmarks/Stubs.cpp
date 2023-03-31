@@ -1,6 +1,6 @@
 extern "C"
 {
-#include <MemoryBuffer.h>
+#include <projectm-eval/MemoryBuffer.h>
 }
 
 void projectm_eval_memory_host_lock_mutex(){}
