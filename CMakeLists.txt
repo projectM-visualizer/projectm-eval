@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.21)
+cmake_policy(SET CMP0127 NEW) # <depends> syntax in cmake_dependent_option() is properly formatted for both old and new behavior.
 
 set(LANGUAGES C)
 if(BUILD_TESTING)
@@ -11,10 +12,11 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(PROJECTM_EVAL_FLOAT_SIZE "8" CACHE STRING "Byte size of floating-point numbers. 8 to use double, 4 to use float. Default is 8.")
 
+include(CMakeDependentOption)
+
 option(ENABLE_FAST_MATH "Enables aggressive math optimizations like -ffast-math to compile faster code. Applied to Release and RelWithDebInfo configurations only." ON)
 option(BUILD_NS_EEL_SHIM "Build and install the ns-eel2 compatibility API shim." OFF)
 option(BUILD_BENCHMARKS "Build benchmarks. Requires Google Benchmark." OFF)
-
 if(NOT PROJECTM_EVAL_FLOAT_SIZE EQUAL 8 AND NOT PROJECTM_EVAL_FLOAT_SIZE EQUAL 4)
     message(FATAL_ERROR "PROJECTM_EVAL_FLOAT_SIZE must be set to either 4 (use floats) or 8 (use doubles).")
 endif()
@@ -23,6 +25,8 @@ project(projectm-eval
         VERSION 1.0.0
         LANGUAGES ${LANGUAGES} # Using "enable_language(CXX)" in the test dir will NOT work properly!
         )
+
+cmake_dependent_option(ENABLE_PROJECTM_EVAL_INSTALL "Enable installing projectm-eval libraries and headers." OFF "NOT projectm-eval_IS_TOP_LEVEL" ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
