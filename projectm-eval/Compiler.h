@@ -147,7 +147,7 @@ int prjm_eval_parse (prjm_eval_compiler_context_t* cctx, yyscan_t scanner);
        int yylex(YYSTYPE* yylval_param, YYLTYPE* yylloc_param, prjm_eval_compiler_context_t* cctx, yyscan_t yyscanner)
    YY_DECL;
 
-   int yyerror(YYLTYPE* yyllocp, prjm_eval_compiler_context_t* cctx, yyscan_t yyscanner, const char* message);
+   void yyerror(YYLTYPE* yyllocp, prjm_eval_compiler_context_t* cctx, yyscan_t yyscanner, const char* message);
 
 
 #endif /* !YY_PRJM_EVAL_COMPILER_H_INCLUDED  */
