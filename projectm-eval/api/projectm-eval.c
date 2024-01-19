@@ -12,7 +12,7 @@ projectm_eval_mem_buffer projectm_eval_memory_buffer_create()
 
 void projectm_eval_memory_buffer_destroy(projectm_eval_mem_buffer buffer)
 {
-    prjm_eval_memory_free(buffer);
+    prjm_eval_memory_destroy_buffer(buffer);
 }
 
 void projectm_eval_memory_global_destroy()
