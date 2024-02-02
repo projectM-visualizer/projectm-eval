@@ -84,6 +84,41 @@ local scope as any other variable. The same is true for more digits like `reg123
 Same as with gmegabuf, global variables are not necessarily `0` when a preset is initialized and they can change at any
 time when two presets using the same global variables are blended during a transition.
 
+### Constants
+
+All constants are converted into floating-point numbers internally, even if written as integers.
+
+As with all other names, constant names (and hexadecimal values) are also case-insensitive.
+
+#### Numerical Constants
+
+Basic numerical/decimal constants can be defined in the code in the following formats:
+
+- Integer values: `1` (or `1.`)
+- Decimal values: `1.234` (values between 0 and 1 can be abbreviated with `.234`, which equals `0.234`)
+- Base 10 exponential form: `1.234e5` equals `123400` and `1.234e-5` equals `0.00001234`
+
+#### Predefined Constants
+
+A few named convenience constants can be used:
+
+- `$PI`: Equals `3.141592653589793`
+- `$E`: Equals `2.71828183`
+- `$PHI`: Equals `1.61803399`
+
+#### Hexadecimal Constants
+
+Hexadecimal constants start with `$X`, immediately followed by the hexadecimal numbers.
+
+Example: `$XFF` converts to `255`.
+
+#### Character (Ordinal) Constants
+
+Constants can also convert a single character into its ordinal (ASCII) value using the form `$'c'`, where `c` is the
+character to convert.
+
+Example: `$'a'` converts to `97`.
+
 ### Operator Precedence
 
 Operator precedence is defined in a similar way as in C, with the expection of the `^` operator, which has a different
