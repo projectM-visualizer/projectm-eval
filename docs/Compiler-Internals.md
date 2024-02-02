@@ -21,7 +21,7 @@ scanner looks for these kinds of symbols, with letters always being case-insensi
 - Numbers in integer and floating-point notation with an optional exponent. Note that these numbers are always positive,
   negativity is applied later via the `-` unary operator in the parser.
 - Identifiers starting with an underscore or alphabetical letter, and also numbers on any following character.
-  These can be returned as two diffent tokens:
+  These can be returned as two different tokens:
     - If the (lower-case) name exists in the function table, the name is returned as a `FUN` token.
     - Anything else is returned as a `VAR` token and identifies a variable.
 
@@ -140,7 +140,7 @@ type `prjm_eval_compiler_node`, which stores a few additional flags only require
 #### Function Argument List
 
 Inside a function argument list, all expressions are collected in a special `prjm_eval_compiler_arg_list` wrapper holding
-one compiler node object for each potential function argument. It also keeps the arugment count as a separate variable
+one compiler node object for each potential function argument. It also keeps the argument count as a separate variable
 for easy access.
 
 When the arguments have been collected and the function is reduced in the parser, the action will then compare the

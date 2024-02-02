@@ -59,7 +59,7 @@ z = sin(4.0);
 
 ### Variable and Function Names, Limits
 
-Variable and function names are generally case-insensitve, making `variable` equivalent to `vArIaBlE`.
+Variable and function names are generally case-insensitive, making `variable` equivalent to `vArIaBlE`.
 
 Any text in expressions - starting with either a letter from a to z or an underscore, followed by more of these
 characters and also numbers from 0 to 9 - is first checked to be a built-in function. If it is not a function, the
@@ -81,7 +81,7 @@ in the same way as gmegabuf.
 Note the index must always be written with two digits. `reg3` is _not_ considered a global variable and will only have a
 local scope as any other variable. The same is true for more digits like `reg123`.
 
-Same as with gmegabuf, global variables are not necessarily `0` when a preset is initialized and they can change at any
+Same as with gmegabuf, global variables are not necessarily `0` when a preset is initialized, and they can change at any
 time when two presets using the same global variables are blended during a transition.
 
 ### Constants
@@ -121,7 +121,7 @@ Example: `$'a'` converts to `97`.
 
 ### Operator Precedence
 
-Operator precedence is defined in a similar way as in C, with the expection of the `^` operator, which has a different
+Operator precedence is defined in a similar way as in C, except the `^` operator, which has a different
 meaning in Milkdrop presets (pow() instead of binary XOR).
 
 See the [C precedence table on cppreference.com](https://en.cppreference.com/w/c/language/operator_precedence) for
@@ -176,7 +176,7 @@ if(x > 5,5000,1000)[(sin(y) + 1 * .5) * 1000] = z;
 ### Using Parentheses
 
 Parentheses can be used to specify a specific order in which operations are executed. Expressions inside parentheses are
-always evaluated, and the result of the evaluation is then uses to evaluate any outside expression.
+always evaluated, and the result of the evaluation is then used to evaluate any outside expression.
 
 Inside parentheses, using expression lists is also valid. The result is, as described above, the value of the last
 expression in the list. For example, the following expression will use `5` as the return value:
@@ -515,7 +515,7 @@ level, which can hang up the application.
 ### Internal Functions and Aliases
 
 The following functions are defined internally, some being aliases to the above functions, others being used as actual
-implementations of operators. Deoending on the operator being unary or binary, each function has one or two parameters.
+implementations of operators. Depending on the operator being unary or binary, each function has one or two parameters.
 
 - _aboeq => Operator `>=`
 - _above => Operator `>`
