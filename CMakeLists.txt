@@ -22,7 +22,7 @@ if(NOT PROJECTM_EVAL_FLOAT_SIZE EQUAL 8 AND NOT PROJECTM_EVAL_FLOAT_SIZE EQUAL 4
 endif()
 
 project(projectm-eval
-        VERSION 1.0.0
+        VERSION 1.0.1
         LANGUAGES ${LANGUAGES} # Using "enable_language(CXX)" in the test dir will NOT work properly!
         )
 
