@@ -72,12 +72,12 @@ or library:
 
 ```cmake
 add_executable(MyApp
-        # Sources go here
-        )
+    # Sources go here
+)
 target_link_libraries(MyApp
-        PRIVATE
-        projectM::Eval
-        )
+    PRIVATE
+    projectM::Eval
+)
 ```
 
 Important: If your final target is a static library, this will _not_ copy any code into it! Any application using this
@@ -104,12 +104,12 @@ variant. To link the library as a static library, the CMake code is identical:
 
 ```cmake
 add_executable(MyApp
-        # Sources go here
-        )
+    # Sources go here
+)
 target_link_libraries(MyApp
-        PRIVATE
-        projectM::Eval
-        )
+    PRIVATE
+    projectM::Eval
+)
 ```
 
 If the target is a static library, to which the projectM-Eval object files should be added, then an additional line in
@@ -117,13 +117,13 @@ the target source list is required:
 
 ```cmake
 add_library(MyLib STATIC
-        $<TARGET_OBJECTS:projectM::Eval>
-        # Other sources go here
-        )
+    $<TARGET_OBJECTS:projectM::Eval>
+    # Other sources go here
+)
 target_link_libraries(MyApp
-        PRIVATE
-        projectM::Eval
-        )
+    PRIVATE
+    projectM::Eval
+)
 ```
 
 Note that the library still needs to be linked. While this won't add any code to the target, it will populate the
@@ -133,6 +133,11 @@ required include directories and compiler flags needed to use the headers.
 
 If CMake is not an option, the static library can be linked manually and the `projectm-eval.h` header file can be copied
 into the project or pointed to via the include directory settings of the build system used.
+
+On UNIX operating systems such as Linux, macOS or BSD and if `ENABLE_PROJECTM_EVAL_INSTALL` is enabled, a
+`projectm-eval.pc` pkg-config file will be installed into the destination library dir and can be used by any
+pkg-config-compatible build system to link the static library (using `pkg-config --libs projectm-eval`) and retrieve the
+correct include dir (using `pkg-config --cflags projectm-eval`).
 
 To use it as an object library, please refer to the platform build tools on how to unpack the static library into its
 object files or how to copy its contents into another static library.
