@@ -128,4 +128,11 @@ if(ENABLE_PROJECTM_EVAL_INSTALL)
             COMPONENT Devel
             )
 
+    # Install pkgconfig file
+    if(UNIX)
+        configure_file(install-pkgconfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/install-pkgconfig.cmake @ONLY)
+        install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/install-pkgconfig.cmake
+            COMPONENT Devel
+        )
+    endif()
 endif()
