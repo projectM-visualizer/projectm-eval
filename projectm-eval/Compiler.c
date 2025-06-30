@@ -2008,11 +2008,11 @@ yyreduce:
     break;
 
   case 33: /* expression: expression BOOLOR expression  */
-                                               { PRJM_EVAL_FUNC2((yyval.expression), "bor", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "_or", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 34: /* expression: expression BOOLAND expression  */
-                                               { PRJM_EVAL_FUNC2((yyval.expression), "band", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                               { PRJM_EVAL_FUNC2((yyval.expression), "_and", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 35: /* expression: expression '=' expression  */
@@ -2052,11 +2052,11 @@ yyreduce:
     break;
 
   case 44: /* expression: expression '|' expression  */
-                                         { PRJM_EVAL_FUNC2((yyval.expression), "bor", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "/*or*/", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 45: /* expression: expression '&' expression  */
-                                         { PRJM_EVAL_FUNC2((yyval.expression), "band", (yyvsp[-2].expression), (yyvsp[0].expression)) }
+                                         { PRJM_EVAL_FUNC2((yyval.expression), "/*and*/", (yyvsp[-2].expression), (yyvsp[0].expression)) }
     break;
 
   case 46: /* expression: '-' expression  */

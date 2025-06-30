@@ -21,6 +21,8 @@ static prjm_eval_function_def_t intrinsic_function_table[] = {
     { "/*const*/", prjm_eval_func_const,         0, true,  false },
     { "/*var*/",   prjm_eval_func_var,           0, false, false },
     { "/*list*/",  prjm_eval_func_execute_list,  1, true,  false },
+    { "/*or*/",    prjm_eval_func_or,            2, true, false },
+    { "/*and*/",   prjm_eval_func_and,           2, true, false },
 
     { "if",        prjm_eval_func_if,            3, true,  false },
     { "_if",       prjm_eval_func_if,            3, true,  false },
@@ -777,6 +779,21 @@ prjm_eval_function_decl(orop)
     assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) | (int)(*val2_ptr)));
 }
 
+prjm_eval_function_decl(or)
+{
+    assert_valid_ctx();
+
+    PRJM_EVAL_F val1 = .0;
+    PRJM_EVAL_F* val1_ptr = &val1;
+    PRJM_EVAL_F val2 = .0;
+    PRJM_EVAL_F* val2_ptr = &val2;
+
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
+
+    assign_ret_val((PRJM_EVAL_F) ((int)(*val1_ptr) | (int)(*val2_ptr)));
+}
+
 prjm_eval_function_decl(andop)
 {
     assert_valid_ctx();
@@ -788,6 +805,21 @@ prjm_eval_function_decl(andop)
     invoke_arg(1, &val2_ptr);
 
     assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) & (int)(*val2_ptr)));
+}
+
+prjm_eval_function_decl(and)
+{
+    assert_valid_ctx();
+
+    PRJM_EVAL_F val1 = .0;
+    PRJM_EVAL_F* val1_ptr = &val1;
+    PRJM_EVAL_F val2 = .0;
+    PRJM_EVAL_F* val2_ptr = &val2;
+
+    invoke_arg(0, &val1_ptr);
+    invoke_arg(1, &val2_ptr);
+
+    assign_ret_val((PRJM_EVAL_F) ((int)(*val1_ptr) & (int)(*val2_ptr)));
 }
 
 prjm_eval_function_decl(modop)

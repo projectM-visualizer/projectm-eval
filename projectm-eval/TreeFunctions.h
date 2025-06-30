@@ -56,6 +56,8 @@ prjm_eval_function_decl(sub);
 prjm_eval_function_decl(mul);
 prjm_eval_function_decl(div);
 prjm_eval_function_decl(mod);
+prjm_eval_function_decl(or);
+prjm_eval_function_decl(and);
 prjm_eval_function_decl(band_op);
 prjm_eval_function_decl(bor_op);
 prjm_eval_function_decl(band_func);

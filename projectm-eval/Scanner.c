@@ -1546,11 +1546,11 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-{ return '%'; }
+{ return '&'; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-{ return '^'; }
+{ return '|'; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP

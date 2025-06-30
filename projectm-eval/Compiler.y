@@ -145,8 +145,8 @@ expression:
 | expression[left] '>' expression[right]       { PRJM_EVAL_FUNC2($$, "_above", $left, $right) }
 
 /* Boolean operators */
-| expression[left] BOOLOR expression[right]    { PRJM_EVAL_FUNC2($$, "bor", $left, $right) }
-| expression[left] BOOLAND expression[right]   { PRJM_EVAL_FUNC2($$, "band", $left, $right) }
+| expression[left] BOOLOR expression[right]    { PRJM_EVAL_FUNC2($$, "_or", $left, $right) }
+| expression[left] BOOLAND expression[right]   { PRJM_EVAL_FUNC2($$, "_and", $left, $right) }
 
 /* Assignment operator */
 | expression[left] '=' expression[right]           { PRJM_EVAL_FUNC2($$, "_set", $left, $right) }
@@ -164,8 +164,8 @@ expression:
 | expression[left] '/' expression[right] { PRJM_EVAL_FUNC2($$, "_div", $left, $right) }
 | expression[left] '%' expression[right] { PRJM_EVAL_FUNC2($$, "_mod", $left, $right) }
 | expression[left] '^' expression[right] { PRJM_EVAL_FUNC2($$, "pow", $left, $right) }
-| expression[left] '|' expression[right] { PRJM_EVAL_FUNC2($$, "bor", $left, $right) }
-| expression[left] '&' expression[right] { PRJM_EVAL_FUNC2($$, "band", $left, $right) }
+| expression[left] '|' expression[right] { PRJM_EVAL_FUNC2($$, "/*or*/", $left, $right) }
+| expression[left] '&' expression[right] { PRJM_EVAL_FUNC2($$, "/*and*/", $left, $right) }
 
 /* Unary operators */
 | '-' expression[value] %prec NEG        { PRJM_EVAL_FUNC1($$, "_neg", $value) }
