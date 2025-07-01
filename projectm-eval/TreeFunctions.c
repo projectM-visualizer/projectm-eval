@@ -18,85 +18,85 @@
  */
 static prjm_eval_function_def_t intrinsic_function_table[] = {
     /* Special intrinsic functions. Cannot be used via expression syntax. */
-    { "/*const*/", prjm_eval_func_const,         0, true,  false },
-    { "/*var*/",   prjm_eval_func_var,           0, false, false },
-    { "/*list*/",  prjm_eval_func_execute_list,  1, true,  false },
-    { "/*or*/",    prjm_eval_func_or,            2, true, false },
-    { "/*and*/",   prjm_eval_func_and,           2, true, false },
+    { "/*const*/", prjm_eval_func_const,            0, true,  false },
+    { "/*var*/",   prjm_eval_func_var,              0, false, false },
+    { "/*list*/",  prjm_eval_func_execute_list,     1, true,  false },
+    { "/*or*/",    prjm_eval_func_bitwise_or,       2, true,  false },
+    { "/*and*/",   prjm_eval_func_bitwise_and,      2, true,  false },
 
-    { "if",        prjm_eval_func_if,            3, true,  false },
-    { "_if",       prjm_eval_func_if,            3, true,  false },
-    { "_and",      prjm_eval_func_band_op,       2, true,  false },
-    { "_or",       prjm_eval_func_bor_op,        2, true,  false },
-    { "loop",      prjm_eval_func_execute_loop,  2, true,  false },
-    { "while",     prjm_eval_func_execute_while, 1, true,  false },
+    { "if",        prjm_eval_func_if,               3, true,  false },
+    { "_if",       prjm_eval_func_if,               3, true,  false },
+    { "_and",      prjm_eval_func_boolean_and_op,   2, true,  false },
+    { "_or",       prjm_eval_func_boolean_or_op,    2, true,  false },
+    { "loop",      prjm_eval_func_execute_loop,     2, true,  false },
+    { "while",     prjm_eval_func_execute_while,    1, true,  false },
 
-    { "_not",      prjm_eval_func_bnot,          1, true,  false },
-    { "bnot",      prjm_eval_func_bnot,         1, true,  false },
-    { "_equal",    prjm_eval_func_equal,        2, true,  false },
-    { "equal",     prjm_eval_func_equal,        2, true,  false },
-    { "_noteq",    prjm_eval_func_notequal,     2, true,  false },
-    { "_below",    prjm_eval_func_below,        2, true,  false },
-    { "below",     prjm_eval_func_below,        2, true,  false },
-    { "_above",    prjm_eval_func_above,        2, true,  false },
-    { "above",     prjm_eval_func_above,        2, true,  false },
-    { "_beleq",    prjm_eval_func_beloweq,      2, true,  false },
-    { "_aboeq",    prjm_eval_func_aboveeq,      2, true,  false },
+    { "_not",      prjm_eval_func_bnot,             1, true,  false },
+    { "bnot",      prjm_eval_func_bnot,             1, true,  false },
+    { "_equal",    prjm_eval_func_equal,            2, true,  false },
+    { "equal",     prjm_eval_func_equal,            2, true,  false },
+    { "_noteq",    prjm_eval_func_notequal,         2, true,  false },
+    { "_below",    prjm_eval_func_below,            2, true,  false },
+    { "below",     prjm_eval_func_below,            2, true,  false },
+    { "_above",    prjm_eval_func_above,            2, true,  false },
+    { "above",     prjm_eval_func_above,            2, true,  false },
+    { "_beleq",    prjm_eval_func_beloweq,          2, true,  false },
+    { "_aboeq",    prjm_eval_func_aboveeq,          2, true,  false },
 
-    { "_set",      prjm_eval_func_set,          2, false, true },
-    { "assign",    prjm_eval_func_set,          2, false, true },
-    { "_add",      prjm_eval_func_add,          2, true,  false },
-    { "_sub",      prjm_eval_func_sub,          2, true,  false },
-    { "_mul",      prjm_eval_func_mul,          2, true,  false },
-    { "_div",      prjm_eval_func_div,          2, true,  false },
-    { "_mod",      prjm_eval_func_mod,          2, true,  false },
-    { "_mulop",    prjm_eval_func_mulop,        2, false, true },
-    { "_divop",    prjm_eval_func_divop,        2, false, true },
-    { "_orop",     prjm_eval_func_orop,         2, false, true },
-    { "_andop",    prjm_eval_func_andop,        2, false, true },
-    { "_addop",    prjm_eval_func_addop,        2, false, true },
-    { "_subop",    prjm_eval_func_subop,        2, false, true },
-    { "_modop",    prjm_eval_func_modop,        2, false, true },
+    { "_set",      prjm_eval_func_set,              2, false, true  },
+    { "assign",    prjm_eval_func_set,              2, false, true  },
+    { "_add",      prjm_eval_func_add,              2, true,  false },
+    { "_sub",      prjm_eval_func_sub,              2, true,  false },
+    { "_mul",      prjm_eval_func_mul,              2, true,  false },
+    { "_div",      prjm_eval_func_div,              2, true,  false },
+    { "_mod",      prjm_eval_func_mod,              2, true,  false },
+    { "_mulop",    prjm_eval_func_mul_op,           2, false, true  },
+    { "_divop",    prjm_eval_func_div_op,           2, false, true  },
+    { "_orop",     prjm_eval_func_bitwise_or_op,    2, false, true  },
+    { "_andop",    prjm_eval_func_bitwise_and_op,   2, false, true  },
+    { "_addop",    prjm_eval_func_add_op,           2, false, true  },
+    { "_subop",    prjm_eval_func_sub_op,           2, false, true  },
+    { "_modop",    prjm_eval_func_mod_op,           2, false, true  },
 
-    { "sin",       prjm_eval_func_sin,          1, true,  false },
-    { "cos",       prjm_eval_func_cos,          1, true,  false },
-    { "tan",       prjm_eval_func_tan,          1, true,  false },
-    { "asin",      prjm_eval_func_asin,         1, true,  false },
-    { "acos",      prjm_eval_func_acos,         1, true,  false },
-    { "atan",      prjm_eval_func_atan,         1, true,  false },
-    { "atan2",     prjm_eval_func_atan2,        2, true,  false },
-    { "sqr",       prjm_eval_func_sqr,          1, true,  false },
-    { "sqrt",      prjm_eval_func_sqrt,         1, true,  false },
-    { "pow",       prjm_eval_func_pow,          2, true,  false },
-    { "_powop",    prjm_eval_func_powop,        2, false, true },
-    { "exp",       prjm_eval_func_exp,          1, true,  false },
-    { "_neg",      prjm_eval_func_neg,          1, true,  false },
+    { "sin",       prjm_eval_func_sin,              1, true,  false },
+    { "cos",       prjm_eval_func_cos,              1, true,  false },
+    { "tan",       prjm_eval_func_tan,              1, true,  false },
+    { "asin",      prjm_eval_func_asin,             1, true,  false },
+    { "acos",      prjm_eval_func_acos,             1, true,  false },
+    { "atan",      prjm_eval_func_atan,             1, true,  false },
+    { "atan2",     prjm_eval_func_atan2,            2, true,  false },
+    { "sqr",       prjm_eval_func_sqr,              1, true,  false },
+    { "sqrt",      prjm_eval_func_sqrt,             1, true,  false },
+    { "pow",       prjm_eval_func_pow,              2, true,  false },
+    { "_powop",    prjm_eval_func_pow_op,           2, false, true  },
+    { "exp",       prjm_eval_func_exp,              1, true,  false },
+    { "_neg",      prjm_eval_func_neg,              1, true,  false },
 
-    { "log",       prjm_eval_func_log,          1, true,  false },
-    { "log10",     prjm_eval_func_log10,        1, true,  false },
-    { "abs",       prjm_eval_func_abs,          1, true,  false },
-    { "min",       prjm_eval_func_min,          2, true,  false },
-    { "max",       prjm_eval_func_max,          2, true,  false },
-    { "sign",      prjm_eval_func_sign,         1, true,  false },
-    { "rand",      prjm_eval_func_rand,         1, false, false },
-    { "floor",     prjm_eval_func_floor,        1, true,  false },
-    { "int",       prjm_eval_func_floor,        1, true,  false },
-    { "ceil",      prjm_eval_func_ceil,         1, true,  false },
-    { "invsqrt",   prjm_eval_func_invsqrt,      1, true,  false },
-    { "sigmoid",   prjm_eval_func_sigmoid,      2, true,  false },
+    { "log",       prjm_eval_func_log,              1, true,  false },
+    { "log10",     prjm_eval_func_log10,            1, true,  false },
+    { "abs",       prjm_eval_func_abs,              1, true,  false },
+    { "min",       prjm_eval_func_min,              2, true,  false },
+    { "max",       prjm_eval_func_max,              2, true,  false },
+    { "sign",      prjm_eval_func_sign,             1, true,  false },
+    { "rand",      prjm_eval_func_rand,             1, false, false },
+    { "floor",     prjm_eval_func_floor,            1, true,  false },
+    { "int",       prjm_eval_func_floor,            1, true,  false },
+    { "ceil",      prjm_eval_func_ceil,             1, true,  false },
+    { "invsqrt",   prjm_eval_func_invsqrt,          1, true,  false },
+    { "sigmoid",   prjm_eval_func_sigmoid,          2, true,  false },
 
-    { "band",      prjm_eval_func_band_func,    2, true,  false },
-    { "bor",       prjm_eval_func_bor_func,     2, true,  false },
+    { "band",      prjm_eval_func_boolean_and_func, 2, true,  false },
+    { "bor",       prjm_eval_func_boolean_or_func,  2, true,  false },
 
-    { "exec2",     prjm_eval_func_exec2,         2, true,  false },
-    { "exec3",     prjm_eval_func_exec3,         3, true,  false },
-    { "_mem",      prjm_eval_func_mem,           1, false, true },
-    { "megabuf",   prjm_eval_func_mem,           1, false, true },
-    { "_gmem",     prjm_eval_func_mem,           1, false, true },
-    { "gmegabuf",  prjm_eval_func_mem,           1, false, true },
-    { "freembuf",  prjm_eval_func_freembuf,      1, false, true },
-    { "memcpy",    prjm_eval_func_memcpy,        3, false, true },
-    { "memset",    prjm_eval_func_memset,        3, false, true }
+    { "exec2",     prjm_eval_func_exec2,            2, true,  false },
+    { "exec3",     prjm_eval_func_exec3,            3, true,  false },
+    { "_mem",      prjm_eval_func_mem,              1, false, true  },
+    { "megabuf",   prjm_eval_func_mem,              1, false, true  },
+    { "_gmem",     prjm_eval_func_mem,              1, false, true  },
+    { "gmegabuf",  prjm_eval_func_mem,              1, false, true  },
+    { "freembuf",  prjm_eval_func_freembuf,         1, false, true  },
+    { "memcpy",    prjm_eval_func_memcpy,           3, false, true  },
+    { "memset",    prjm_eval_func_memset,           3, false, true  }
 };
 
 
@@ -610,7 +610,7 @@ prjm_eval_function_decl(mod)
     assign_ret_val((PRJM_EVAL_F) ((int) *val1_ptr % divisor));
 }
 
-prjm_eval_function_decl(band_op)
+prjm_eval_function_decl(boolean_and_op)
 {
     assert_valid_ctx();
 
@@ -637,7 +637,7 @@ prjm_eval_function_decl(band_op)
     }
 }
 
-prjm_eval_function_decl(bor_op)
+prjm_eval_function_decl(boolean_or_op)
 {
     assert_valid_ctx();
 
@@ -664,7 +664,7 @@ prjm_eval_function_decl(bor_op)
     }
 }
 
-prjm_eval_function_decl(band_func)
+prjm_eval_function_decl(boolean_and_func)
 {
     assert_valid_ctx();
 
@@ -680,7 +680,7 @@ prjm_eval_function_decl(band_func)
     assign_ret_val(fabs(*val1_ptr) > close_factor && fabs(*val2_ptr) > close_factor ? 1.0 : 0.0);
 }
 
-prjm_eval_function_decl(bor_func)
+prjm_eval_function_decl(boolean_or_func)
 {
     assert_valid_ctx();
 
@@ -708,7 +708,7 @@ prjm_eval_function_decl(neg)
     assign_ret_val(-(*val1_ptr));
 }
 
-prjm_eval_function_decl(addop)
+prjm_eval_function_decl(add_op)
 {
     assert_valid_ctx();
 
@@ -721,7 +721,7 @@ prjm_eval_function_decl(addop)
     assign_ret_val(**ret_val + *val2_ptr);
 }
 
-prjm_eval_function_decl(subop)
+prjm_eval_function_decl(sub_op)
 {
     assert_valid_ctx();
 
@@ -734,7 +734,7 @@ prjm_eval_function_decl(subop)
     assign_ret_val(**ret_val - *val2_ptr);
 }
 
-prjm_eval_function_decl(mulop)
+prjm_eval_function_decl(mul_op)
 {
     assert_valid_ctx();
 
@@ -747,7 +747,7 @@ prjm_eval_function_decl(mulop)
     assign_ret_val(**ret_val * *val2_ptr);
 }
 
-prjm_eval_function_decl(divop)
+prjm_eval_function_decl(div_op)
 {
     assert_valid_ctx();
 
@@ -766,7 +766,7 @@ prjm_eval_function_decl(divop)
     assign_ret_val(**ret_val / *val2_ptr);
 }
 
-prjm_eval_function_decl(orop)
+prjm_eval_function_decl(bitwise_or_op)
 {
     assert_valid_ctx();
 
@@ -779,7 +779,7 @@ prjm_eval_function_decl(orop)
     assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) | (int)(*val2_ptr)));
 }
 
-prjm_eval_function_decl(or)
+prjm_eval_function_decl(bitwise_or)
 {
     assert_valid_ctx();
 
@@ -794,7 +794,7 @@ prjm_eval_function_decl(or)
     assign_ret_val((PRJM_EVAL_F) ((int)(*val1_ptr) | (int)(*val2_ptr)));
 }
 
-prjm_eval_function_decl(andop)
+prjm_eval_function_decl(bitwise_and_op)
 {
     assert_valid_ctx();
 
@@ -807,7 +807,7 @@ prjm_eval_function_decl(andop)
     assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) & (int)(*val2_ptr)));
 }
 
-prjm_eval_function_decl(and)
+prjm_eval_function_decl(bitwise_and)
 {
     assert_valid_ctx();
 
@@ -822,7 +822,7 @@ prjm_eval_function_decl(and)
     assign_ret_val((PRJM_EVAL_F) ((int)(*val1_ptr) & (int)(*val2_ptr)));
 }
 
-prjm_eval_function_decl(modop)
+prjm_eval_function_decl(mod_op)
 {
     assert_valid_ctx();
 
@@ -841,7 +841,7 @@ prjm_eval_function_decl(modop)
     assign_ret_val((PRJM_EVAL_F) ((int)(**ret_val) % divisor));
 }
 
-prjm_eval_function_decl(powop)
+prjm_eval_function_decl(pow_op)
 {
     assert_valid_ctx();
 

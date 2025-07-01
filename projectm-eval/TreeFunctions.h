@@ -56,23 +56,23 @@ prjm_eval_function_decl(sub);
 prjm_eval_function_decl(mul);
 prjm_eval_function_decl(div);
 prjm_eval_function_decl(mod);
-prjm_eval_function_decl(or);
-prjm_eval_function_decl(and);
-prjm_eval_function_decl(band_op);
-prjm_eval_function_decl(bor_op);
-prjm_eval_function_decl(band_func);
-prjm_eval_function_decl(bor_func);
+prjm_eval_function_decl(bitwise_or);
+prjm_eval_function_decl(bitwise_and);
+prjm_eval_function_decl(boolean_and_op);
+prjm_eval_function_decl(boolean_or_op);
+prjm_eval_function_decl(boolean_and_func);
+prjm_eval_function_decl(boolean_or_func);
 prjm_eval_function_decl(neg);
 
 /* Compound assignment operators */
-prjm_eval_function_decl(addop);
-prjm_eval_function_decl(subop);
-prjm_eval_function_decl(mulop);
-prjm_eval_function_decl(divop);
-prjm_eval_function_decl(modop);
-prjm_eval_function_decl(orop);
-prjm_eval_function_decl(andop);
-prjm_eval_function_decl(powop);
+prjm_eval_function_decl(add_op);
+prjm_eval_function_decl(sub_op);
+prjm_eval_function_decl(mul_op);
+prjm_eval_function_decl(div_op);
+prjm_eval_function_decl(mod_op);
+prjm_eval_function_decl(bitwise_or_op);
+prjm_eval_function_decl(bitwise_and_op);
+prjm_eval_function_decl(pow_op);
 
 /* Mathematical functions */
 prjm_eval_function_decl(sin);
