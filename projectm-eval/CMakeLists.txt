@@ -74,6 +74,11 @@ target_include_directories(projectM_eval
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/projectm-eval>
                            )
 
+target_compile_definitions(projectM_eval
+    PUBLIC
+    PRJM_F_SIZE=${PROJECTM_EVAL_FLOAT_SIZE}
+)
+
 set_target_properties(projectM_eval PROPERTIES
                       EXPORT_NAME Eval
                       )

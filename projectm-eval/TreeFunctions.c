@@ -158,19 +158,19 @@ void prjm_eval_intrinsic_functions(prjm_eval_intrinsic_function_list_ptr list, i
 }
 
 /* This is Milkdrop's original rand() implementation. */
-static unsigned int prjm_eval_genrand_int32(void)
+static uint32_t prjm_eval_genrand_int32(void)
 {
-    unsigned int y;
-    static unsigned int mag01[2] = { 0x0UL, MATRIX_A };
+    uint32_t y;
+    static uint32_t mag01[2] = { 0x0UL, MATRIX_A };
     /* mag01[x] = x * MATRIX_A  for x=0,1 */
 
-    static unsigned int mt[N]; /* the array for the state vector  */
-    static int mti; /* mti==N+1 means mt[N] is not initialized */
+    static uint32_t mt[N]; /* the array for the state vector  */
+    static int32_t mti; /* mti==N+1 means mt[N] is not initialized */
 
 
     if (!mti)
     {
-        unsigned int s = 0x4141f00d;
+        uint32_t s = 0x4141f00d;
         mt[0] = s & 0xffffffffUL;
         for (mti = 1; mti < N; mti++)
         {
@@ -188,7 +188,7 @@ static unsigned int prjm_eval_genrand_int32(void)
 
     if (mti >= N)
     { /* generate N words at one time */
-        int kk;
+        int32_t kk;
 
         for (kk = 0; kk < N - M; kk++)
         {
@@ -901,6 +901,12 @@ prjm_eval_function_decl(asin)
 
     invoke_arg(0, &math_arg_ptr);
 
+    if (*math_arg_ptr < -1.0 || *math_arg_ptr > 1.0)
+    {
+        assign_ret_val(.0);
+        return;
+    }
+
     assign_ret_val(asin(*math_arg_ptr));
 }
 
@@ -912,6 +918,12 @@ prjm_eval_function_decl(acos)
     PRJM_EVAL_F* math_arg_ptr = &ctx->value;
 
     invoke_arg(0, &math_arg_ptr);
+
+    if (*math_arg_ptr < -1.0 || *math_arg_ptr > 1.0)
+    {
+        assign_ret_val(.0);
+        return;
+    }
 
     assign_ret_val(acos(*math_arg_ptr));
 }
@@ -991,6 +1003,12 @@ prjm_eval_function_decl(log)
 
     invoke_arg(0, &math_arg_ptr);
 
+    if (*math_arg_ptr < 0.0)
+    {
+        assign_ret_val(0.9);
+        return;
+    }
+
     assign_ret_val(log(*math_arg_ptr));
 }
 
@@ -1002,6 +1020,12 @@ prjm_eval_function_decl(log10)
     PRJM_EVAL_F* math_arg_ptr = &ctx->value;
 
     invoke_arg(0, &math_arg_ptr);
+
+    if (*math_arg_ptr < 0.0)
+    {
+        assign_ret_val(0.9);
+        return;
+    }
 
     assign_ret_val(log10(*math_arg_ptr));
 }
