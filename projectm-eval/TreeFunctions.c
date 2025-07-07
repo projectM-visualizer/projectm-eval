@@ -952,7 +952,7 @@ prjm_eval_function_decl(sqrt)
 
     invoke_arg(0, &math_arg_ptr);
 
-    assign_ret_val(sqrt(*math_arg_ptr));
+    assign_ret_val(sqrt(fabs(*math_arg_ptr)));
 }
 
 prjm_eval_function_decl(pow)
