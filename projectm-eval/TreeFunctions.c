@@ -851,6 +851,12 @@ prjm_eval_function_decl(pow_op)
     invoke_arg(0, ret_val);
     invoke_arg(1, &val2_ptr);
 
+    if(fabs(**ret_val) < close_factor_low && *val2_ptr < 0)
+    {
+        assign_ret_val(.0);
+        return;
+    }
+
     assign_ret_val(pow(**ret_val, *val2_ptr));
 }
 
@@ -978,6 +984,12 @@ prjm_eval_function_decl(pow)
 
     invoke_arg(0, &math_arg1_ptr);
     invoke_arg(1, &math_arg2_ptr);
+
+    if (fabs(*math_arg1_ptr) < close_factor_low && *math_arg2_ptr < 0)
+    {
+        assign_ret_val(.0);
+        return;
+    }
 
     assign_ret_val(pow(*math_arg1_ptr, *math_arg2_ptr));
 }
