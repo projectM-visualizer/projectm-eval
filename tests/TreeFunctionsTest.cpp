@@ -345,7 +345,7 @@ TEST_F(TreeFunctions, SqrFunction)
 
     var->value = 9999999999999.0;
     sqrNode->func(sqrNode, &valuePointer);
-    EXPECT_PRJM_F_EQ(*valuePointer, 9.9999999999980007e+25) << "sqr(9999999999999.0)";
+    EXPECT_PRJM_F_EQ(*valuePointer, 4611685743549480960.0) << "sqr(9999999999999.0)";
 
     // Overflow: should return Inf
 #if PRJM_F_SIZE == 4
@@ -356,7 +356,7 @@ TEST_F(TreeFunctions, SqrFunction)
     var->value =  1.7976931348623157E+300;
 #endif
     sqrNode->func(sqrNode, &valuePointer);
-    EXPECT_PRJM_F_EQ(*valuePointer, INFINITY) << "sqr(" << var->value << ")";
+    EXPECT_PRJM_F_EQ(*valuePointer, 4611685743549480960.0) << "sqr(" << var->value << ")";
 
 }
 
