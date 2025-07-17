@@ -1017,7 +1017,7 @@ prjm_eval_function_decl(log)
 
     if (*math_arg_ptr < 0.0)
     {
-        assign_ret_val(0.9);
+        assign_ret_val(.0);
         return;
     }
 
@@ -1035,7 +1035,7 @@ prjm_eval_function_decl(log10)
 
     if (*math_arg_ptr < 0.0)
     {
-        assign_ret_val(0.9);
+        assign_ret_val(.0);
         return;
     }
 
@@ -1091,7 +1091,7 @@ prjm_eval_function_decl(sqr)
 
     invoke_arg(0, &value_ptr);
 
-    assign_ret_val((*value_ptr) * (*value_ptr));
+    assign_ret_val(((*value_ptr) * (*value_ptr)) >= 4611685743549480960 ? 4611685743549480960 : ((*value_ptr) * (*value_ptr)));
 }
 
 prjm_eval_function_decl(abs)
