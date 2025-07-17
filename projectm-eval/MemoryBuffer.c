@@ -69,7 +69,9 @@ void prjm_eval_memory_free_block(projectm_eval_mem_buffer buffer, int block)
     }
     if (block < PRJM_EVAL_MEM_BLOCKS * PRJM_EVAL_MEM_ITEMSPERBLOCK)
     {
-        // Set int following the block pointer to the starting index of the first index/block to be freed.
+        // ns-eel2 sets ctx->ram_needfree to the starting index (plus one) of the first index/block to be freed:
+        //    ((INT_PTR *)blocks)[1]=1+d;
+        // But since NSEEL_VM_freeRAMIfCodeRequested() is never called, no memory is ever cleared.
     }
 }
 

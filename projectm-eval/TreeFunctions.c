@@ -377,9 +377,7 @@ prjm_eval_function_decl(freembuf)
 
     invoke_arg(0, ret_val);
 
-    prjm_eval_memory_free(ctx->memory_buffer);
-
-    assign_ret_val(.0);
+    prjm_eval_memory_free_block(ctx->memory_buffer, (int) (**ret_val + 0.0001));
 }
 
 prjm_eval_function_decl(memcpy)
