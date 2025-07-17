@@ -10,16 +10,10 @@ add_executable(projectM_EvalLib_Test
         TreeFunctionsTest.cpp
         )
 
-
 target_link_libraries(projectM_EvalLib_Test
         PRIVATE
         projectM::Eval
         GTest::gtest_main
-        )
-
-target_include_directories(projectM_EvalLib_Test
-        PRIVATE
-        ${CMAKE_SOURCE_DIR}/SimpleCompiler
         )
 
 target_compile_definitions(projectM_EvalLib_Test

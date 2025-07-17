@@ -1,8 +1,13 @@
 #pragma once
 
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
+
 extern "C"
 {
 #include "projectm-eval/TreeFunctions.h"
+#include <projectm-eval/MemoryBuffer.h>
 };
 
 #include <gtest/gtest.h>
@@ -32,4 +37,5 @@ protected:
 
     std::vector<prjm_eval_variable_def_t*> m_variables{};
     std::vector<prjm_eval_exptreenode_t*> m_treeNodes;
+    projectm_eval_mem_buffer m_memoryBuffer{};
 };
