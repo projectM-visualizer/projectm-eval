@@ -442,7 +442,7 @@ fixed _value_ `0`, and no memory is changed when assigning another value to it.
 
 ### memcpy(dest, src, count)
 
-Copies `count` values starting at `src` to `dest`.
+Copies `count` values starting at `src` to `dest`. Returns a reference to `dest`.
 
 Memory areas are allowed to overlap.
 
