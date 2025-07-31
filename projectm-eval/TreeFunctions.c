@@ -855,7 +855,9 @@ prjm_eval_function_decl(pow_op)
         return;
     }
 
-    assign_ret_val(pow(**ret_val, *val2_ptr));
+    PRJM_EVAL_F result = pow(**ret_val, *val2_ptr);
+
+    assign_ret_val(isnan(result) ? .0 : result);
 }
 
 
@@ -989,7 +991,9 @@ prjm_eval_function_decl(pow)
         return;
     }
 
-    assign_ret_val(pow(*math_arg1_ptr, *math_arg2_ptr));
+    PRJM_EVAL_F result = pow(*math_arg1_ptr, *math_arg2_ptr);
+
+    assign_ret_val(isnan(result) ? .0 : result);
 }
 
 prjm_eval_function_decl(exp)
@@ -1013,7 +1017,7 @@ prjm_eval_function_decl(log)
 
     invoke_arg(0, &math_arg_ptr);
 
-    if (*math_arg_ptr < 0.0)
+    if (*math_arg_ptr <= 0.0)
     {
         assign_ret_val(.0);
         return;
@@ -1031,7 +1035,7 @@ prjm_eval_function_decl(log10)
 
     invoke_arg(0, &math_arg_ptr);
 
-    if (*math_arg_ptr < 0.0)
+    if (*math_arg_ptr <= 0.0)
     {
         assign_ret_val(.0);
         return;
@@ -1089,7 +1093,7 @@ prjm_eval_function_decl(sqr)
 
     invoke_arg(0, &value_ptr);
 
-    assign_ret_val(((*value_ptr) * (*value_ptr)) >= 4611685743549480960 ? 4611685743549480960 : ((*value_ptr) * (*value_ptr)));
+    assign_ret_val((*value_ptr) * (*value_ptr));
 }
 
 prjm_eval_function_decl(abs)
@@ -1205,5 +1209,5 @@ prjm_eval_function_decl(invsqrt)
     type_conv.int_val = INVSQRT_MAGIC_NUMBER - (type_conv.int_val >> 1);
     type_conv.PRJM_F_val = type_conv.PRJM_F_val * (three_halfs - (num2 * type_conv.PRJM_F_val * type_conv.PRJM_F_val));
 
-    assign_ret_val(type_conv.PRJM_F_val);
+    assign_ret_val(isnan(type_conv.PRJM_F_val) ? 0 : (type_conv.PRJM_F_val));
 }
