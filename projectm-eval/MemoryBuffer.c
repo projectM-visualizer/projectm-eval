@@ -114,6 +114,7 @@ PRJM_EVAL_F* prjm_eval_memory_copy(projectm_eval_mem_buffer buffer,
                                    PRJM_EVAL_F* src,
                                    PRJM_EVAL_F* len)
 {
+    // Add 0.0001 to avoid using the wrong index due to tiny float rounding errors.
     int offset_dest = (int) (*dest + 0.0001);
     int offset_src = (int) (*src + 0.0001);
     int count = (int) (*len + 0.0001);
@@ -183,6 +184,7 @@ PRJM_EVAL_F* prjm_eval_memory_set(projectm_eval_mem_buffer buffer,
                                   PRJM_EVAL_F* value,
                                   PRJM_EVAL_F* len)
 {
+    // Add 0.0001 to avoid using the wrong index due to tiny float rounding errors.
     int offset_dest = (int) (*dest + 0.0001);
     int count = (int) (*len + 0.0001);
 

@@ -170,7 +170,7 @@ static uint32_t prjm_eval_genrand_int32(void)
 
     if (!mti)
     {
-        uint32_t s = 0x4141f00d;
+        uint32_t s = 0x4141f00d; // Initial Mersenne Twister seed
         mt[0] = s & 0xffffffffUL;
         for (mti = 1; mti < N; mti++)
         {
@@ -360,6 +360,7 @@ prjm_eval_function_decl(mem)
     PRJM_EVAL_F* index_ptr = &ctx->value;
     invoke_arg(0, &index_ptr);
 
+    // Add 0.0001 to avoid using the wrong index due to tiny float rounding errors.
     PRJM_EVAL_F* mem_addr = prjm_eval_memory_allocate(ctx->memory_buffer, (int) (*index_ptr + 0.0001));
     if (mem_addr)
     {
@@ -377,6 +378,7 @@ prjm_eval_function_decl(freembuf)
 
     invoke_arg(0, ret_val);
 
+    // Add 0.0001 to avoid using the wrong index due to tiny float rounding errors.
     prjm_eval_memory_free_block(ctx->memory_buffer, (int) (**ret_val + 0.0001));
 }
 
