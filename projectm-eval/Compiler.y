@@ -47,6 +47,11 @@ typedef void* yyscan_t;
 %nterm <prjm_eval_compiler_node_t*> function program instruction-list expression parentheses
 %nterm <prjm_eval_compiler_arg_list_t*> function-arglist
 
+/* Cleanup */
+%destructor { free($$); } VAR FUNC
+%destructor { prjm_eval_compiler_destroy_node($$); } function instruction-list expression parentheses
+%destructor { prjm_eval_compiler_destroy_arglist($$); } function-arglist
+
 /* Operator precedence, lowest first, highest last. */
 %precedence ','
 %right '='
