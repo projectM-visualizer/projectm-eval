@@ -2,6 +2,7 @@
 
 #include "Scanner.h"
 #include "Compiler.h"
+#include "ExpressionTree.h"
 #include "MemoryBuffer.h"
 #include "TreeFunctions.h"
 

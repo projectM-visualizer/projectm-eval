@@ -1,5 +1,9 @@
 #include "TreeFunctionsTest.hpp"
 
+extern "C" {
+#include <projectm-eval/ExpressionTree.h>
+}
+
 #include <cmath>
 
 #ifdef _MSC_VER
