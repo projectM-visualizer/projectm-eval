@@ -10,19 +10,19 @@
 #include <string.h>
 
 prjm_eval_compiler_context_t* prjm_eval_create_compile_context(projectm_eval_mem_buffer global_memory,
-                                                               PRJM_EVAL_F (* global_variables)[100])
+                                                               PRJM_EVAL_F (*global_variables)[100])
 {
     prjm_eval_compiler_context_t* cctx = calloc(1, sizeof(prjm_eval_compiler_context_t));
 
     prjm_eval_intrinsic_function_list intrinsics;
-    int intrinsics_count = 0;
+    uint32_t intrinsics_count = 0;
     prjm_eval_intrinsic_functions(&intrinsics, &intrinsics_count);
 
     assert(intrinsics);
     assert(intrinsics_count);
 
     prjm_eval_function_list_item_t* last_func = NULL;
-    for (int index = intrinsics_count - 1; index >= 0; --index)
+    for (int32_t index = (int32_t)intrinsics_count - 1; index >= 0; --index)
     {
         assert(&intrinsics[index]);
         prjm_eval_function_list_item_t* func = malloc(sizeof(prjm_eval_function_list_item_t));
@@ -137,7 +137,8 @@ void prjm_eval_reset_context_vars(prjm_eval_compiler_context_t* cctx)
     }
 }
 
-const char* prjm_eval_compiler_get_error(prjm_eval_compiler_context_t* cctx, int* line, int* column_start, int* column_end)
+const char* prjm_eval_compiler_get_error(prjm_eval_compiler_context_t* cctx, int* line, int* column_start,
+                                         int* column_end)
 {
     assert(cctx);
 
