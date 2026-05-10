@@ -1,0 +1,52 @@
+[preset00]
+; Minimal excerpt from "1 0 classique DISCO INFERNO (solid floor)" by Rovastar.
+; Used to demonstrate the rand() integer-return bug.
+;
+; This preset draws a single square per frame positioned with:
+;   x = rand(11)*.1   -> should land on 0.0, 0.1, 0.2, ..., 1.0 (11 columns)
+;   y = rand(11)*.13  -> should land on 0.0, 0.13, 0.26, ..., 1.3 (11 rows)
+;
+; With integer rand(), the square snaps to a regular grid each frame.
+; With float rand(), the square scatters to arbitrary sub-pixel positions.
+fRating=3.000000
+fGammaAdj=1.000000
+fDecay=1.000000
+zoom=0.999514
+rot=0.000000
+cx=0.500000
+cy=0.500000
+dx=0.000000
+dy=0.000000
+warp=0.010000
+sx=1.000000
+sy=1.000000
+shapecode_0_enabled=1
+shapecode_0_sides=4
+shapecode_0_additive=0
+shapecode_0_thickOutline=0
+shapecode_0_textured=0
+shapecode_0_x=0.500000
+shapecode_0_y=0.500000
+shapecode_0_rad=0.158028
+shapecode_0_ang=0.000000
+shapecode_0_r=1.000000
+shapecode_0_g=1.000000
+shapecode_0_b=1.000000
+shapecode_0_a=1.000000
+shapecode_0_r2=1.000000
+shapecode_0_g2=1.000000
+shapecode_0_b2=1.000000
+shapecode_0_a2=1.000000
+shapecode_0_border_r=0.000000
+shapecode_0_border_g=0.000000
+shapecode_0_border_b=0.000000
+shapecode_0_border_a=0.000000
+shape_0_per_frame1=ang = 1.571;
+shape_0_per_frame2=x = rand(11)*.1;
+shape_0_per_frame3=y = rand(11)*.13;
+shape_0_per_frame4=r = rand(100)*.01;
+shape_0_per_frame5=g = rand(100)*.01;
+shape_0_per_frame6=b = rand(100)*.01;
+shape_0_per_frame7=r2 = r;
+shape_0_per_frame8=g2 = g;
+shape_0_per_frame9=b2 = b;

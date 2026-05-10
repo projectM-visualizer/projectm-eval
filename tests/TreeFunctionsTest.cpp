@@ -2269,6 +2269,36 @@ TEST_F(TreeFunctions, RandFunction)
     testValue(INT32_MAX * 1000000000000000.0);
 }
 
+TEST_F(TreeFunctions, RandFunctionReturnsInteger)
+{
+    // rand(N) must return integer values in [0, N-1], matching the MilkDrop
+    // specification and the behavior of projectM 3.x (ns-eel2 with EEL1_COMPAT_MODE).
+    //
+    // Presets such as DISCO INFERNO use `rand(11)*.1` to position tiles on a
+    // regular grid. If rand() returns floats, tile positions scatter randomly;
+    // integer output snaps them to the expected 11-column grid.
+    prjm_eval_variable_def_t* var;
+    auto* varNode = CreateVariableNode("x", 11.f, &var);
+
+    auto* randNode = CreateEmptyNode(1);
+    randNode->func = prjm_eval_func_rand;
+    randNode->args[0] = varNode;
+
+    m_treeNodes.push_back(randNode);
+
+    PRJM_EVAL_F value{};
+    PRJM_EVAL_F* valuePointer = &value;
+
+    for (int i = 0; i < 1000; i++)
+    {
+        randNode->func(randNode, &valuePointer);
+        EXPECT_EQ(*valuePointer, floor(*valuePointer))
+            << "rand(11) must return an integer value, got " << *valuePointer;
+        EXPECT_GE(*valuePointer, 0.0) << "rand(11) must be >= 0";
+        EXPECT_LT(*valuePointer, 11.0) << "rand(11) must be < 11";
+    }
+}
+
 TEST_F(TreeFunctions, InverseSquareRootFunction)
 {
     // Expression: "invsqrt(x)"
