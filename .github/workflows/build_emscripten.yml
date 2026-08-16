@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       
       - name: Setup emsdk
-        uses: mymindstorm/setup-emsdk@v14
+        uses: emscripten-core/setup-emsdk@v16
         with:
           # Make sure to set a version number!
           version: 3.1.74
@@ -46,7 +46,7 @@ jobs:
         run: cmake --install "${{ github.workspace }}/cmake-build"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
             name: projectm-eval-emscripten-latest
             path: install/*
