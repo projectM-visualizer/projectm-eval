@@ -41,7 +41,8 @@ DIGIT           [0-9]
 HEX             [0-9a-fA-F]
 SIGN            [+-]
 EXPO            [eE]{SIGN}?{DIGIT}+
-FLOAT           ({DIGIT}+|{DIGIT}+\.{DIGIT}*|{DIGIT}*\.{DIGIT}+){EXPO}?
+FLT_BASE        {DIGIT}+\.{DIGIT}*|{DIGIT}*\.{DIGIT}+
+FLOAT           ({DIGIT}+{EXPO})|({FLT_BASE}{EXPO}?)
 INT             {DIGIT}+
 NAME            [_a-zA-Z][_a-zA-Z0-9]*
 
